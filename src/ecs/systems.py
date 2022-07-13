@@ -15,6 +15,7 @@ def erase_system(screen: pygame.Surface, background: pygame.Surface, graphic_com
 
 def draw_system(screen: pygame.Surface, graphic_components: Iterable[GraphicComponent],
                 dirty_rects: List[pygame.Rect]) -> None:
+                
     for graphic_compo in graphic_components:
         dirty_rects.append(screen.blit(graphic_compo.surface, graphic_compo.rect))
 
