@@ -10,7 +10,6 @@ def init_display():
     global g_background
 
     g_screen = pygame.display.set_mode(SCREEN_RESOLUTION)
-    screen_rect = g_screen.get_rect()
     pygame.display.set_caption(TITLE)
 
     g_background = pygame.Surface(DESIGN_RESOLUTION)
@@ -126,7 +125,6 @@ def get_ball_off_bounds_handler(screen: pygame.Surface, background: pygame.Surfa
         global g_score
         if ball["GraphicComponent"].rect.top <= 0 or ball["GraphicComponent"].rect.bottom >= bottom_edge:
             ball["VelocityComponent"].y_velocity *= -1
-
         if ball["GraphicComponent"].rect.left <= 0:
             g_score = (g_score[0], g_score[1]+1)
             ecs.rewrite_text_system(screen, background, dirty_rects, score2, "{}".format(g_score[1]))
@@ -164,7 +162,6 @@ def main():
     game_loop()
     
     pygame.quit()
-
 
 if __name__=='__main__':
     main()
