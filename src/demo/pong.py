@@ -2,8 +2,8 @@ import random
 import pygame
 import ecs
 
-from config import *
-from globals import *
+from demo.config import *
+from demo.globals import *
 
 def init_display():
     global g_screen
