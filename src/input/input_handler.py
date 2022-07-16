@@ -1,9 +1,9 @@
 from typing import List, Dict
-from commands.command import *
+from src.commands.command import *
 import pygame
 import logging
 
-logging.basicConfig(filename='logfile.log',level=logging.DEBUG)
+logging.basicConfig(filename='logfile.log', level=logging.DEBUG)
 
 class InputHandler:
     def __init__(self):
@@ -12,7 +12,7 @@ class InputHandler:
         self.GamepadCommands = dict()
 
     def register_command(self, keycode: int, command: ICommand):
-        self.KeyboardCommands.update({keycode:command})
+        self.KeyboardCommands.update({keycode: command})
 
     def handle_input(self) -> List[ICommand]:
         pygame.event.pump()

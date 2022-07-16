@@ -1,0 +1,15 @@
+# GRAPHICS
+GAME_W = 640
+GAME_H = 480
+WIN_W = 960
+WIN_H = 540
+GAME_TITLE = "Pong Demo"
+FONT_NAME = 'freesansbold.ttf'
+FONT_SIZE = 54
+# COLORS
+WHITE = (255, 255, 255)
+BLACK = (0, 0, 0,)
+RED = (255, 0, 0)
+GREEN = (0, 255, 0)
+BLUE = (0, 0, 255)
+YELLOW = (255, 255, 0)

@@ -1,6 +1,8 @@
-from commands import *
-from input import *
+from commands.command import *
+from input.input_handler import *
 import datetime
+import pygame
+
 
 def select(keycode):
     f = open("logfile.log", "a")
@@ -9,7 +11,7 @@ def select(keycode):
 
 def main():
     pygame.init()
-    screen = pygame.display.set_mode((640,480))
+    screen = pygame.display.set_mode((640, 480))
     pygame.display.set_caption("input_demo")
 
     s = SelectCommand(ActiveOn.RELEASED, select)
@@ -27,5 +29,5 @@ def main():
         clock.tick(60)
 
 
-if __name__=="__main__":
+if __name__ == "__main__":
     main()
