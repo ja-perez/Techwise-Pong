@@ -1,3 +1,9 @@
+"""
+Bug in font initialization, when quiting game
+pygame.error Library not initialized pops up.
+"""
+
+
 import os
 import pygame
 from Constants import *
