@@ -9,6 +9,7 @@ def select(keycode):
     f.write("{} : {} : {}\n".format(datetime.datetime.now(), "select()", chr(keycode)))
     f.close()
 
+
 def main():
     pygame.init()
     screen = pygame.display.set_mode((640, 480))

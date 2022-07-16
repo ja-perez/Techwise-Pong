@@ -1,5 +1,5 @@
-from src.states.state import State
-from src.Constants import *
+from states.state import State
+from Constants import *
 
 
 class Title(State):
