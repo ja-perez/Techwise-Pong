@@ -3,7 +3,6 @@ from input.input_handler import *
 import datetime
 import pygame
 
-
 def select(keycode=0):
     f = open("logfile.log", "a")
     f.write("{} : {} : {}\n".format(datetime.datetime.now(), "select()", chr(keycode)))
@@ -25,6 +24,7 @@ def main():
         CommandQueue = ih.handle_input()
         for command, args in CommandQueue:
             command.execute(args[0])
+
         if pygame.event.peek(pygame.QUIT):
             pygame.quit()
 

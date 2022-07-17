@@ -10,7 +10,7 @@ class InputHandler:
         self.GamepadCommands = dict()
 
     def register_command(self, keycode: int, command: ICommand):
-        self.KeyboardCommands.update({keycode: command})
+        self.KeyboardCommands.update({keycode:command})
 
     def handle_input(self) -> List[ICommand]:
         CommandQueue = list()

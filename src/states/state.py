@@ -8,7 +8,7 @@ class State:
 
     def render(self, surface):
         pass
-
+    
     def enter_state(self):
         if len(self.game.state_stack) > 1:
             self.prev_state = self.game.state_stack[-1]
@@ -16,3 +16,6 @@ class State:
 
     def exit_state(self):
         self.game.state_stack.pop()
+    
+    def get_instance(self):
+        return self
