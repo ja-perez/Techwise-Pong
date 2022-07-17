@@ -1,10 +1,7 @@
 from typing import List, Dict
 from commands.command import *
+import functools
 import pygame
-import logging
-
-logging.basicConfig(filename='logfile.log', level=logging.DEBUG)
-
 
 class InputHandler:
     def __init__(self):
@@ -16,9 +13,10 @@ class InputHandler:
         self.KeyboardCommands.update({keycode: command})
 
     def handle_input(self) -> List[ICommand]:
+        CommandQueue = list()
         pygame.event.pump()
 
-        # pressed = pygame.event.get(pygame.KEYDOWN)
+        pressed = pygame.event.get(pygame.KEYDOWN)
         released = pygame.event.get(pygame.KEYUP)
 
         # mouse_pressed = pygame.event.get(pygame.MOUSEBUTTONDOWN)
@@ -26,11 +24,22 @@ class InputHandler:
         # mouse_moved = pygame.event.get(pygame.MOUSEMOTION)
         # mouse_wheel = pygame.event.get(pygame.MOUSEWHEEL)
 
+        #functools here seems like a great choice, but would like to keep the queue
+        #strictly commands and not callables to ensure we can maintain talking about
+        #a command in a wholly fashion. potentially a tuple with a command and a list of
+        #their arguments, or a tuple of a command and a partialed callable?
+
         for keycode, command in self.KeyboardCommands.items():
-            if command.active == ActiveOn.RELEASED:
+            if command.active == ActiveOn.PRESSED:
+                for event in pressed:
+                    if event.key == keycode:
+                        #CommandQueue.append((command, functools.partial(command.execute, keycode)))
+                        CommandQueue.append((command, [keycode]))
+            elif command.active == ActiveOn.RELEASED:
                 for event in released:
                     if event.key == keycode:
-                        command.execute(event.key)
+                        CommandQueue.append(functools.partial(command.execute, keycode))
+        return CommandQueue
         """
         for i, command in enumerate(self.MouseCommands):
             if command:

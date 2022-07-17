@@ -4,7 +4,7 @@ import datetime
 import pygame
 
 
-def select(keycode):
+def select(keycode=0):
     f = open("logfile.log", "a")
     f.write("{} : {} : {}\n".format(datetime.datetime.now(), "select()", chr(keycode)))
     f.close()
@@ -15,16 +15,17 @@ def main():
     screen = pygame.display.set_mode((640, 480))
     pygame.display.set_caption("input_demo")
 
-    s = SelectCommand(ActiveOn.RELEASED, select)
+    s = SelectCommand(ActiveOn.PRESSED, select)
     ih = InputHandler()
     ih.register_command(pygame.K_ESCAPE, s)
     ih.register_command(pygame.K_EQUALS, s)
     clock = pygame.time.Clock()
 
     while True:
-        ih.handle_input()
+        CommandQueue = ih.handle_input()
+        for command, args in CommandQueue:
+            command.execute(args[0])
         if pygame.event.peek(pygame.QUIT):
-            logging.shutdown()
             pygame.quit()
 
         clock.tick(60)
