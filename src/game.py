@@ -4,7 +4,6 @@ from Constants import *
 from states.menus.mainmenu import MainMenu
 from states.state import State
 
-
 # States = Dict()
 
 class Game():
@@ -30,8 +29,8 @@ class Game():
         # self.get_dt()
         # self.ih.handle_input()    call to input handler
         # for command, arg
-        # commandqueue = self.current_state.input_handler.handle_input()
-        # for command, args in commandqueue:
+        # CommandQueue = self.current_state.input_handler.handle_input()
+        # for command, args in CommandQueue:
         #    command.execute(self, args)
 
         #######################

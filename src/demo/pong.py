@@ -1,9 +1,10 @@
 import random
 import pygame
 import ecs
+import sys
 
-from demo.config import *
-from demo.globals import *
+from config import *
+from globals import *
 
 def init_display():
     global g_screen
@@ -162,6 +163,7 @@ def main():
     game_loop()
     
     pygame.quit()
+    sys.exit()
 
 if __name__=='__main__':
     main()

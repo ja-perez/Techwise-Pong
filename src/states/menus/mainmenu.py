@@ -2,20 +2,20 @@ import pygwidgets
 import pygame
 from states.state import State
 from Constants import *
-
+import os
 
 class MainMenu(State):
     def __init__(self, game, name):
         State.__init__(self, game, name)
         self.create_buttons()
 
-    #######################
-    # temp button methods #
+    ######################
+    # temp button method #
     def create_buttons(self):
         self.play_game_button = pygwidgets.TextButton(self.game.screen, (GAME_W - 40, GAME_H), 'Player vs. Player')
         self.exit_button = pygwidgets.TextButton(self.game.screen, (GAME_W - 34, GAME_H + 50), 'Exit Game')
-    # temp button methods #
-    #######################
+    # temp button method #
+    ######################
 
     def update(self):
         #######################
@@ -23,6 +23,7 @@ class MainMenu(State):
         for event in pygame.event.get():
             if self.play_game_button.handleEvent(event):
                 print("Playing game and having fun!")
+                os.system('python3 demo/pong.py')
             if self.exit_button.handleEvent(event):
                 print("Goodbye")
                 self.game.running = False
