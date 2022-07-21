@@ -13,7 +13,7 @@ class MainMenu(State):
     ######################
     # temp button method #
     def create_buttons(self):
-        self.local_game_button = pygwidgets.TextButton(self.game.screen, (GAME_W - 40, GAME_H), 'Player vs. Player')
+        self.local_game_button = pygwidgets.TextButton(self.game.screen, (GAME_W - 40, GAME_H), 'Local')
         self.mainmenu_options = pygwidgets.TextButton(self.game.screen, (GAME_W - 34, GAME_H + 50), 'Settings')
         self.exit_button = pygwidgets.TextButton(self.game.screen, (GAME_W - 34, GAME_H + 100), 'Exit Game')
     # temp button method #
@@ -24,9 +24,8 @@ class MainMenu(State):
         # temp input handling #
         for event in pygame.event.get():
             if self.local_game_button.handleEvent(event):
-                print("Playing game and having fun!")
-                local = Local(self.game, "local")
-                self.game.change_state(local)
+                print("Playing game and having fun")
+                self.game.change_state("local")
             if self.exit_button.handleEvent(event):
                 print("Goodbye")
                 self.game.running = False
