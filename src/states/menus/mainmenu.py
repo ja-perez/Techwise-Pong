@@ -2,7 +2,8 @@ import pygwidgets
 import pygame
 from states.state import State
 from Constants import *
-import os
+
+from states.modes.local import Local
 
 class MainMenu(State):
     def __init__(self, game, name):
@@ -12,8 +13,9 @@ class MainMenu(State):
     ######################
     # temp button method #
     def create_buttons(self):
-        self.play_game_button = pygwidgets.TextButton(self.game.screen, (GAME_W - 40, GAME_H), 'Player vs. Player')
-        self.exit_button = pygwidgets.TextButton(self.game.screen, (GAME_W - 34, GAME_H + 50), 'Exit Game')
+        self.local_game_button = pygwidgets.TextButton(self.game.screen, (GAME_W - 40, GAME_H), 'Player vs. Player')
+        self.mainmenu_options = pygwidgets.TextButton(self.game.screen, (GAME_W - 34, GAME_H + 50), 'Settings')
+        self.exit_button = pygwidgets.TextButton(self.game.screen, (GAME_W - 34, GAME_H + 100), 'Exit Game')
     # temp button method #
     ######################
 
@@ -21,9 +23,10 @@ class MainMenu(State):
         #######################
         # temp input handling #
         for event in pygame.event.get():
-            if self.play_game_button.handleEvent(event):
+            if self.local_game_button.handleEvent(event):
                 print("Playing game and having fun!")
-                os.system('python3 demo/pong.py')
+                local = Local(self.game, "local")
+                self.game.change_state(local)
             if self.exit_button.handleEvent(event):
                 print("Goodbye")
                 self.game.running = False
@@ -43,7 +46,8 @@ class MainMenu(State):
         self.game.screen.blit(text_surface, text_rect)
 
     def button_display(self):
-        self.play_game_button.draw()
+        self.local_game_button.draw()
+        self.mainmenu_options.draw()
         self.exit_button.draw()
     # temp render methods #
     #######################

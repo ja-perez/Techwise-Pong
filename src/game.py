@@ -2,6 +2,7 @@ import pygame
 import sys
 from Constants import *
 from states.menus.mainmenu import MainMenu
+from states.modes.local import Local
 from states.state import State
 
 # States = Dict()
@@ -17,7 +18,7 @@ class Game():
         self.running = True
         self.clock = pygame.time.Clock()
 
-        self.states = {"mainmenu": MainMenu(self, "mainmenu")}
+        self.states = {"mainmenu": MainMenu(self, "mainmenu"), "local": Local(self, "local")}
         self.curr_state = self.states["mainmenu"]
 
         # input handler using input_handler class
