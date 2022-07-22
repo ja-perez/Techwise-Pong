@@ -4,6 +4,7 @@ from Constants import *
 from ecs.entities import Player, Ball, Score
 from ecs.entity_manager import EntityManager
 from states.modes.localcommands import *
+from ecs.systems import *
 
 
 class Local(State):
@@ -14,6 +15,7 @@ class Local(State):
         self.create_players()
         self.create_balls()
         self.create_scoreboards()
+        self.objects = list()
 
     def update(self):
         command_queue = self.ih.handle_input()
@@ -21,15 +23,9 @@ class Local(State):
             command.execute(args[0])
 
     def render(self):
-        for player_graphic in self.players.component_to_entity["graphics"]:
-            self.game.screen.blit(player_graphic.components["graphics"].surface,
-                                  player_graphic.components["graphics"].rect)
-        for ball_graphic in self.balls.component_to_entity["graphics"]:
-            self.game.screen.blit(ball_graphic.components["graphics"].surface,
-                                  ball_graphic.components["graphics"].rect)
-        for score_graphic in self.scores.component_to_entity["graphics"]:
-            self.game.screen.blit(score_graphic.components["graphics"].surface,
-                                  score_graphic.components["graphics"].rect)
+        draw_system(self.game.screen, self.players.all_component_instances("graphics"), self.objects)
+        draw_system(self.game.screen, self.balls.all_component_instances("graphics"), self.objects)
+        draw_system(self.game.screen, self.scores.all_component_instances("graphics"), self.objects)
 
     def register_commands(self):
         self.ih.register_command(pygame.K_ESCAPE, LocalCommand(ActiveOn.PRESSED, self.exit_state, self))

@@ -11,3 +11,7 @@ class EntityManager():
     def unregister_entity(self, entity):
         for component_type in self.component_to_entity:
             self.component_to_entity[component_type].remove(entity)
+
+    def all_component_instances(self, component_type):
+        for entity in self.component_to_entity[component_type]:
+            yield entity.components[component_type]

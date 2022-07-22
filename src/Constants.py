@@ -17,3 +17,6 @@ YELLOW = (255, 255, 0)
 # OBJECT SIZES
 PADDLE = WIN_W / 32, WIN_H / 6
 BALL = WIN_W / 60, WIN_H / 35
+
+X = 0
+Y = 0
