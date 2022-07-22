@@ -22,6 +22,7 @@ def main():
 
     while True:
         CommandQueue = ih.handle_input()
+
         for command, args in CommandQueue:
             command.execute(args[0])
 

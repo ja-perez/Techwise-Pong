@@ -1,10 +1,9 @@
 import pygame
 import sys
 from Constants import *
-from states.menus.mainmenu import MainMenu
+from states.menus.mainmenu.mainmenu import MainMenu
 from states.modes.local import Local
-from states.settings.mmset import MainMenuSettings
-from states.state import State
+from states.settings.mmsettings import MainMenuSettings
 
 
 class Game():
@@ -24,13 +23,8 @@ class Game():
         self.curr_state = self.states["mainmenu"]
 
     def update(self):
-        #######################
-        # temp input handling #
         if pygame.event.peek(pygame.QUIT):
             self.running = False
-        # temp input handling #
-        #######################
-
         self.curr_state.update()
         self.temp_render()
         self.clock.tick(60)

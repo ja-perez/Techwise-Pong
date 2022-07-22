@@ -15,7 +15,7 @@ class ICommand:
         self.delay = 0
 
     @abstractstaticmethod
-    def execute(game: Game):
+    def execute(game):
         """"""
     @abstractstaticmethod
     def undo():
@@ -24,9 +24,8 @@ class ICommand:
 class SelectCommand(ICommand):
     def __init__(self, active: ActiveOn, function: Callable):
         super(SelectCommand, self).__init__(active, function)
-        
-    def execute(self, keycode):
 
+    def execute(self, keycode):
         self.function(keycode)
 
     def undo(self):

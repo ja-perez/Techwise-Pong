@@ -1,13 +1,21 @@
+from commands.command import *
+from input.input_handler import *
+
+
 class State():
     def __init__(self, game, name):
         self.game = game
         self.name = name
+        self.ih = InputHandler()
 
     def update(self):
         # input handler
         pass
 
     def render(self, surface):
+        pass
+
+    def register_commands(self):
         pass
 
     def state_name(self):
