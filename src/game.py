@@ -6,6 +6,7 @@ from states.modes.local import Local
 from states.settings.mmset import MainMenuSettings
 from states.state import State
 
+
 class Game():
     def __init__(self):
         # Pygame/GUI specific initializations
@@ -33,13 +34,6 @@ class Game():
         self.curr_state.update()
         self.temp_render()
         self.clock.tick(60)
-
-    def change_state(self, next_state: str):
-        # WIP - called from command and passed next state string
-        self.curr_state.exit_state()
-        self.curr_state = self.states[next_state]
-        self.curr_state.enter_state()
-        # self.input_handler = curr_state.input_handler
 
     ######################
     # temp render method #

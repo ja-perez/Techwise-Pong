@@ -15,7 +15,7 @@ class State():
 
     def change_state(self, next_state):
         self.exit_state()
-        self.game.curr_state = self.game.change_state(next_state)
+        self.game.curr_state = self.game.states[next_state]
         self.enter_state()
 
     def exit_state(self):

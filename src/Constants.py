@@ -6,6 +6,7 @@ GAME_H = 270
 GAME_TITLE = "Pong Demo"
 FONT_NAME = 'freesansbold.ttf'
 FONT_SIZE = 100
+SCORE_SIZE = 25
 # COLORS
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0,)
@@ -15,4 +16,4 @@ BLUE = (0, 0, 255)
 YELLOW = (255, 255, 0)
 # OBJECT SIZES
 PADDLE = WIN_W / 32, WIN_H / 6
-BALL = WIN_W / 80, WIN_H / 60
+BALL = WIN_W / 60, WIN_H / 35

@@ -5,3 +5,9 @@ class Entity():
 
     def set_components(self):
         pass
+
+    def set_name(self, new_name):
+        self.name = new_name
+
+    def get_name(self):
+        return self.name

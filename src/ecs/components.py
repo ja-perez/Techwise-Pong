@@ -25,3 +25,4 @@ class TextComponent:
         self.text = text
         self.size = size
         self.color = color
+        self.font = pygame.font.Font(None, self.size)

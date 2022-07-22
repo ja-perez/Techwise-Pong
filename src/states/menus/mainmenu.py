@@ -3,8 +3,6 @@ import pygame
 from states.state import State
 from Constants import *
 
-from states.modes.local import Local
-
 class MainMenu(State):
     def __init__(self, game, name):
         State.__init__(self, game, name)
@@ -25,7 +23,7 @@ class MainMenu(State):
         for event in pygame.event.get():
             if self.local_game_button.handleEvent(event):
                 print("Playing game and having fun")
-                self.game.change_state("local")
+                self.change_state("local")
             if self.exit_button.handleEvent(event):
                 print("Goodbye")
                 self.game.running = False
@@ -50,3 +48,10 @@ class MainMenu(State):
         self.exit_button.draw()
     # temp render methods #
     #######################
+
+    def exit_state(self):
+        pass
+
+
+    def enter_state(self):
+        pass
