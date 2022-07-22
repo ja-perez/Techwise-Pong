@@ -40,9 +40,19 @@ class MainMenu(State):
     #######################
 
     def create_buttons(self):
-        self.local_game_button = pygwidgets.TextButton(self.game.screen, (GAME_W - 40, GAME_H), 'Local')
-        self.mainmenu_settings = pygwidgets.TextButton(self.game.screen, (GAME_W - 34, GAME_H + 50), 'Settings')
-        self.exit_button = pygwidgets.TextButton(self.game.screen, (GAME_W - 34, GAME_H + 100), 'Exit Game')
+        self.local_game_button = pygwidgets.TextButton(self.game.screen, (0, 0), 'Local')
+        button_height = self.local_game_button.getRect().height
+        self.local_game_button.moveXY(WIN_W / 2 - self.local_game_button.getRect().width / 2,
+                                    WIN_H / 2 - self.local_game_button.getRect().height / 2
+                                    + button_height)
+        self.mainmenu_settings = pygwidgets.TextButton(self.game.screen, (0, 0), 'Settings')
+        self.mainmenu_settings.moveXY(WIN_W / 2 - self.mainmenu_settings.getRect().width / 2,
+                                    WIN_H / 2 - self.mainmenu_settings.getRect().height / 2
+                                    + button_height * 2)
+        self.exit_button = pygwidgets.TextButton(self.game.screen, (0, 0), 'Exit Game')
+        self.exit_button.moveXY(WIN_W / 2 - self.exit_button.getRect().width / 2,
+                                    WIN_H / 2 - self.exit_button.getRect().height / 2
+                                    + button_height * 3)
 
     def exit_state(self):
         pass
