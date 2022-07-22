@@ -5,7 +5,8 @@ class EntityManager():
     def register_entity(self, entity):
         for component_type in entity.components:
             if component_type not in self.component_to_entity:
-                self.component_to_entity[component_type] = entity
+                self.component_to_entity[component_type] = list()
+            self.component_to_entity[component_type].append(entity)
 
     def unregister_entity(self, entity):
         for component_type in self.component_to_entity:

@@ -6,7 +6,7 @@ class GraphicComponent:
     def __init__(self, surface, initial_x, initial_y):
         self.surface = surface
         self.rect = self.surface.get_rect()
-        self.rect.move(initial_x, initial_y)
+        self.rect.move_ip(initial_x, initial_y)
 
 
 class VelocityComponent:

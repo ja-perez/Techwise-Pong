@@ -1,8 +1,8 @@
 # GRAPHICS
-GAME_W = 480
-GAME_H = 270
 WIN_W = 960
 WIN_H = 540
+GAME_W = 480
+GAME_H = 270
 GAME_TITLE = "Pong Demo"
 FONT_NAME = 'freesansbold.ttf'
 FONT_SIZE = 100
@@ -13,3 +13,6 @@ RED = (255, 0, 0)
 GREEN = (0, 255, 0)
 BLUE = (0, 0, 255)
 YELLOW = (255, 255, 0)
+# OBJECT SIZES
+PADDLE = WIN_W / 32, WIN_H / 6
+BALL = WIN_W / 80, WIN_H / 60
