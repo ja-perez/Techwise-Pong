@@ -27,16 +27,14 @@ class InputHandler:
         #strictly commands and not callables to ensure we can maintain talking about
         #a command in a wholly fashion. potentially a tuple with a command and a list of
         #their arguments, or a tuple of a command and a partialed callable?
-        if pressed or released:
-            print(pressed, '\t', released, '\t', self.KeyboardCommands.items())
 
         for keycode, command in self.KeyboardCommands.items():
-            if command.active == ActiveOn.PRESSED:
+            if command.active == ActiveOn.PRESSED or command.active == ActiveOn.BOTH:
                 for event in pressed:
                     if event.key == keycode:
                         #CommandQueue.append((command, functools.partial(command.execute, keycode)))
                         CommandQueue.append((command, [keycode]))
-            if command.active == ActiveOn.RELEASED:
+            if command.active == ActiveOn.RELEASED or command.active == ActiveOn.BOTH:
                 for event in released:
                     if event.key == keycode:
                         #CommandQueue.append(functools.partial(command.execute, keycode))

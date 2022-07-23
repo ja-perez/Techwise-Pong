@@ -23,7 +23,6 @@ def up_command(keycode=0, state_int=0):
         state_int.p1_up = not state_int.p1_up
     elif keycode == pygame.K_UP:
         state_int.p2_up = not state_int.p2_up
-    print(state_int.p1_up)
 
 def down_command(keycode=0, state_int=0):
     if keycode == pygame.K_s:

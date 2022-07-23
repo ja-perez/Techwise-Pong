@@ -7,6 +7,7 @@ from typing import Callable
 class ActiveOn(Enum):
     PRESSED = 1
     RELEASED = 2
+    BOTH = 3
 
 class ICommand:
     def __init__(self, active: ActiveOn, function: Callable):

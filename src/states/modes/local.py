@@ -24,8 +24,9 @@ class Local(State):
         if self.start:
             self.p1_y_direction = self.p1_down - self.p1_up
             self.p2_y_direction = self.p2_down - self.p2_up
-        else:
-            pass
+            print(self.p1_y_direction, self.p2_y_direction)
+            move_system(self.player1, 0, 0, self.p1_y_direction)
+            move_system(self.player2, 0, 0, self.p2_y_direction)
 
     def render(self):
         draw_system(self.game.screen, self.players.all_component_instances("graphics"), self.objects)
@@ -37,20 +38,14 @@ class Local(State):
         self.start_command = LocalCommand(ActiveOn.PRESSED, set_start, self)
         self.ih.register_command(pygame.K_SPACE, self.start_command)
         # Command: press up/w to move player up and down/s to move player down
-        self.player_up_press = LocalCommand(ActiveOn.PRESSED, up_command, self)
-        self.player_up_release = LocalCommand(ActiveOn.RELEASED, up_command, self)
-        self.player_down_press = LocalCommand(ActiveOn.PRESSED, down_command, self)
-        self.player_down_release = LocalCommand(ActiveOn.RELEASED, down_command, self)
+        self.player_up_press = LocalCommand(ActiveOn.BOTH, up_command, self)
+        self.player_down_press = LocalCommand(ActiveOn.BOTH, down_command, self)
         # Player 1 movement
         self.ih.register_command(pygame.K_w, self.player_up_press)
         self.ih.register_command(pygame.K_s, self.player_down_press)
-        self.ih.register_command(pygame.K_w, self.player_up_release)
-        self.ih.register_command(pygame.K_s, self.player_down_release)
         # Player 2 movement
         self.ih.register_command(pygame.K_UP, self.player_up_press)
         self.ih.register_command(pygame.K_DOWN, self.player_down_press)
-        self.ih.register_command(pygame.K_UP, self.player_up_release)
-        self.ih.register_command(pygame.K_DOWN, self.player_down_release)
 
     def create_players(self):
         # create player 1:
