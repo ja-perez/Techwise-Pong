@@ -7,6 +7,7 @@ GAME_TITLE = "Pong Demo"
 FONT_NAME = 'freesansbold.ttf'
 FONT_SIZE = 100
 SCORE_SIZE = 25
+TEXT_SIZE = 40
 # COLORS
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0,)

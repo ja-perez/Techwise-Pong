@@ -30,5 +30,5 @@ def down_command(keycode=0, state_int=0):
     elif keycode == pygame.K_DOWN:
         state_int.p2_down = not state_int.p2_down
 
-def set_start(keycode=0, state_inst=0):
-    state_inst.start = not state_inst.start
+def toggle_pause(keycode=0, state_inst=0):
+    state_inst.pause = not state_inst.pause
