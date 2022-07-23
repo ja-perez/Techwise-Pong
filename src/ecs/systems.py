@@ -1,6 +1,8 @@
+import pygame
+
 def draw_system(surface, graphics, objects):
     for graphic_component in graphics:
-        objects.append(surface.blit(graphic_component.surface, graphic_component.rect))
+        surface.blit(graphic_component.surface, graphic_component.rect)
 
 
 def move_system(entity, off_bounds_handler, x_dir=0, y_dir=0):
@@ -12,5 +14,12 @@ def move_system(entity, off_bounds_handler, x_dir=0, y_dir=0):
     off_bounds_handler(entity)
 
 
-def collision_detection_system():
-    pass
+def collision_detection_system(c_object, entities):
+    c_object_rect = c_object.components["graphics"].rect
+    for entity in entities:
+        entity_rect = entity.rect
+        if c_object_rect == entity_rect:
+            continue
+        elif pygame.Rect.colliderect(c_object_rect, entity_rect):
+            return True
+    return False

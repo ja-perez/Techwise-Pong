@@ -19,4 +19,5 @@ class EntityManager():
 
     def all_active_component_instances(self, component_type):
         for entity in self.component_to_entity["velocity"]:
-            yield entity.components[component_type]
+            if entity in self.component_to_entity[component_type]:
+                yield entity.components[component_type]

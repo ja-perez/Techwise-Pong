@@ -11,16 +11,14 @@ from ecs.systems import *
 class Local(State):
     def __init__(self, game, name):
         State.__init__(self, game, name)
-        self.pause = True
+        self.pause, self.scored, self.collision_present = True, False, False
         self.register_commands()
         self.g_manager = EntityManager()
         self.create_players()
-        self.ball_vel = random.randint(2, 5)
         self.create_balls()
         self.create_texts()
         self.set_start_positions()
         self.objects = list()
-        self.scored = False
 
     def update(self):
         command_queue = self.ih.handle_input()
@@ -33,12 +31,13 @@ class Local(State):
             move_system(self.player2, self.paddle_off_bounds_handler, 0, self.p2_y_direction)
             move_system(self.ball, self.ball_off_bounds_handler, self.ball_x_dir, self.ball_y_dir)
             self.update_score()
-            collision_detection_system()
+            self.collision_present = collision_detection_system(
+                self.ball, self.g_manager.all_active_component_instances("graphics"))
+            self.collision_handler(self.collision_present)
 
     def render(self):
         draw_system(self.game.screen, self.g_manager.all_component_instances("graphics"), self.objects)
         if self.pause:
-            pass
             draw_system(self.game.screen, self.texts.all_component_instances("graphics"), self.objects)
 
     def register_commands(self):
@@ -59,7 +58,8 @@ class Local(State):
         self.player1.set_pos(BALL[0], GAME_H - PADDLE[1] / 2)
         self.player2.set_pos(GAME_W * 2 - PADDLE[0] - BALL[0], GAME_H - PADDLE[1] / 2)
         # self.ball.set_pos(GAME_W, GAME_H - BALL[1] / 2)
-        self.pause_text.set_pos(GAME_W - self.pause_text.components["graphics"].rect.width / 2, 0)
+        self.pause_text.set_pos(GAME_W - self.pause_text.components["graphics"].rect.width / 2,
+                                self.pause_text.components["graphics"].rect.height)
         self.score1.set_pos(self.player1.surface.get_width() * 2, 0)
         self.score2.set_pos(GAME_W * 2 - self.score2.surface.get_width() * 1.5, 0)
 
@@ -80,19 +80,19 @@ class Local(State):
         self.player2.set_vel(0, 10)
         self.p2_up, self.p2_down = False, False
         self.p2_y_direction = 0
-        # register both players with a player entity manager and game manager
+        # register both players with game manager
         self.g_manager.register_entity(self.player1)
         self.g_manager.register_entity(self.player2)
-
 
     def create_balls(self):
         # create ball and set position to the center of the screen
         self.ball = Ball("ball")
         self.ball.set_pos(GAME_W, GAME_H - BALL[1] / 2)
+        self.ball_vel = random.randint(3, 5)
         self.ball_x_dir = 1 if random.randint(0, 1) else -1
         self.ball_y_dir = 1 if random.randint(0, 1) else -1
         self.ball.set_vel(self.ball_vel, self.ball_vel)
-        # register ball with a ball entity manager and game manager
+        # register ball with game manager
         self.g_manager.register_entity(self.ball)
 
     def create_texts(self):
@@ -103,7 +103,7 @@ class Local(State):
                             SCORE_SIZE, WHITE)
         self.score2 = Score(self.player2.get_name() + " score: " + self.player2.get_score(),
                             SCORE_SIZE, WHITE)
-        # register scores and pause entities with manager
+        # register scores with game manager and pause with text manager
         # self.g_manager.register_entity(self.pause_text)
         self.g_manager.register_entity(self.score1)
         self.g_manager.register_entity(self.score2)
@@ -133,6 +133,10 @@ class Local(State):
             self.scored = True
         if ball.components["graphics"].rect.top <= 0 or ball.components["graphics"].rect.bottom >= WIN_H:
             self.ball_y_dir *= -1
+
+    def collision_handler(self, collision_present):
+        if collision_present:
+            self.ball_x_dir *= -1
 
     def exit_state(self):
         self.game.running = False
