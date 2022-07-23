@@ -10,3 +10,7 @@ def move_system(entity, off_bounds_handler, x_dir=0, y_dir=0):
     new_y = velocity_component.y_velocity * y_dir
     graphic_component.rect.move_ip(new_x, new_y)
     off_bounds_handler(entity)
+
+
+def collision_detection_system():
+    pass
