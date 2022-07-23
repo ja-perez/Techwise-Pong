@@ -26,6 +26,7 @@ class Player(Entity):
     def increase_score(self, increment):
         self.score += increment
 
+
 class Ball(Entity):
     def __init__(self, name):
         Entity.__init__(self, name)
@@ -41,11 +42,6 @@ class Ball(Entity):
         self.components["velocity"].x_velocity = x
         self.components["velocity"].y_velocity = y
 
-    def x_dir(self):
-        return self.components["velocity"].x_velocity
-
-    def y_dir(self):
-        return self.components["velocity"].y_velocity
 
 class Score(Entity):
     def __init__(self, title, size, color):
@@ -65,6 +61,7 @@ class Score(Entity):
     def update_graphics(self):
         self.update_surface()
         self.components["graphics"].surface = self.surface
+
 
 class Pause(Entity):
     def __init__(self, title, size, color):

@@ -14,6 +14,7 @@ class Local(State):
         self.pause = True
         self.register_commands()
         self.create_players()
+        self.ball_vel = random.randint(2, 5)
         self.create_balls()
         self.create_texts()
         self.set_start_positions()
@@ -29,12 +30,9 @@ class Local(State):
             self.p2_y_direction = self.p2_down - self.p2_up
             move_system(self.player1, self.paddle_off_bounds_handler, 0, self.p1_y_direction)
             move_system(self.player2, self.paddle_off_bounds_handler, 0, self.p2_y_direction)
-            move_system(self.ball, self.ball_off_bounds_handler)
-            if self.scored:
-                self.balls.unregister_entity(self.ball)
-                self.create_balls()
-                self.update_scores()
-                self.scored = False
+            move_system(self.ball, self.ball_off_bounds_handler, self.ball_x_dir, self.ball_y_dir)
+            self.update_score()
+
 
     def render(self):
         draw_system(self.game.screen, self.players.all_component_instances("graphics"), self.objects)
@@ -90,9 +88,10 @@ class Local(State):
     def create_balls(self):
         # create ball and set position to the center of the screen
         self.ball = Ball("ball")
-        random_ball_start = (random.randint(2, 5) * (1 if random.randint(0, 1) else -1))
         self.ball.set_pos(GAME_W, GAME_H - BALL[1] / 2)
-        self.ball.set_vel(random_ball_start, random_ball_start)
+        self.ball_x_dir = 1 if random.randint(0, 1) else -1
+        self.ball_y_dir = 1 if random.randint(0, 1) else -1
+        self.ball.set_vel(self.ball_vel, self.ball_vel)
         # register ball with a ball entity manager
         self.balls = EntityManager()
         self.balls.register_entity(self.ball)
@@ -112,11 +111,15 @@ class Local(State):
         self.scores.register_entity(self.score1)
         self.scores.register_entity(self.score2)
 
-    def update_scores(self):
-        self.score1.name = self.player1.get_name() + " score: " + self.player1.get_score()
-        self.score2.name = self.player2.get_name() + " score: " + self.player2.get_score()
-        self.score1.update_graphics()
-        self.score2.update_graphics()
+    def update_score(self):
+        if self.scored:
+            self.balls.unregister_entity(self.ball)
+            self.create_balls()
+            self.scored = False
+            self.score1.name = self.player1.get_name() + " score: " + self.player1.get_score()
+            self.score2.name = self.player2.get_name() + " score: " + self.player2.get_score()
+            self.score1.update_graphics()
+            self.score2.update_graphics()
 
     def paddle_off_bounds_handler(self, player):
         player.components["graphics"].rect.top = max(player.components["graphics"].rect.top, 0)
@@ -129,8 +132,8 @@ class Local(State):
         elif ball.components["graphics"].rect.right >= WIN_W:
             self.player1.increase_score(1)
             self.scored = True
-        if ball.components["graphics"].rect.top <= 0 or ball.components["graphics"].rect.bottom >= GAME_H:
-            ball.components["velocity"].y_velocity *= -1
+        if ball.components["graphics"].rect.top <= 0 or ball.components["graphics"].rect.bottom >= WIN_H:
+            self.ball_y_dir *= -1
 
     def exit_state(self):
         self.game.running = False
