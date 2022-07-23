@@ -18,7 +18,6 @@ class InputHandler:
 
         pressed = pygame.event.get(pygame.KEYDOWN)
         released = pygame.event.get(pygame.KEYUP)
-
         # mouse_pressed = pygame.event.get(pygame.MOUSEBUTTONDOWN)
         # mouse_released = pygame.event.get(pygame.MOUSEBUTTONUP)
         # mouse_moved = pygame.event.get(pygame.MOUSEMOTION)
@@ -28,6 +27,8 @@ class InputHandler:
         #strictly commands and not callables to ensure we can maintain talking about
         #a command in a wholly fashion. potentially a tuple with a command and a list of
         #their arguments, or a tuple of a command and a partialed callable?
+        if pressed or released:
+            print(pressed, '\t', released, '\t', self.KeyboardCommands.items())
 
         for keycode, command in self.KeyboardCommands.items():
             if command.active == ActiveOn.PRESSED:
@@ -35,10 +36,11 @@ class InputHandler:
                     if event.key == keycode:
                         #CommandQueue.append((command, functools.partial(command.execute, keycode)))
                         CommandQueue.append((command, [keycode]))
-            elif command.active == ActiveOn.RELEASED:
+            if command.active == ActiveOn.RELEASED:
                 for event in released:
                     if event.key == keycode:
-                        CommandQueue.append(functools.partial(command.execute, keycode))
+                        #CommandQueue.append(functools.partial(command.execute, keycode))
+                        CommandQueue.append((command, [keycode]))
         return CommandQueue
         """
         for i, command in enumerate(self.MouseCommands):

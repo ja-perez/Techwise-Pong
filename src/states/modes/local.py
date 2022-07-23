@@ -10,7 +10,7 @@ from ecs.systems import *
 class Local(State):
     def __init__(self, game, name):
         State.__init__(self, game, name)
-        self.player_c = LocalCommand(ActiveOn.PRESSED, player_commands, self)
+        self.start = False
         self.register_commands()
         self.create_players()
         self.create_balls()
@@ -18,10 +18,14 @@ class Local(State):
         self.objects = list()
 
     def update(self):
-
         command_queue = self.ih.handle_input()
         for command, args in command_queue:
             command.execute(args[0])
+        if self.start:
+            self.p1_y_direction = self.p1_down - self.p1_up
+            self.p2_y_direction = self.p2_down - self.p2_up
+        else:
+            pass
 
     def render(self):
         draw_system(self.game.screen, self.players.all_component_instances("graphics"), self.objects)
@@ -29,30 +33,44 @@ class Local(State):
         draw_system(self.game.screen, self.scores.all_component_instances("graphics"), self.objects)
 
     def register_commands(self):
+        # Command: press space to start
+        self.start_command = LocalCommand(ActiveOn.PRESSED, set_start, self)
+        self.ih.register_command(pygame.K_SPACE, self.start_command)
+        # Command: press up/w to move player up and down/s to move player down
+        self.player_up_press = LocalCommand(ActiveOn.PRESSED, up_command, self)
+        self.player_up_release = LocalCommand(ActiveOn.RELEASED, up_command, self)
+        self.player_down_press = LocalCommand(ActiveOn.PRESSED, down_command, self)
+        self.player_down_release = LocalCommand(ActiveOn.RELEASED, down_command, self)
         # Player 1 movement
-        self.ih.register_command(pygame.K_LEFT, self.player_c)
-        self.ih.register_command(pygame.K_RIGHT, self.player_c)
-        self.ih.register_command(pygame.K_UP, self.player_c)
-        self.ih.register_command(pygame.K_DOWN, self.player_c)
+        self.ih.register_command(pygame.K_w, self.player_up_press)
+        self.ih.register_command(pygame.K_s, self.player_down_press)
+        self.ih.register_command(pygame.K_w, self.player_up_release)
+        self.ih.register_command(pygame.K_s, self.player_down_release)
         # Player 2 movement
-        self.ih.register_command(pygame.K_a, self.player_c)
-        self.ih.register_command(pygame.K_d, self.player_c)
-        self.ih.register_command(pygame.K_w, self.player_c)
-        self.ih.register_command(pygame.K_s, self.player_c)
+        self.ih.register_command(pygame.K_UP, self.player_up_press)
+        self.ih.register_command(pygame.K_DOWN, self.player_down_press)
+        self.ih.register_command(pygame.K_UP, self.player_up_release)
+        self.ih.register_command(pygame.K_DOWN, self.player_down_release)
 
     def create_players(self):
         # create player 1:
         # set position to the left of the screen
         # set x velocity to 0 and y velocity to 10
+        # set up and down values to false and direction to 0
         self.player1 = Player("player 1")
         self.player1.set_pos(BALL[0], GAME_H - PADDLE[1] / 2)
         self.player1.set_vel(0, 10)
+        self.p1_up, self.p1_down = False, False
+        self.p1_y_direction = 0
         # create player 2:
         # set position to the left of the screen
         # set x velocity to 0 and y velocity to 10
+        # set up and down values to false and direction to 0
         self.player2 = Player("player 2")
         self.player2.set_pos(GAME_W * 2 - PADDLE[0] - BALL[0], GAME_H - PADDLE[1] / 2)
         self.player2.set_vel(0, 10)
+        self.p2_up, self.p2_down = False, False
+        self.p2_y_direction = 0
         # register both players with a player entity manager
         self.players = EntityManager()
         self.players.register_entity(self.player1)
