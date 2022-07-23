@@ -3,7 +3,8 @@ import sys
 from Constants import *
 from states.menus.mainmenu.mainmenu import MainMenu
 from states.modes.local import Local
-from states.settings.mmsettings import MainMenuSettings
+from states.menus.mainmenu.mmsettings import MainMenuSettings
+from states.menus.pause.pause import Pause
 
 
 class Game():
@@ -19,7 +20,7 @@ class Game():
 
         # Pong game states initializations
         self.states = {"mainmenu": MainMenu(self, "mainmenu"), "local": Local(self, "local"),
-                       "mmsettings": MainMenuSettings(self, "mmsettings")}
+                       "mmsettings": MainMenuSettings(self, "mmsettings"), "Pause": Pause(self, "pause")}
         self.curr_state = self.states["mainmenu"]
 
     def update(self):

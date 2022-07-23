@@ -10,7 +10,7 @@ from ecs.systems import *
 class Local(State):
     def __init__(self, game, name):
         State.__init__(self, game, name)
-        self.local_commands = LocalCommand(ActiveOn.PRESSED, player_commands, self)
+        self.player_c = LocalCommand(ActiveOn.PRESSED, player_commands, self)
         self.register_commands()
         self.create_players()
         self.create_balls()
@@ -18,6 +18,7 @@ class Local(State):
         self.objects = list()
 
     def update(self):
+
         command_queue = self.ih.handle_input()
         for command, args in command_queue:
             command.execute(args[0])
@@ -28,17 +29,16 @@ class Local(State):
         draw_system(self.game.screen, self.scores.all_component_instances("graphics"), self.objects)
 
     def register_commands(self):
-        self.ih.register_command(pygame.K_ESCAPE, LocalCommand(ActiveOn.PRESSED, self.exit_state, self))
         # Player 1 movement
-        self.ih.register_command(pygame.K_LEFT, self.local_commands)
-        self.ih.register_command(pygame.K_RIGHT, self.local_commands)
-        self.ih.register_command(pygame.K_UP, self.local_commands)
-        self.ih.register_command(pygame.K_DOWN, self.local_commands)
+        self.ih.register_command(pygame.K_LEFT, self.player_c)
+        self.ih.register_command(pygame.K_RIGHT, self.player_c)
+        self.ih.register_command(pygame.K_UP, self.player_c)
+        self.ih.register_command(pygame.K_DOWN, self.player_c)
         # Player 2 movement
-        self.ih.register_command(pygame.K_a, self.local_commands)
-        self.ih.register_command(pygame.K_d, self.local_commands)
-        self.ih.register_command(pygame.K_w, self.local_commands)
-        self.ih.register_command(pygame.K_s, self.local_commands)
+        self.ih.register_command(pygame.K_a, self.player_c)
+        self.ih.register_command(pygame.K_d, self.player_c)
+        self.ih.register_command(pygame.K_w, self.player_c)
+        self.ih.register_command(pygame.K_s, self.player_c)
 
     def create_players(self):
         # create player 1:
@@ -80,3 +80,6 @@ class Local(State):
 
     def exit_state(self):
         self.game.running = False
+
+    def pause_command(self):
+        self.change_state("mainmenu")
