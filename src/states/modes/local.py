@@ -1,10 +1,10 @@
-import pygame
-import random
+import pygame, random
 from states.state import State
 from Constants import *
 from ecs.entities import Player, Ball, Score, Pause, Start
 from ecs.entity_manager import EntityManager
-from states.modes.localcommands import *
+from states.modes.localcommands import LocalCommand, up_command, down_command, toggle_pause, set_start
+from commands.command import ActiveOn
 from ecs.systems import draw_system, move_system, collision_detection_system
 
 
@@ -12,16 +12,15 @@ class Local(State):
     def __init__(self, game, name):
         State.__init__(self, game, name)
         self.start, self.pause = False, False
-        self.scored, self.collision_present, self.volley, self.boost = False, False, 1, 5
+        self.scored, self.collision_present, self.volley, self.boost = False, False, 1, 2
         self.register_commands()
         self.create_entities()
-        self.objects = list()
 
     def update(self):
         command_queue = self.ih.handle_input()
         for command, args in command_queue:
             command.execute(args[0])
-        if self.start:
+        if self.start and not self.pause:
             self.p1_y_direction = self.p1_down - self.p1_up
             self.p2_y_direction = self.p2_down - self.p2_up
             move_system(self.player1, self.paddle_off_bounds_handler, 0, self.p1_y_direction)
@@ -46,9 +45,13 @@ class Local(State):
     def register_commands(self):
         # Command: press p to pause and transition to pause state
         self.pause_command = LocalCommand(ActiveOn.PRESSED, toggle_pause, self)
+        self.ih.register_command(pygame.K_p, self.pause_command)
         # Command: press space to start
         self.start_command = LocalCommand(ActiveOn.PRESSED, set_start, self)
         self.ih.register_command(pygame.K_SPACE, self.start_command)
+        # Command: press esc to exit game
+        self.exit_command = LocalCommand(ActiveOn.PRESSED, self.exit_state, self)
+        self.ih.register_command(pygame.K_ESCAPE, self.exit_command)
         # Command: press up/w to move player up and down/s to move player down
         self.player_up_press = LocalCommand(ActiveOn.BOTH, up_command, self)
         self.player_down_press = LocalCommand(ActiveOn.BOTH, down_command, self)
@@ -111,7 +114,7 @@ class Local(State):
 
     def create_texts(self):
         # create Pause entity
-        self.pause_text = Pause("Press Space to Toggle Pause", TEXT_SIZE, WHITE)
+        self.pause_text = Pause("Press P to Toggle Pause", TEXT_SIZE, WHITE)
         # create Start entity
         self.start_text = Start("Press Space to Start", TEXT_SIZE, WHITE)
         # create Score entities
@@ -156,4 +159,5 @@ class Local(State):
                 self.ball.set_vel(self.ball.x_vel() + self.volley / 2.5, self.ball.y_vel() + self.volley / 2.5)
 
     def exit_state(self):
+        self.start = False
         self.game.running = False
