@@ -1,6 +1,6 @@
 import pygame
 
-def draw_system(surface, graphics, objects):
+def draw_system(surface, graphics):
     for graphic_component in graphics:
         surface.blit(graphic_component.surface, graphic_component.rect)
 

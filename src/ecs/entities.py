@@ -42,6 +42,12 @@ class Ball(Entity):
         self.components["velocity"].x_velocity = x
         self.components["velocity"].y_velocity = y
 
+    def x_vel(self):
+        return self.components["velocity"].x_velocity
+
+    def y_vel(self):
+        return self.components["velocity"].y_velocity
+
 
 class Score(Entity):
     def __init__(self, title, size, color):
@@ -62,6 +68,15 @@ class Score(Entity):
         self.update_surface()
         self.components["graphics"].surface = self.surface
 
+class Start(Entity):
+    def __init__(self, title, size, color):
+        Entity.__init__(self, title)
+        self.components["text"] = TextComponent(title, size, color)
+        self.surface = self.components["text"].font.render(title, False, color)
+        self.components["graphics"] = GraphicComponent(self.surface, 0, 0)
+
+    def set_pos(self, x, y):
+        self.components["graphics"].rect.move_ip(x, y)
 
 class Pause(Entity):
     def __init__(self, title, size, color):
