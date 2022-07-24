@@ -20,7 +20,9 @@ class Game():
 
         # Pong game states initializations
         self.states = {"mainmenu": MainMenu(self, "mainmenu"), "local": Local(self, "local"),
-                       "mmsettings": MainMenuSettings(self, "mmsettings"), "Pause": Pause(self, "pause")}
+                       "mmsettings": MainMenuSettings(self, "mmsettings"), "Pause": Pause(self, "pause"),
+                       "mmgraphics": MMGraphics(self, "mmgraphics"), "mmaudio": MMAudio(self, "mmaudio"),
+                       "mmcontrols": MMControls(self, "mmcontrols")}
         self.curr_state = self.states["mainmenu"]
 
     def update(self):
