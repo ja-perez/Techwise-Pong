@@ -47,3 +47,15 @@ class MainMenuSettings(State):
         self.return_button = pygwidgets.TextButton(self.game.screen, (0, 0), 'Return', fontSize=45)
         self.return_button.moveXY(WIN_W / 2 - self.return_button.getRect().width / 2,
                                     WIN_H / 2 - self.return_button.getRect().height / 2)
+
+class MMGraphics():
+    def __init__(self, game, name):
+        State.__init__(self, game, name)
+
+class MMAudio():
+    def __init__(self, game, name):
+        State.__init__(self, game, name)
+
+class MMControls():
+    def __init__(self, game, name):
+        State.__init__(self, game, name)

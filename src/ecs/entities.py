@@ -68,7 +68,7 @@ class Score(Entity):
         self.update_surface()
         self.components["graphics"].surface = self.surface
 
-class Start(Entity):
+class Pause(Entity):
     def __init__(self, title, size, color):
         Entity.__init__(self, title)
         self.components["text"] = TextComponent(title, size, color)
@@ -78,7 +78,7 @@ class Start(Entity):
     def set_pos(self, x, y):
         self.components["graphics"].rect.move_ip(x, y)
 
-class Pause(Entity):
+class Start(Entity):
     def __init__(self, title, size, color):
         Entity.__init__(self, title)
         self.components["text"] = TextComponent(title, size, color)

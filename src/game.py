@@ -1,9 +1,9 @@
 import pygame
 import sys
 from Constants import *
-from states.menus.mainmenu.mainmenu import MainMenu
 from states.modes.local import Local
-from states.menus.mainmenu.mmsettings import MainMenuSettings
+from states.menus.mainmenu.mainmenu import MainMenu
+from states.menus.mainmenu.mmsettings import MainMenuSettings, MMGraphics, MMAudio, MMControls
 from states.menus.pause.pause import Pause
 
 
