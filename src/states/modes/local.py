@@ -36,7 +36,7 @@ class Local(State):
             self.game.screen.blit(self.pause_text.components["graphics"].surface,
                                   self.pause_text.components["graphics"].rect)
             draw_system(self.game.screen, self.g_manager.all_component_instances("graphics"))
-        elif not self.start:
+        elif not self.start and self.game.running:
             self.game.screen.blit(self.start_text.components["graphics"].surface,
                                   self.start_text.components["graphics"].rect)
         else:

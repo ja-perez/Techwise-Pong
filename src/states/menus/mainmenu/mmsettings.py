@@ -12,11 +12,11 @@ class MainMenuSettings(State):
     def update(self):
         for event in pygame.event.get():
             if self.graphics_button.handleEvent(event):
-                self.change_state("MM_Graphics")
+                self.change_state("mmgraphics")
             if self.audio_button.handleEvent(event):
-                self.change_state("MM_Audio")
+                self.change_state("mmaudio")
             if self.controls_button.handleEvent(event):
-                self.change_state("MM_Controls")
+                self.change_state("mmcontrols")
             if self.return_button.handleEvent(event):
                 self.change_state("mainmenu")
 
