@@ -16,10 +16,10 @@ class InputHandler:
         CommandQueue = list()
         pygame.event.pump()
 
-        pressed = pygame.event.get(pygame.KEYDOWN)
-        released = pygame.event.get(pygame.KEYUP)
-        # mouse_pressed = pygame.event.get(pygame.MOUSEBUTTONDOWN)
-        # mouse_released = pygame.event.get(pygame.MOUSEBUTTONUP)
+        key_pressed = pygame.event.get(pygame.KEYDOWN)
+        key_released = pygame.event.get(pygame.KEYUP)
+        mouse_pressed = pygame.event.get(pygame.MOUSEBUTTONDOWN)
+        mouse_released = pygame.event.get(pygame.MOUSEBUTTONUP)
         # mouse_moved = pygame.event.get(pygame.MOUSEMOTION)
         # mouse_wheel = pygame.event.get(pygame.MOUSEWHEEL)
 
@@ -30,16 +30,20 @@ class InputHandler:
 
         for keycode, command in self.KeyboardCommands.items():
             if command.active == ActiveOn.PRESSED or command.active == ActiveOn.BOTH:
-                for event in pressed:
+                for event in key_pressed:
                     if event.key == keycode:
                         #CommandQueue.append((command, functools.partial(command.execute, keycode)))
                         CommandQueue.append((command, [keycode]))
             if command.active == ActiveOn.RELEASED or command.active == ActiveOn.BOTH:
-                for event in released:
+                for event in key_released:
                     if event.key == keycode:
                         #CommandQueue.append(functools.partial(command.execute, keycode))
                         CommandQueue.append((command, [keycode]))
         return CommandQueue
+
+        for keycode, command in self.MouseCommands.items():
+            if command.active == ActiveOn.Pressed or comman.active == ActiveOn.BOTH:
+                
         """
         for i, command in enumerate(self.MouseCommands):
             if command:
