@@ -5,6 +5,7 @@ from Constants import *
 from commands.command import *
 from input.input_handler import *
 
+
 class MainMenu(State):
     def __init__(self, game, name):
         State.__init__(self, game, name)
@@ -20,8 +21,6 @@ class MainMenu(State):
                 print("Goodbye")
                 self.game.running = False
 
-    #######################
-    # temp render methods #
     def render(self):
         self.title_display()
         self.button_display()
@@ -36,23 +35,21 @@ class MainMenu(State):
         self.local_game_button.draw()
         self.mainmenu_settings.draw()
         self.exit_button.draw()
-    # temp render methods #
-    #######################
 
     def create_buttons(self):
         self.local_game_button = pygwidgets.TextButton(self.game.screen, (0, 0), 'Local')
         button_height = self.local_game_button.getRect().height
         self.local_game_button.moveXY(WIN_W / 2 - self.local_game_button.getRect().width / 2,
-                                    WIN_H / 2 - self.local_game_button.getRect().height / 2
-                                    + button_height)
+                                      WIN_H / 2 - self.local_game_button.getRect().height / 2
+                                      + button_height)
         self.mainmenu_settings = pygwidgets.TextButton(self.game.screen, (0, 0), 'Settings')
         self.mainmenu_settings.moveXY(WIN_W / 2 - self.mainmenu_settings.getRect().width / 2,
-                                    WIN_H / 2 - self.mainmenu_settings.getRect().height / 2
-                                    + button_height * 2)
+                                      WIN_H / 2 - self.mainmenu_settings.getRect().height / 2
+                                      + button_height * 2)
         self.exit_button = pygwidgets.TextButton(self.game.screen, (0, 0), 'Exit Game')
         self.exit_button.moveXY(WIN_W / 2 - self.exit_button.getRect().width / 2,
-                                    WIN_H / 2 - self.exit_button.getRect().height / 2
-                                    + button_height * 3)
+                                WIN_H / 2 - self.exit_button.getRect().height / 2
+                                + button_height * 3)
 
     def exit_state(self):
         pass

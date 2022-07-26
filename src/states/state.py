@@ -1,5 +1,5 @@
 from commands.command import *
-from input.input_handler import *
+from input.input_handler import InputHandler
 
 
 class State():

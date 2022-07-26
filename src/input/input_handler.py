@@ -42,7 +42,8 @@ class InputHandler:
         return CommandQueue
 
         for keycode, command in self.MouseCommands.items():
-            if command.active == ActiveOn.Pressed or comman.active == ActiveOn.BOTH:
+            if command.active == ActiveOn.Pressed or command.active == ActiveOn.BOTH:
+                pass
                 
         """
         for i, command in enumerate(self.MouseCommands):

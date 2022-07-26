@@ -29,17 +29,13 @@ class Game():
         if pygame.event.peek(pygame.QUIT):
             self.running = False
         self.curr_state.update()
-        self.temp_render()
+        self.render()
         self.clock.tick(60)
 
-    ######################
-    # temp render method #
-    def temp_render(self):
+    def render(self):
         self.screen.blit(pygame.transform.scale(self.game_canvas, (WIN_W, WIN_H)), (0, 0))
         self.curr_state.render()
         pygame.display.flip()
-    # temp render method #
-    ######################
 
     def teardown(self):
         # handle game exit
