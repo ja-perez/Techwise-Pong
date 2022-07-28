@@ -30,9 +30,13 @@ class Local(State):
             self.collision_present = collision_detection_system(
                 self.ball, self.g_manager.all_active_component_instances("graphics"))
             self.collision_handler(self.collision_present)
+        for event in pygame.event.get():
+            if self.pause:
+                self.change_state("Pause")
 
     def render(self):
         if self.start and self.pause:
+            #self.change_state("Pause")
             self.game.screen.blit(self.pause_text.components["graphics"].surface,
                                   self.pause_text.components["graphics"].rect)
             draw_system(self.game.screen, self.g_manager.all_component_instances("graphics"))
