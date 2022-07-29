@@ -33,9 +33,14 @@ def down_command(keycode=0, state_int=0):
         state_int.p2_down = not state_int.p2_down
 
 
-def toggle_pause(keycode=0, state_inst=0):
-    state_inst.pause = not state_inst.pause
+def set_pause(keycode=0, state_inst=0):
+    state_inst.pause = True
 
 
 def set_start(keycode=0, state_inst=0):
     state_inst.start = True
+
+
+def set_exit(keycode=0, state_inst=0):
+    state_inst.start = False
+    state_inst.game.running = False

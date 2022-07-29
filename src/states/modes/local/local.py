@@ -3,7 +3,7 @@ from states.state import State
 from Constants import *
 from ecs.entities import Player, Ball, Score, Pause, Start
 from ecs.entity_manager import EntityManager
-from states.modes.localcommands import LocalCommand, up_command, down_command, toggle_pause, set_start
+from states.modes.local.localcommands import LocalCommand, up_command, down_command, set_pause, set_start, set_exit
 from commands.command import ActiveOn
 from ecs.systems import draw_system, move_system, collision_detection_system
 
@@ -15,6 +15,7 @@ class Local(State):
         self.scored, self.collision_present, self.volley, self.boost = False, False, 1, 2
         self.register_commands()
         self.create_entities()
+        self.next_state = ""
 
     def update(self):
         command_queue = self.ih.handle_input()
@@ -31,29 +32,28 @@ class Local(State):
                 self.ball, self.g_manager.all_active_component_instances("graphics"))
             self.collision_handler(self.collision_present)
         if self.pause:
-            for event in pygame.event.get():
-                self.change_state("mmsettings")
+            self.next_state = "pause"
+            self.change_state(self.next_state)
 
     def render(self):
-        if self.start:
-            self.game.screen.blit(self.pause_text.components["graphics"].surface,
-                                  self.pause_text.components["graphics"].rect)
-            draw_system(self.game.screen, self.g_manager.all_component_instances("graphics"))
-        elif not self.start:
+        if not self.start:
             self.game.screen.blit(self.start_text.components["graphics"].surface,
                                   self.start_text.components["graphics"].rect)
+            draw_system(self.game.screen, self.g_manager.all_component_instances("graphics"))
         else:
+            self.game.screen.blit(self.pause_text.components["graphics"].surface,
+                                  self.pause_text.components["graphics"].rect)
             draw_system(self.game.screen, self.g_manager.all_component_instances("graphics"))
 
     def register_commands(self):
         # Command: press p to pause and transition to pause state
-        self.pause_command = LocalCommand(ActiveOn.PRESSED, toggle_pause, self)
+        self.pause_command = LocalCommand(ActiveOn.PRESSED, set_pause, self)
         self.ih.register_command(pygame.K_p, self.pause_command)
         # Command: press space to start
         self.start_command = LocalCommand(ActiveOn.PRESSED, set_start, self)
         self.ih.register_command(pygame.K_SPACE, self.start_command)
         # Command: press esc to exit game
-        self.exit_command = LocalCommand(ActiveOn.PRESSED, self.exit_state, self)
+        self.exit_command = LocalCommand(ActiveOn.PRESSED, set_exit, self)
         self.ih.register_command(pygame.K_ESCAPE, self.exit_command)
         # Command: press up/w to move player up and down/s to move player down
         self.player_up_press = LocalCommand(ActiveOn.BOTH, up_command, self)
@@ -78,8 +78,7 @@ class Local(State):
         # self.ball.set_pos(GAME_W, GAME_H - BALL[1] / 2)
         self.start_text.set_pos(GAME_W - self.start_text.components["graphics"].rect.width / 2,
                                 self.start_text.components["graphics"].rect.height * 2)
-        self.pause_text.set_pos(GAME_W - self.pause_text.components["graphics"].rect.width / 2,
-                                self.pause_text.components["graphics"].rect.height * 2)
+        self.pause_text.set_pos(0, GAME_H * 2 - self.pause_text.components["graphics"].rect.height)
         self.score1.set_pos(self.player1.surface.get_width() * 2, 0)
         self.score2.set_pos(GAME_W * 2 - self.score2.surface.get_width() * 1.5, 0)
 
@@ -117,7 +116,7 @@ class Local(State):
 
     def create_texts(self):
         # create Pause entity
-        self.pause_text = Pause("Press P to Toggle Pause", TEXT_SIZE, WHITE)
+        self.pause_text = Pause("Press P to Toggle Pause", SCORE_SIZE, WHITE)
         # create Start entity
         self.start_text = Start("Press Space to Start", TEXT_SIZE, WHITE)
         # create Score entities
@@ -161,6 +160,14 @@ class Local(State):
             if self.volley % self.boost == 0:
                 self.ball.set_vel(self.ball.x_vel() + self.volley / 2.5, self.ball.y_vel() + self.volley / 2.5)
 
+    def change_state(self, next_state):
+        self.exit_state()
+        self.game.curr_state = self.game.states[next_state]
+        self.enter_state()
+
     def exit_state(self):
-        self.start = False
-        self.game.running = False
+        if self.pause:
+            self.pause = False
+
+    def enter_state(self):
+        pass

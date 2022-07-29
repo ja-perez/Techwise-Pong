@@ -14,7 +14,7 @@ class MainMenu(State):
     def update(self):
         for event in pygame.event.get():
             if self.local_game_button.handleEvent(event):
-                self.change_state("pause")
+                self.change_state("local")
             if self.mainmenu_settings.handleEvent(event):
                 self.change_state("mmsettings")
             if self.exit_button.handleEvent(event):
