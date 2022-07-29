@@ -11,7 +11,7 @@ class InputHandler:
 
     def register_command(self, keycode: int, command: ICommand):
         self.KeyboardCommands.update({keycode:command})
-        self.MouseCommands.update({keycode:command})
+        #self.MouseCommands.update({keycode:command})
 
     def handle_input(self) -> List[ICommand]:
         CommandQueue = list()
@@ -40,7 +40,7 @@ class InputHandler:
                     if event.key == keycode:
                         #CommandQueue.append(functools.partial(command.execute, keycode))
                         CommandQueue.append((command, [keycode]))
-
+        return CommandQueue
         for keycode, command in self.MouseCommands.items():
             if command.active == ActiveOn.Pressed or command.active == ActiveOn.BOTH:
                 for event in mouse_pressed:
@@ -53,8 +53,6 @@ class InputHandler:
         return CommandQueue
 
 
-
-                
         """
         for i, command in enumerate(self.MouseCommands):
             if command:
