@@ -20,7 +20,7 @@ class Local(State):
         command_queue = self.ih.handle_input()
         for command, args in command_queue:
             command.execute(args[0])
-        if self.start and not self.pause:
+        if self.start:
             self.p1_y_direction = self.p1_down - self.p1_up
             self.p2_y_direction = self.p2_down - self.p2_up
             move_system(self.player1, self.paddle_off_bounds_handler, 0, self.p1_y_direction)
@@ -30,17 +30,16 @@ class Local(State):
             self.collision_present = collision_detection_system(
                 self.ball, self.g_manager.all_active_component_instances("graphics"))
             self.collision_handler(self.collision_present)
-        for event in pygame.event.get():
-            if self.pause:
-                self.change_state("Pause")
+        if self.pause:
+            for event in pygame.event.get():
+                self.change_state("mmsettings")
 
     def render(self):
-        if self.start and self.pause:
-            #self.change_state("Pause")
+        if self.start:
             self.game.screen.blit(self.pause_text.components["graphics"].surface,
                                   self.pause_text.components["graphics"].rect)
             draw_system(self.game.screen, self.g_manager.all_component_instances("graphics"))
-        elif not self.start and self.game.running:
+        elif not self.start:
             self.game.screen.blit(self.start_text.components["graphics"].surface,
                                   self.start_text.components["graphics"].rect)
         else:

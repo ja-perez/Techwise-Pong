@@ -9,7 +9,7 @@ class Pause(State):
     def __init__(self, game, name):
         State.__init__(self, game, name)
         self.create_buttons()
-        #self.state_inst = state_inst
+
 
     def update(self):
         for event in pygame.event.get():
@@ -23,6 +23,7 @@ class Pause(State):
                 print("Goodbye")
                 self.game.running = False
 
+
     # def register_commands(self):
     #     # Command: press p to pause and transition to pause state
     #     self.pause_command = PauseCommand(ActiveOn.PRESSED, toggle_pause, self)
@@ -30,10 +31,11 @@ class Pause(State):
 
     def render(self):
         #self.pause_display()
+        self.test_display()
         self.button_display()
 
-    def pause_display(self):
-        text_surface = self.game.font.render(GAME_TITLE, True, WHITE)
+    def test_display(self):
+        text_surface = self.game.font.render("pause screen works", True, WHITE)
         text_rect = text_surface.get_rect()
         text_rect.center = (GAME_W, GAME_H / 2.5)
         self.game.screen.blit(text_surface, text_rect)
