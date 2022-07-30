@@ -5,8 +5,8 @@ from Constants import *
 
 
 class MainMenuSettings(State):
-    def __init__(self, game, name):
-        State.__init__(self, game, name)
+    def __init__(self, game):
+        State.__init__(self, game)
         self.create_buttons()
 
     def update(self):
@@ -49,13 +49,13 @@ class MainMenuSettings(State):
                                     WIN_H / 2 - self.return_button.getRect().height / 2)
 
 class MMGraphics():
-    def __init__(self, game, name):
-        State.__init__(self, game, name)
+    def __init__(self, game):
+        State.__init__(self, game)
 
 class MMAudio():
-    def __init__(self, game, name):
-        State.__init__(self, game, name)
+    def __init__(self, game):
+        State.__init__(self, game)
 
 class MMControls():
-    def __init__(self, game, name):
-        State.__init__(self, game, name)
+    def __init__(self, game):
+        State.__init__(self, game)

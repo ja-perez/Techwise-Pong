@@ -6,8 +6,8 @@ from states.menus.pause.pausecommands import PauseCommand, toggle_pause
 
 
 class Pause(State):
-    def __init__(self, game, name):
-        State.__init__(self, game, name)
+    def __init__(self, game):
+        State.__init__(self, game)
         self.create_buttons()
 
 

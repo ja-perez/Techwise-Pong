@@ -7,14 +7,16 @@ from input.input_handler import *
 
 
 class MainMenu(State):
-    def __init__(self, game, name):
-        State.__init__(self, game, name)
+    def __init__(self, game):
+        State.__init__(self, game)
         self.create_buttons()
 
     def update(self):
         for event in pygame.event.get():
             if self.local_game_button.handleEvent(event):
                 self.change_state("local")
+            if self.online_game_button.handleEvent(event):
+                self.change_state("online")
             if self.mainmenu_settings.handleEvent(event):
                 self.change_state("mmsettings")
             if self.exit_button.handleEvent(event):
@@ -33,6 +35,7 @@ class MainMenu(State):
 
     def button_display(self):
         self.local_game_button.draw()
+        self.online_game_button.draw()
         self.mainmenu_settings.draw()
         self.exit_button.draw()
 
@@ -42,14 +45,18 @@ class MainMenu(State):
         self.local_game_button.moveXY(WIN_W / 2 - self.local_game_button.getRect().width / 2,
                                       WIN_H / 2 - self.local_game_button.getRect().height / 2
                                       + button_height)
+        self.online_game_button = pygwidgets.TextButton(self.game.screen, (0, 0), 'Online')
+        self.online_game_button.moveXY(WIN_W / 2 - self.online_game_button.getRect().width / 2,
+                                      WIN_H / 2 - self.online_game_button.getRect().height / 2
+                                      + button_height * 2)
         self.mainmenu_settings = pygwidgets.TextButton(self.game.screen, (0, 0), 'Settings')
         self.mainmenu_settings.moveXY(WIN_W / 2 - self.mainmenu_settings.getRect().width / 2,
                                       WIN_H / 2 - self.mainmenu_settings.getRect().height / 2
-                                      + button_height * 2)
+                                      + button_height * 3)
         self.exit_button = pygwidgets.TextButton(self.game.screen, (0, 0), 'Exit Game')
         self.exit_button.moveXY(WIN_W / 2 - self.exit_button.getRect().width / 2,
                                 WIN_H / 2 - self.exit_button.getRect().height / 2
-                                + button_height * 3)
+                                + button_height * 4)
 
     def exit_state(self):
         pass

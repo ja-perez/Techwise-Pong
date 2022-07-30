@@ -13,6 +13,9 @@ class Player(Entity):
         self.components["graphics"] = GraphicComponent(self.surface, 0, 0)
         self.components["velocity"] = VelocityComponent(0, 0)
 
+    def get_name(self):
+        return self.name
+
     def set_pos(self, x, y):
         self.components["graphics"].rect.move_ip(x, y)
 

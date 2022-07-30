@@ -3,9 +3,8 @@ from input.input_handler import InputHandler
 
 
 class State():
-    def __init__(self, game, name):
+    def __init__(self, game):
         self.game = game
-        self.name = name
         self.ih = InputHandler()
 
     def update(self):
@@ -18,13 +17,10 @@ class State():
     def register_commands(self):
         pass
 
-    def state_name(self):
-        return self.name
-
     def change_state(self, next_state):
         self.exit_state()
         self.game.curr_state = self.game.states[next_state]
-        self.enter_state()
+        self.game.curr_state.enter_state()
 
     def exit_state(self):
         # input handler into command change state

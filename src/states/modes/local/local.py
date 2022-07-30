@@ -9,8 +9,8 @@ from ecs.systems import draw_system, move_system, collision_detection_system
 
 
 class Local(State):
-    def __init__(self, game, name):
-        State.__init__(self, game, name)
+    def __init__(self, game):
+        State.__init__(self, game)
         self.start, self.pause = False, False
         self.scored, self.collision_present, self.volley, self.boost = False, False, 1, 2
         self.register_commands()

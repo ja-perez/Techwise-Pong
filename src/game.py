@@ -5,6 +5,7 @@ from states.modes.local.local import Local
 from states.menus.mainmenu.mainmenu import MainMenu
 from states.menus.mainmenu.mmsettings import MainMenuSettings, MMGraphics, MMAudio, MMControls
 from states.menus.pause.pause import Pause
+from states.modes.online.online import Online
 
 
 class Game():
@@ -19,10 +20,10 @@ class Game():
         self.clock = pygame.time.Clock()
 
         # Pong game states initializations
-        self.states = {"mainmenu": MainMenu(self, "mainmenu"), "local": Local(self, "local"),
-                       "mmsettings": MainMenuSettings(self, "mmsettings"), "pause": Pause(self, "pause"),
-                       "mmgraphics": MMGraphics(self, "mmgraphics"), "mmaudio": MMAudio(self, "mmaudio"),
-                       "mmcontrols": MMControls(self, "mmcontrols")}
+        self.states = {"mainmenu": MainMenu(self), "local": Local(self),
+                       "mmsettings": MainMenuSettings(self), "pause": Pause(self),
+                       "mmgraphics": MMGraphics(self), "mmaudio": MMAudio(self),
+                       "mmcontrols": MMControls(self), "online": Online(self)}
         self.curr_state = self.states["mainmenu"]
 
     def update(self):
