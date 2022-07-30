@@ -10,14 +10,13 @@ class InputHandler:
         self.MouseCommands = dict()
         self.GamepadCommands = dict()
         self.MouseButtons = {"lclick": 1, "mclick": 2, "rclick": 3, "scrolldown": 4, "scrollup": 5}
-
     def register_command(self, keycode: int, command: ICommand):
         self.KeyboardCommands.update({keycode: command})
-        self.MouseCommands.update({keycode: command})
 
     def register_ms_command(self, button: str, command: ICommand):
-        keycode = self.MouseButtons[button]
-        self.MouseCommands.update({keycode: command})
+        if button in self.MouseButtons:
+            keycode = self.MouseButtons[button]
+            self.MouseCommands.update({keycode: command})
 
     def handle_input(self) -> List[ICommand]:
         CommandQueue = list()
