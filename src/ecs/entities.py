@@ -92,3 +92,13 @@ class Start(Entity):
 
     def set_pos(self, x, y):
         self.components["graphics"].rect.move_ip(x, y)
+
+class State_Text(Entity):
+    def __init__(self, title, size, color):
+        Entity.__init__(self, title)
+        self.components["text"] = TextComponent(title, size, color)
+        self.surface = self.components["text"].font.render(title, False, color)
+        self.components["graphics"] = GraphicComponent(self.surface, 0, 0)
+
+    def set_pos(self, x, y):
+        self.components["graphics"].rect.move_ip(x, y)

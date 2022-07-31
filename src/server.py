@@ -1,7 +1,7 @@
 import socket
 from _thread import *
 
-server = "192.168.0.210"
+server = "192.168.0.3"
 port = 5555
 
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -49,7 +49,7 @@ def threaded_client(conn):
             data = conn.recv(2048)
             answer = data.decode("utf-8")
             reply = "Working"
-            if not data:
+            if not data or answer == "Goodbye":
                 print("Disconnected")
                 break
             else:
