@@ -3,12 +3,15 @@ from input.input_handler import InputHandler
 
 
 class State():
-    def __init__(self, game):
+    def __init__(self, game, name=""):
         self.game = game
+        self.name = name
         self.ih = InputHandler()
 
+    def get_name(self):
+        return self.name
+
     def update(self):
-        # input handler
         pass
 
     def render(self, surface):
@@ -23,9 +26,7 @@ class State():
         self.game.curr_state.enter_state()
 
     def exit_state(self):
-        # input handler into command change state
         pass
 
     def enter_state(self):
-        # input handler into command change state
         pass

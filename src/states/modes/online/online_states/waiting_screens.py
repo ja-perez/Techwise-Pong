@@ -16,7 +16,6 @@ class WaitScreen(State):
             elif self.ws2_button2.handleEvent(event):
                 state.change_state("mainmenu")
 
-
     def render(self, scene):
         if scene == "ws1":
             graphic_component = self.wait_screen1.components["graphics"]

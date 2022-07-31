@@ -3,8 +3,8 @@ class Entity():
         self.name = name
         self.components = dict()
 
-    def set_components(self):
-        pass
+    def set_components(self, component_type, component):
+        self.components.update({component_type: component})
 
     def set_name(self, new_name):
         self.name = new_name
