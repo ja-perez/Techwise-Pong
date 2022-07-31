@@ -36,6 +36,8 @@ class Ball(Entity):
         self.surface = pygame.Surface(BALL)
         self.surface.fill(WHITE)
         self.components["graphics"] = GraphicComponent(self.surface, 0, 0)
+        self.components["graphics"].is_circle = True
+        self.components["graphics"].radius = BALL_RADIUS
         self.components["velocity"] = VelocityComponent(0, 0)
 
     def set_pos(self, x, y):

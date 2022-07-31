@@ -1,8 +1,12 @@
 import pygame
 
+
 def draw_system(surface, graphics):
     for graphic_component in graphics:
-        surface.blit(graphic_component.surface, graphic_component.rect)
+        if graphic_component.is_circle:
+            pygame.draw.circle(surface, (255, 255, 255), graphic_component.rect.center, graphic_component.radius)
+        else:
+            surface.blit(graphic_component.surface, graphic_component.rect)
 
 
 def move_system(entity, off_bounds_handler, x_dir=0, y_dir=0):
