@@ -2,7 +2,7 @@ import pygwidgets
 import pygame
 from states.state import State
 from Constants import *
-from states.menus.pause.pausecommands import PauseCommand, toggle_pause
+
 
 
 class Pause(State):
@@ -25,17 +25,17 @@ class Pause(State):
 
 
     # def register_commands(self):
-    #     # Command: press p to pause and transition to pause state
-    #     self.pause_command = PauseCommand(ActiveOn.PRESSED, toggle_pause, self)
-    #     self.ih.register_command(pygame.K_p, self.pause_command)
+        # # Command: press p to pause and transition to pause state
+        # self.pause_command = PauseCommand(ActiveOn.PRESSED, toggle_pause, self)
+        # self.register_command(pygame.K_p, self.pause_command)
 
     def render(self):
-        #self.pause_display()
-        self.test_display()
+        self.state_text_display()
         self.button_display()
 
-    def test_display(self):
-        text_surface = self.game.font.render("pause screen works", True, WHITE)
+    def state_text_display(self):
+        font = pygame.font.Font(FONT_NAME, TEXT_SIZE)
+        text_surface = font.render("Pause Menu", True, WHITE)
         text_rect = text_surface.get_rect()
         text_rect.center = (GAME_W, GAME_H / 2.5)
         self.game.screen.blit(text_surface, text_rect)
@@ -47,23 +47,24 @@ class Pause(State):
         self.exit_to_desktop.draw()
 
     def create_buttons(self):
+        height_variable = 60
         self.resume_button = pygwidgets.TextButton(self.game.screen, (0, 0), 'Resume', fontSize=45)
         button_height = self.resume_button.getRect().height
         self.resume_button.moveXY(WIN_W / 2 - self.resume_button.getRect().width / 2,
                                     WIN_H / 2 - self.resume_button.getRect().height / 2
-                                    - button_height * 3)
+                                    - button_height * 3 + height_variable)
 
         self.settings_button = pygwidgets.TextButton(self.game.screen, (0, 0), 'Settings', fontSize=45)
         self.settings_button.moveXY(WIN_W / 2 - self.settings_button.getRect().width / 2,
                                  WIN_H / 2 - self.settings_button.getRect().height / 2
-                                 - button_height * 2)
+                                 - button_height * 2 + height_variable)
         self.exit_to_mainmenu = pygwidgets.TextButton(self.game.screen, (0, 0), 'Exit to Main Menu', fontSize=45)
         self.exit_to_mainmenu.moveXY(WIN_W / 2 - self.exit_to_mainmenu.getRect().width / 2,
                                     WIN_H / 2 - self.exit_to_mainmenu.getRect().height / 2
-                                    - button_height)
+                                    - button_height + height_variable)
         self.exit_to_desktop = pygwidgets.TextButton(self.game.screen, (0, 0), 'Exit to Desktop', fontSize=45)
         self.exit_to_desktop.moveXY(WIN_W / 2 - self.exit_to_desktop.getRect().width / 2,
-                                  WIN_H / 2 - self.exit_to_desktop.getRect().height / 2)
+                                  WIN_H / 2 - self.exit_to_desktop.getRect().height / 2 + height_variable)
 
     def exit_state(self):
         pass
