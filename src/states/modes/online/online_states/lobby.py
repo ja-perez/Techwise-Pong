@@ -1,26 +1,41 @@
 import pygame, pygwidgets
 from states.state import State
 from ecs.entities import State_Text
+from states.modes.online.online_states.friend_screen import Friend_Screen
 from Constants import *
 
 
 class Lobby(State):
-    def __init__(self, game):
+    def __init__(self, game, online):
         State.__init__(self, game)
         self.create_objects()
+        self.online_inst = online
+        self.states = {"friendscreen": Friend_Screen(game, online),
+                       "findmatch": None,
+                       "self": self}
+        self.curr_state = self.states["self"]
 
     def update(self, state):
-        for event in pygame.event.get():
-            if self.find_match_btn.handleEvent(event):
-                pass
-            elif self.mainmenu_btn.handleEvent(event):
-                state.change_state("mainmenu")
+        if self.curr_state != self:
+            self.curr_state.update(self)
+        else:
+            for event in pygame.event.get():
+                if self.find_match_btn.handleEvent(event):
+                    pass # change curr_state in online to match state
+                elif self.play_w_friend_btn.handleEvent(event):
+                    self.curr_state = self.states["friendscreen"]
+                elif self.mainmenu_btn.handleEvent(event):
+                    state.change_state("mainmenu")
 
     def render(self):
-        graphic_component = self.lobby_screen.components["graphics"]
-        self.game.screen.blit(graphic_component.surface, graphic_component.rect)
-        self.find_match_btn.draw()
-        self.mainmenu_btn.draw()
+        if self.curr_state != self:
+            self.curr_state.render()
+        else:
+            graphic_component = self.lobby_screen.components["graphics"]
+            self.game.screen.blit(graphic_component.surface, graphic_component.rect)
+            self.find_match_btn.draw()
+            self.play_w_friend_btn.draw()
+            self.mainmenu_btn.draw()
 
     def create_objects(self):
         # Lobby title
@@ -31,10 +46,17 @@ class Lobby(State):
                                   GAME_H - graphic_component.rect.height * 2)
 
         # Lobby Buttons
+        # Find Random Match
         self.find_match_btn = pygwidgets.TextButton(self.game.screen, (0, 0), 'Find Match')
         btn_rect = self.find_match_btn.getRect().width, self.find_match_btn.getRect().height
         self.find_match_btn.moveXY(GAME_W - btn_rect[0] / 2, GAME_H - btn_rect[1] / 2)
+        # Play with friend
+        self.play_w_friend_btn = pygwidgets.TextButton(self.game.screen, (0, 0), 'Play with Friend')
+        btn_rect = self.play_w_friend_btn.getRect().width, self.play_w_friend_btn.getRect().height
+        self.play_w_friend_btn.moveXY(GAME_W - btn_rect[0] / 2, GAME_H - btn_rect[1] / 2
+                                  + btn_rect[1])
+        # Return to main menu
         self.mainmenu_btn = pygwidgets.TextButton(self.game.screen, (0, 0), 'Main Menu')
         btn_rect = self.mainmenu_btn.getRect().width, self.mainmenu_btn.getRect().height
         self.mainmenu_btn.moveXY(GAME_W - btn_rect[0] / 2, GAME_H - btn_rect[1] / 2
-                                 + btn_rect[1])
+                                 + btn_rect[1] * 2)
