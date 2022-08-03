@@ -6,7 +6,7 @@ from ecs.entity_manager import EntityManager
 from states.modes.local.localcommands import LocalCommand, up_command, down_command, set_pause, set_start, set_exit
 from commands.command import ActiveOn
 from ecs.systems import draw_system, move_system, collision_detection_system
-
+from pygame import mixer
 
 class Local(State):
     def __init__(self, game):
@@ -144,19 +144,33 @@ class Local(State):
         player.components["graphics"].rect.bottom = min(player.components["graphics"].rect.bottom, WIN_H)
 
     def ball_off_bounds_handler(self, ball):
+        #SOUNDS MOVE LATER
+        pointfx = mixer.Sound("point.wav")
+        bouncefx = mixer.Sound("bounce.wav")
+        bouncefx.set_volume(0.3)
+        pointfx.set_volume(0.4)
+
         if ball.components["graphics"].rect.left <= 0:
             self.player2.increase_score(1)
             self.scored = True
+            pointfx.play()
         elif ball.components["graphics"].rect.right >= WIN_W:
             self.player1.increase_score(1)
             self.scored = True
+            pointfx.play()
         if ball.components["graphics"].rect.top <= 0 or ball.components["graphics"].rect.bottom >= WIN_H:
             self.ball_y_dir *= -1
+            bouncefx.play()
 
     def collision_handler(self, collision_present):
+        # SOUND MOVE LATER
+        bouncefx = mixer.Sound("bounce.wav")
+        bouncefx.set_volume(0.3)
+
         if collision_present:
             self.ball_x_dir *= -1
             self.volley += 1
+            bouncefx.play()
             if self.volley % self.boost == 0:
                 self.ball.set_vel(self.ball.x_vel() + self.volley / 2.5, self.ball.y_vel() + self.volley / 2.5)
 

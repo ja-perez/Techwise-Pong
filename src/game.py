@@ -6,6 +6,7 @@ from states.menus.mainmenu.mainmenu import MainMenu
 from states.menus.mainmenu.mmsettings import MainMenuSettings, MMGraphics, MMAudio, MMControls
 from states.menus.pause.pause import Pause
 from states.modes.online.online import Online
+from pygame import mixer
 
 
 class Game():
@@ -25,6 +26,10 @@ class Game():
                        "mmgraphics": MMGraphics(self), "mmaudio": MMAudio(self),
                        "mmcontrols": MMControls(self), "online": Online(self)}
         self.curr_state = self.states["mainmenu"]
+        # Background Music
+        mixer.music.load("background.wav")
+        mixer.music.set_volume(0.3)
+        mixer.music.play(-1)
 
     def update(self):
         if pygame.event.peek(pygame.QUIT):
