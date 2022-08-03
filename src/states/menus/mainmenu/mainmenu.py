@@ -7,8 +7,8 @@ from input.input_handler import *
 
 
 class MainMenu(State):
-    def __init__(self, game):
-        State.__init__(self, game)
+    def __init__(self, game, name):
+        State.__init__(self, game, name)
         self.create_buttons()
 
     def update(self):
@@ -18,7 +18,8 @@ class MainMenu(State):
             if self.online_game_button.handleEvent(event):
                 self.change_state("online")
             if self.mainmenu_settings.handleEvent(event):
-                self.change_state("mmsettings")
+                print(self.name)
+                self.change_state("settings", self.name)
             if self.exit_button.handleEvent(event):
                 print("Goodbye")
                 self.game.running = False

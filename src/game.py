@@ -3,7 +3,8 @@ import sys
 from Constants import *
 from states.modes.local.local import Local
 from states.menus.mainmenu.mainmenu import MainMenu
-from states.menus.mainmenu.mmsettings import MainMenuSettings, MMGraphics, MMAudio, MMControls
+from states.menus.settings.settings import Settings
+from states.menus.settings.update_set import Change_Graphics, Change_Audio, Change_Controls
 from states.menus.pause.pause import Pause
 from states.modes.online.online import Online
 from pygame import mixer
@@ -21,10 +22,10 @@ class Game():
         self.clock = pygame.time.Clock()
 
         # Pong game states initializations
-        self.states = {"mainmenu": MainMenu(self), "local": Local(self),
-                       "mmsettings": MainMenuSettings(self), "pause": Pause(self),
-                       "mmgraphics": MMGraphics(self), "mmaudio": MMAudio(self),
-                       "mmcontrols": MMControls(self), "online": Online(self)}
+        self.states = {"mainmenu": MainMenu(self, "mainmenu"), "local": Local(self, "local"),
+                       "settings": Settings(self, "settings"), "pause": Pause(self, "pause"),
+                       "graphics": Change_Graphics(self, "graphics"), "audio": Change_Audio(self, "audio"),
+                       "controls": Change_Controls(self, "controls"), "online": Online(self, "online")}
         self.curr_state = self.states["mainmenu"]
         # Background Music
         mixer.music.load("background.wav")

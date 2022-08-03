@@ -7,8 +7,8 @@ from Constants import *
 
 
 class Online(State):
-    def __init__(self, game):
-        State.__init__(self, game)
+    def __init__(self, game, name):
+        State.__init__(self, game, name)
         self.friend_code = ""
         self.states = {"waitscreen": WaitScreen(self.game)}
         self.curr_state = self.states["waitscreen"]

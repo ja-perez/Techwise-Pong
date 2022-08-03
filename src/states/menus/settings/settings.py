@@ -4,21 +4,22 @@ from states.state import State
 from Constants import *
 
 
-class MainMenuSettings(State):
-    def __init__(self, game):
-        State.__init__(self, game)
+class Settings(State):
+    def __init__(self, game, name):
+        State.__init__(self, game, name)
         self.create_buttons()
+        self.return_state = ""
 
     def update(self):
         for event in pygame.event.get():
             if self.graphics_button.handleEvent(event):
-                self.change_state("mmgraphics")
+                self.change_state("graphics")
             if self.audio_button.handleEvent(event):
-                self.change_state("mmaudio")
+                self.change_state("audio")
             if self.controls_button.handleEvent(event):
-                self.change_state("mmcontrols")
+                self.change_state("controls")
             if self.return_button.handleEvent(event):
-                self.change_state("mainmenu")
+                self.change_state(self.return_state)
 
     def render(self):
         self.state_text_display()
@@ -57,14 +58,5 @@ class MainMenuSettings(State):
         self.return_button.moveXY(WIN_W / 2 - self.return_button.getRect().width / 2,
                                     WIN_H / 2 - self.return_button.getRect().height / 2 + height_variable)
 
-class MMGraphics():
-    def __init__(self, game):
-        State.__init__(self, game)
-
-class MMAudio():
-    def __init__(self, game):
-        State.__init__(self, game)
-
-class MMControls():
-    def __init__(self, game):
-        State.__init__(self, game)
+    def enter_state(self, prev_state):
+        self.return_state = prev_state

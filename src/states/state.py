@@ -20,13 +20,16 @@ class State():
     def register_commands(self):
         pass
 
-    def change_state(self, next_state):
+    def change_state(self, next_state, prev_state=""):
         self.exit_state()
         self.game.curr_state = self.game.states[next_state]
-        self.game.curr_state.enter_state()
+        if prev_state:
+            self.game.curr_state.enter_state(prev_state)
+        else:
+            self.game.curr_state.enter_state()
 
     def exit_state(self):
         pass
 
-    def enter_state(self):
+    def enter_state(self, prev_state=""):
         pass
