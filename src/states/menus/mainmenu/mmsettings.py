@@ -21,7 +21,15 @@ class MainMenuSettings(State):
                 self.change_state("mainmenu")
 
     def render(self):
+        self.state_text_display()
         self.button_display()
+
+    def state_text_display(self):
+        font = pygame.font.Font(FONT_NAME, TEXT_SIZE)
+        text_surface = font.render("Settings Menu", True, WHITE)
+        text_rect = text_surface.get_rect()
+        text_rect.center = (GAME_W, GAME_H / 2.5)
+        self.game.screen.blit(text_surface, text_rect)
 
     def button_display(self):
         self.graphics_button.draw()
@@ -30,23 +38,24 @@ class MainMenuSettings(State):
         self.return_button.draw()
 
     def create_buttons(self):
+        height_variable = 60
         self.graphics_button = pygwidgets.TextButton(self.game.screen, (0, 0), 'Graphics', fontSize=45)
         button_height = self.graphics_button.getRect().height
         self.graphics_button.moveXY(WIN_W / 2 - self.graphics_button.getRect().width / 2,
                                     WIN_H / 2 - self.graphics_button.getRect().height / 2
-                                    - button_height * 3)
+                                    - button_height * 3 + height_variable)
 
         self.audio_button = pygwidgets.TextButton(self.game.screen, (0, 0), 'Audio', fontSize=45)
         self.audio_button.moveXY(WIN_W / 2 - self.audio_button.getRect().width / 2,
                                     WIN_H / 2 - self.audio_button.getRect().height / 2
-                                 - button_height * 2)
+                                 - button_height * 2 + height_variable)
         self.controls_button = pygwidgets.TextButton(self.game.screen, (0, 0), 'Controls', fontSize=45)
         self.controls_button.moveXY(WIN_W / 2 - self.controls_button.getRect().width / 2,
                                     WIN_H / 2 - self.controls_button.getRect().height / 2
-                                    - button_height)
+                                    - button_height + height_variable)
         self.return_button = pygwidgets.TextButton(self.game.screen, (0, 0), 'Return', fontSize=45)
         self.return_button.moveXY(WIN_W / 2 - self.return_button.getRect().width / 2,
-                                    WIN_H / 2 - self.return_button.getRect().height / 2)
+                                    WIN_H / 2 - self.return_button.getRect().height / 2 + height_variable)
 
 class MMGraphics():
     def __init__(self, game):
