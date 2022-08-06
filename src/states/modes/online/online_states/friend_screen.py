@@ -15,12 +15,19 @@ class Friend_Screen(State):
         for event in pygame.event.get():
             if self.private_match_btn.handleEvent(event):
                 match_id = self.online.network.send("create_private")
-                print(match_id)
+                state.curr_state = state.states["privatematch"]
+                state.curr_state.set_match(match_id)
             if self.back_to_lobby_btn.handleEvent(event):
                 state.curr_state = state.states["self"]
             if self.code_input.handleEvent(event):
                 f_code = self.code_input.getValue()
                 match_id = self.online.network.send("join_private " + f_code)
+                try:
+                    match_id = int(match_id)
+                    state.curr_state = state.states["privatematch"]
+                    state.curr_state.set_match(match_id)
+                except ValueError as e:
+                    print(str(e))
 
     def render(self):
         graphic_component = self.client_code.components["graphics"]

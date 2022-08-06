@@ -12,7 +12,8 @@ class Lobby(State):
         self.create_objects()
         self.online_inst = online
         self.states = {"friendscreen": Friend_Screen(game, online),
-                       "onlinematch": Online_Match(game, online),
+                       "publicmatch": Online_Match(game, online),
+                       "privatematch": Online_Match(game, online, True),
                        "self": self}
         self.curr_state = self.states["self"]
 
@@ -22,7 +23,7 @@ class Lobby(State):
         else:
             for event in pygame.event.get():
                 if self.find_match_btn.handleEvent(event):
-                    self.change_online_state("onlinematch")
+                    self.change_online_state("publicmatch")
                 elif self.play_w_friend_btn.handleEvent(event):
                     self.curr_state = self.states["friendscreen"]
                 elif self.mainmenu_btn.handleEvent(event):

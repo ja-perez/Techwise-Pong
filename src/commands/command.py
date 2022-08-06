@@ -1,13 +1,16 @@
 from abc import abstractstaticmethod
 from enum import Enum, unique
 from typing import Callable
-#from globals import States
-#s = States["MainMenu"]
+
+
+# from globals import States
+# s = States["MainMenu"]
 @unique
 class ActiveOn(Enum):
     PRESSED = 1
     RELEASED = 2
     BOTH = 3
+
 
 class ICommand:
     def __init__(self, active: ActiveOn, function: Callable):
@@ -18,9 +21,11 @@ class ICommand:
     @abstractstaticmethod
     def execute(game):
         """"""
+
     @abstractstaticmethod
     def undo():
         """"""
+
 
 class SelectCommand(ICommand):
     def __init__(self, active: ActiveOn, function: Callable):
@@ -32,8 +37,10 @@ class SelectCommand(ICommand):
     def undo(self):
         pass
 
+
 class ScrollUpCommand(ICommand):
     pass
+
 
 class ScrollDownCommand(ICommand):
     pass

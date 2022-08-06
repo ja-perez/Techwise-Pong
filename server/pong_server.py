@@ -50,15 +50,15 @@ class Pong_Server():
             try:
                 data = conn.recv(2048)
                 data = data.decode("utf-8")
-                reply = ""
                 reply = self.process_client_data(data, client_id, curr_match)
                 print(str(client_id) + " received:", data)
-                print(str(client_id) + " reply:", reply)
+
                 if reply and type(reply) == str:
-                    pass
+                    print(str(client_id) + " reply:", reply)
                 elif reply and type(reply) == int:
                     curr_match = reply
                     reply = str(reply)
+                    print(str(client_id) + " reply:", reply)
                 else:
                     print("Disconnected")
                     break
@@ -88,6 +88,9 @@ class Pong_Server():
         elif data == "join_public":
             public_id = self.m.get_open_match(client_id)
             return public_id
+        elif "move" in data and curr_match:
+            move = data.split()[1]
+            return self.m.process_input(curr_match, move)
         else:
             return "No action available"
 

@@ -12,7 +12,9 @@ class Example(State):
         pass
 
     def update(self):
-        pass
+        command_queue = self.ih.handle_input()
+        for command, args in command_queue:
+            command.execute(args[0])
 
     def render(self):
         pass

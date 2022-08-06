@@ -38,6 +38,12 @@ class Match:
     def is_full(self):
         return self.players[1] and self.players[2]
 
+    def is_empty(self):
+        return self.players[1] or self.players[2]
+
+    def owner_present(self):
+        return str(self.match_id) in self.get_players()
+
     def get_state(self):
         return self.match_state
 
@@ -60,11 +66,6 @@ class Match_Manager:
         self.open.append(self.match_ids)
         self.match_ids += 1
 
-    def create_private_match(self, private_id):
-        self.matches[private_id] = Match(private_id, True)
-        self.matches[private_id].set_player(private_id)
-        return self.matches[private_id].get_id()
-
     def get_open_match(self, player_id):
         try:
             match_id = self.open[0]
@@ -73,6 +74,11 @@ class Match_Manager:
         except IndexError as e:
             print(str(e))
             return "No matches available"
+
+    def create_private_match(self, private_id):
+        self.matches[private_id] = Match(private_id, True)
+        self.matches[private_id].set_player(private_id)
+        return self.matches[private_id].get_id()
 
     def get_private_match(self, private_id, player_id):
         try:
@@ -90,11 +96,27 @@ class Match_Manager:
             return str(e)
 
     def update_matches(self):
+        remove_matches = []
         for match_id in self.matches:
-            if self.matches[match_id].is_full() and match_id in self.open:
+            curr_match = self.matches[match_id]
+            if curr_match.is_full() and match_id in self.open:
                 self.open.remove(match_id)
-            if not self.matches[match_id].is_full() and match_id not in self.open:
+            if not curr_match.is_full() and match_id not in self.open:
                 self.open.append(match_id)
+            if curr_match.is_private() and not curr_match.owner_present():
+                remove_matches.append(match_id)
+                self.open.remove(match_id)
+        self.remove_match(remove_matches)
+
+    def process_input(self, match_id: int, client_input: str):
+        return str(match_id) + ": moving character " + client_input
+
+    def remove_match(self, match_ids):
+        try:
+            for match_id in match_ids:
+                del self.matches[match_id]
+        except ValueError as e:
+            print(str(e))
 
     def number_of_matches(self):
         return len(self.matches)
