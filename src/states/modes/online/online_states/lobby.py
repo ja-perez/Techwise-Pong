@@ -2,6 +2,7 @@ import pygame, pygwidgets
 from states.state import State
 from ecs.entities import State_Text
 from states.modes.online.online_states.friend_screen import Friend_Screen
+from states.modes.online.online_states.online_match import Online_Match
 from Constants import *
 
 
@@ -11,7 +12,7 @@ class Lobby(State):
         self.create_objects()
         self.online_inst = online
         self.states = {"friendscreen": Friend_Screen(game, online),
-                       "findmatch": None,
+                       "onlinematch": Online_Match(game, online),
                        "self": self}
         self.curr_state = self.states["self"]
 
@@ -21,7 +22,7 @@ class Lobby(State):
         else:
             for event in pygame.event.get():
                 if self.find_match_btn.handleEvent(event):
-                    pass # change curr_state in online to match state
+                    self.change_online_state("onlinematch")
                 elif self.play_w_friend_btn.handleEvent(event):
                     self.curr_state = self.states["friendscreen"]
                 elif self.mainmenu_btn.handleEvent(event):
@@ -60,3 +61,7 @@ class Lobby(State):
         btn_rect = self.mainmenu_btn.getRect().width, self.mainmenu_btn.getRect().height
         self.mainmenu_btn.moveXY(GAME_W - btn_rect[0] / 2, GAME_H - btn_rect[1] / 2
                                  + btn_rect[1] * 2)
+
+    def change_online_state(self, next_state):
+        self.curr_state = self.states[next_state]
+        self.curr_state.enter_state()

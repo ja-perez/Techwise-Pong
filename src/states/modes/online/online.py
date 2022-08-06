@@ -10,7 +10,7 @@ class Online(State):
     def __init__(self, game, name):
         State.__init__(self, game, name)
         self.friend_code = ""
-        self.states = {"waitscreen": WaitScreen(self.game)}
+        self.states = {"waitscreen": WaitScreen(self.game, "waitscreen")}
         self.curr_state = self.states["waitscreen"]
 
     def update(self):
@@ -22,7 +22,7 @@ class Online(State):
         self.curr_state.update(self)
 
     def render(self):
-        if not self.network.connected:
+        if not self.network.connected and self.curr_state.get_name() == "waitscreen":
             self.curr_state.render("ws2")
         else:
             self.curr_state.render()
@@ -34,7 +34,7 @@ class Online(State):
         pygame.time.delay(600)
         self.network = Network()
         if self.network.connected:
-            self.friend_code = self.network.send("friendcode")
+            self.friend_code = self.network.getP().split()[1]
             self.states.update({"lobby": Lobby(self.game, self)})
             self.curr_state = self.states["lobby"]
 

@@ -11,7 +11,6 @@ class Network:
         self.port = 5555
         self.addr = (self.server, self.port)
         self.p = self.connect()
-        self.friend_code = ""
 
     def getP(self):
         return self.p
@@ -34,4 +33,4 @@ class Network:
             self.connected = False
 
     def disconnect(self):
-        self.client.send(str.encode("Goodbye"))
+        self.client.send(str.encode("goodbye"))

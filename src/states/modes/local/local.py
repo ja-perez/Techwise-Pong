@@ -174,11 +174,6 @@ class Local(State):
             if self.volley % self.boost == 0:
                 self.ball.set_vel(self.ball.x_vel() + self.volley / 2.5, self.ball.y_vel() + self.volley / 2.5)
 
-    def change_state(self, next_state):
-        self.exit_state()
-        self.game.curr_state = self.game.states[next_state]
-        self.enter_state()
-
     def exit_state(self):
         if self.pause:
             self.pause = False

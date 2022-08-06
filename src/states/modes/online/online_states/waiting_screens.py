@@ -5,8 +5,8 @@ from Constants import *
 
 
 class WaitScreen(State):
-    def __init__(self, game):
-        State.__init__(self, game)
+    def __init__(self, game, name):
+        State.__init__(self, game, name)
         self.create_scenes()
 
     def update(self, state):

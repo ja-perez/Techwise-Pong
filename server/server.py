@@ -1,6 +1,7 @@
 import socket
 import random
 from _thread import *
+from match import Match
 
 # Testing
 local_server = socket.gethostbyname(socket.gethostname())
@@ -75,11 +76,25 @@ def threaded_client(conn):
     print("Lost connection")
     conn.close()
 
+"""
+    Join a Match > Update Match element with player until filled then start
+        If Random Match > Match element will be one of 
+"""
+match_id = 100
+matches = {}
+filled_matches, open_matches = [], []
+number_of_players = 0
 #curr_player = 0
 while True:
     conn, addr = s.accept()
     print("Connected to:", addr)
-
+    number_of_players += 1
+    create_match()
+    if number_of_players % 2 != 0:
+        matches[match_id] = [Match(), [0, 0]]
+        match_id += 1
     start_new_thread(threaded_client, (conn,))
 #    start_new_thread(threaded_client, (conn, curr_player))
 #    curr_player += 1
+
+create_match()

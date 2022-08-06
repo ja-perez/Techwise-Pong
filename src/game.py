@@ -1,11 +1,11 @@
 import pygame
 import sys
 from Constants import *
-from states.modes.local.local import Local
 from states.menus.mainmenu.mainmenu import MainMenu
 from states.menus.settings.settings import Settings
 from states.menus.settings.update_set import Change_Graphics, Change_Audio, Change_Controls
 from states.menus.pause.pause import Pause
+from states.modes.local.local import Local
 from states.modes.online.online import Online
 from pygame import mixer
 
