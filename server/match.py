@@ -5,10 +5,10 @@ from online_pong import Pong
 class Match:
     def __init__(self, match_id, private_match=False):
         self.match_id = match_id
-        self.pong_match = Pong()
         self.players = {1: "", 2: ""}
-        self.match_state = "idle"
+        self.match_state = "wait"
         self.private_match = private_match
+        self.pong_match = Pong(self.match_state)
 
     def set_player(self, player_id):
         player_id = str(player_id)
@@ -27,7 +27,7 @@ class Match:
         for player in self.players:
             if self.players[player] == str(player_id):
                 self.players[player] = ""
-                self.match_state = "idle"
+                self.match_state = "wait"
 
     def is_private(self):
         return self.private_match
@@ -46,6 +46,13 @@ class Match:
 
     def get_state(self):
         return self.match_state
+
+    def start_game(self):
+        self.pong_match.set_players(self.get_players())
+        self.match_state = "start"
+
+    def update_game(self, player: int, player_input: str):
+        self.pong_match.process_input(player, player_input)
 
 
 class Match_Manager:
@@ -89,6 +96,7 @@ class Match_Manager:
             print(str(e))
             return "Match " + str(private_id) + " does not exist"
 
+    # TODO: Change this to update match with inputs and remove match_handler: process input method
     def update_match(self, match_id, player_id):
         try:
             self.matches[match_id].remove_player(player_id)
@@ -96,22 +104,31 @@ class Match_Manager:
             return str(e)
 
     def update_matches(self):
-        remove_matches = []
+        remove_match = []
         for match_id in self.matches:
             curr_match = self.matches[match_id]
-            if curr_match.is_full() and match_id in self.open:
-                self.open.remove(match_id)
-            if not curr_match.is_full() and match_id not in self.open:
+            if curr_match.is_full():
+                if match_id in self.open:
+                    self.open.remove(match_id)
+                if curr_match.get_state() == "wait":
+                    self.matches[match_id].start_game()
+            elif match_id not in self.open:
                 self.open.append(match_id)
             if curr_match.is_private() and not curr_match.owner_present():
-                remove_matches.append(match_id)
+                remove_match.append(match_id)
                 self.open.remove(match_id)
-        self.remove_match(remove_matches)
+        self.remove_matches(remove_match)
 
-    def process_input(self, match_id: int, client_input: str):
-        return str(match_id) + ": moving character " + client_input
+    def process_input(self, input_str: str, match_id: int, client_id: int):
+        if "move" in input_str:
+            client_input = input_str.split()[1]
+            self.matches[match_id].update_game(client_id, client_input)
+            # TODO: Return pickled updated online_match object instead of string #
+            return "In match " + str(match_id) + ": Moving Player " + str(client_id) + " " + client_input
+        else:
+            return "No movement input"
 
-    def remove_match(self, match_ids):
+    def remove_matches(self, match_ids):
         try:
             for match_id in match_ids:
                 del self.matches[match_id]

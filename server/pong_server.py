@@ -39,8 +39,8 @@ class Pong_Server():
     def create_client_thread(self, conn):
         client_id = self.get_client_id()
         if self.num_of_clients % 2 > self.m.number_of_matches():
+            # TODO: Create matches by request instead of making them "statically" #
             self.m.create_match()
-        ######################################################################
         _thread.start_new_thread(self.threaded_client, (conn, client_id))
 
     def threaded_client(self, conn, client_id):
@@ -50,18 +50,19 @@ class Pong_Server():
             try:
                 data = conn.recv(2048)
                 data = data.decode("utf-8")
-                reply = self.process_client_data(data, client_id, curr_match)
-                print(str(client_id) + " received:", data)
-
-                if reply and type(reply) == str:
-                    print(str(client_id) + " reply:", reply)
-                elif reply and type(reply) == int:
+                if not data or data.lower() == "goodbye":
+                    if curr_match:
+                        self.m.update_match(curr_match, client_id)
+                    break
+                reply = ""
+                if curr_match:
+                    reply = self.m.process_input(data, curr_match, client_id)
+                else:
+                    reply = self.process_client_data(data, client_id)
                     curr_match = reply
                     reply = str(reply)
-                    print(str(client_id) + " reply:", reply)
-                else:
-                    print("Disconnected")
-                    break
+                print(str(client_id) + " received:", data)
+                print(str(client_id) + " reply:", reply)
                 self.m.update_matches()
                 self.m.print_matches()
                 conn.sendall(str.encode(reply))
@@ -74,12 +75,8 @@ class Pong_Server():
         print("Lost connection")
         conn.close()
 
-    def process_client_data(self, data: str, client_id: int, curr_match: int):
-        if not data or data.lower() == "goodbye":
-            if curr_match:
-                self.m.update_match(curr_match, client_id)
-            return ""
-        elif data == "create_private":
+    def process_client_data(self, data: str, client_id: int):
+        if data == "create_private":
             self.m.create_private_match(client_id)
             return client_id
         elif "join_private" in data:
@@ -88,9 +85,6 @@ class Pong_Server():
         elif data == "join_public":
             public_id = self.m.get_open_match(client_id)
             return public_id
-        elif "move" in data and curr_match:
-            move = data.split()[1]
-            return self.m.process_input(curr_match, move)
         else:
             return "No action available"
 

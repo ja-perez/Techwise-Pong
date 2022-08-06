@@ -14,18 +14,22 @@ class Online_Match(State):
         self.curr_match = None
         self.is_private = is_private
         self.server_response = None
+        self.data = ""
 
     def update(self, state):
         command_queue = self.ih.handle_input()
         for command, args in command_queue:
             command.execute(args[0])
+        if self.data:
+            self.server_response = self.network.send(self.data)
 
     def render(self):
-        print(self.server_response)
+        if self.server_response:
+            print(self.server_response)
 
     def register_commands(self):
-        self.press_up = MatchCommand(ActiveOn.PRESSED, up_command, self)
-        self.press_down = MatchCommand(ActiveOn.PRESSED, down_command, self)
+        self.press_up = MatchCommand(ActiveOn.BOTH, up_command, self)
+        self.press_down = MatchCommand(ActiveOn.BOTH, down_command, self)
         self.ih.register_command(pygame.K_w, self.press_up)
         self.ih.register_command(pygame.K_s, self.press_down)
 

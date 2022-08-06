@@ -3,6 +3,7 @@ from commands.command import *
 from inspect import signature
 from states.state import State
 
+
 class MatchCommand(ICommand):
     def __init__(self, active: ActiveOn, function: Callable, state_inst: State):
         super(MatchCommand, self).__init__(active, function)
@@ -18,11 +19,21 @@ class MatchCommand(ICommand):
         pass
 
 
+move_up = 0
+move_down = 0
+
+
 def up_command(keycode=0, state_int=None):
+    global move_up
+    btn_state = {0: "move stop", 1: "move up"}
     if keycode == pygame.K_w:
-        state_int.server_response = state_int.network.send("move up")
+        move_up = int(not move_up)
+        state_int.data = btn_state[move_up]
 
 
 def down_command(keycode=0, state_int=None):
+    global move_down
+    btn_state = {0: "move stop", 1: "move down"}
     if keycode == pygame.K_s:
-        state_int.server_response = state_int.network.send("move down")
+        move_down = int(not move_down)
+    state_int.data = btn_state[move_down]
