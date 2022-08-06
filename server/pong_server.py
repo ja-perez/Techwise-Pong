@@ -38,7 +38,6 @@ class Pong_Server():
 
     def create_client_thread(self, conn):
         client_id = self.get_client_id()
-        
         if self.num_of_clients % 2 > self.m.number_of_matches():
             self.m.create_match()
         ######################################################################
@@ -52,20 +51,17 @@ class Pong_Server():
                 data = conn.recv(2048)
                 data = data.decode("utf-8")
                 reply = ""
-                if curr_match:
-                    pass  # process input
+                reply = self.process_client_data(data, client_id, curr_match)
+                print(str(client_id) + " received:", data)
+                print(str(client_id) + " reply:", reply)
+                if reply and type(reply) == str:
+                    pass
+                elif reply and type(reply) == int:
+                    curr_match = reply
+                    reply = str(reply)
                 else:
-                    reply = self.process_client_data(data, client_id, curr_match)
-                    print(str(client_id) + " received:", data)
-                    print(str(client_id) + " reply:", reply)
-                    if reply and type(reply) == str:
-                        pass
-                    elif reply and type(reply) == int:
-                        curr_match = reply
-                        reply = str(reply)
-                    else:
-                        print("Disconnected")
-                        break
+                    print("Disconnected")
+                    break
                 self.m.update_matches()
                 self.m.print_matches()
                 conn.sendall(str.encode(reply))
