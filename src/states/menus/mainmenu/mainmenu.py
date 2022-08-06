@@ -18,7 +18,6 @@ class MainMenu(State):
             if self.online_game_button.handleEvent(event):
                 self.change_state("online")
             if self.mainmenu_settings.handleEvent(event):
-                print(self.name)
                 self.change_state("settings", self.name)
             if self.exit_button.handleEvent(event):
                 print("Goodbye")

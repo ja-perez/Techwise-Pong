@@ -19,21 +19,28 @@ class MatchCommand(ICommand):
         pass
 
 
-move_up = 0
-move_down = 0
+move_up = False
+move_down = False
 
 
-def up_command(keycode=0, state_int=None):
+def up_command(keycode=0, state_inst=None):
     global move_up
-    btn_state = {0: "move stop", 1: "move up"}
+    btn_state = {False: "move stop", True: "move up"}
     if keycode == pygame.K_w:
-        move_up = int(not move_up)
-        state_int.data = btn_state[move_up]
+        move_up = not move_up
+        state_inst.data = btn_state[move_up]
 
 
-def down_command(keycode=0, state_int=None):
+def down_command(keycode=0, state_inst=None):
     global move_down
-    btn_state = {0: "move stop", 1: "move down"}
+    btn_state = {False: "move stop", True: "move down"}
     if keycode == pygame.K_s:
         move_down = int(not move_down)
-    state_int.data = btn_state[move_down]
+    state_inst.data = btn_state[move_down]
+
+
+def ready_up(keycode=0, state_inst=None):
+    if keycode == pygame.K_SPACE:
+        state_inst.start = not state_inst.start
+        # Temp - Stops transmission of previous move command
+        state_inst.data = ""

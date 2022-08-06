@@ -5,11 +5,8 @@ from match import Match_Manager
 
 """
 TODO:
-Implement Public Match full - set players, remove players, etc.
-Implement Private Match Return
 Implement Basic Entity Creation per match
 """
-
 
 class Pong_Server():
     def __init__(self, server_ip, port, queue):
@@ -52,11 +49,11 @@ class Pong_Server():
                 data = data.decode("utf-8")
                 if not data or data.lower() == "goodbye":
                     if curr_match:
-                        self.m.update_match(curr_match, client_id)
+                        self.m.update_match(curr_match, client_id, data)
                     break
                 reply = ""
                 if curr_match:
-                    reply = self.m.process_input(data, curr_match, client_id)
+                    reply = self.m.update_match(curr_match, client_id, data)
                 else:
                     reply = self.process_client_data(data, client_id)
                     curr_match = reply
@@ -64,14 +61,12 @@ class Pong_Server():
                 print(str(client_id) + " received:", data)
                 print(str(client_id) + " reply:", reply)
                 self.m.update_matches()
-                self.m.print_matches()
                 conn.sendall(str.encode(reply))
             except:
                 break
         self.num_of_clients -= 1
         self.client_ids.remove(client_id)
         self.m.update_matches()
-        self.m.print_matches()
         print("Lost connection")
         conn.close()
 
