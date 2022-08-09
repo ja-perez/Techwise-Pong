@@ -18,6 +18,9 @@ class Local(State):
         self.create_entities()
         self.next_state = ""
 
+    def set_game_mode(self, number):
+        self.game_mode = number
+    
     def update(self):
         command_queue = self.ih.handle_input()
         for command, args in command_queue:

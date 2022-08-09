@@ -13,16 +13,18 @@ class LocalMenu(State):
     def update(self):
         for event in pygame.event.get():
             if self.graphics_button.handleEvent(event):
-                Local.game_mode = 0
+                self.game.states["local"].set_game_mode(0)
                 self.change_state("local")
             if self.audio_button.handleEvent(event):
-                Local.game_mode = 1
+                self.game.states["local"].set_game_mode(1)
                 self.change_state("local")
             if self.controls_button.handleEvent(event):
-                Local.game_mode = 2
+                self.game.states["local"].set_game_mode(2)
                 self.change_state("local")
+
             if self.return_button.handleEvent(event):
                 self.change_state(self.return_state)
+                
 
     def render(self):
         self.state_text_display()
