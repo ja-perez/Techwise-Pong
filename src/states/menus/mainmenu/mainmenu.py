@@ -14,7 +14,7 @@ class MainMenu(State):
     def update(self):
         for event in pygame.event.get():
             if self.local_game_button.handleEvent(event):
-                self.change_state("local")
+                self.change_state("localmenu", self.name)
             if self.online_game_button.handleEvent(event):
                 self.change_state("online")
             if self.mainmenu_settings.handleEvent(event):

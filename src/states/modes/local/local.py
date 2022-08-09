@@ -5,13 +5,14 @@ from ecs.entities import Player, Ball, Score, Pause, Start
 from ecs.entity_manager import EntityManager
 from states.modes.local.localcommands import LocalCommand, up_command, down_command, set_pause, set_start, set_exit
 from commands.command import ActiveOn
-from ecs.systems import draw_system, move_system, collision_detection_system
+from ecs.systems import draw_system, move_system, collision_detection_system, ai_system
 from pygame import mixer
 
 class Local(State):
     def __init__(self, game, name):
         State.__init__(self, game, name)
         self.start, self.pause = False, False
+        self.game_mode = 0
         self.scored, self.collision_present, self.volley, self.boost = False, False, 1, 2
         self.register_commands()
         self.create_entities()
@@ -24,8 +25,17 @@ class Local(State):
         if self.start:
             self.p1_y_direction = self.p1_down - self.p1_up
             self.p2_y_direction = self.p2_down - self.p2_up
-            move_system(self.player1, self.paddle_off_bounds_handler, 0, self.p1_y_direction)
-            move_system(self.player2, self.paddle_off_bounds_handler, 0, self.p2_y_direction)
+
+            if self.game_mode == 0:
+                move_system(self.player1, self.paddle_off_bounds_handler, 0, self.p1_y_direction)
+                move_system(self.player2, self.paddle_off_bounds_handler, 0, self.p2_y_direction)
+            if self.game_mode == 1:
+                move_system(self.player1, self.paddle_off_bounds_handler, 0, self.p1_y_direction)
+                ai_system(self.player2, self.ball, self.paddle_off_bounds_handler, 0)
+            if self.game_mode == 2:
+                ai_system(self.player1, self.ball, self.paddle_off_bounds_handler, 0)
+                ai_system(self.player2, self.ball, self.paddle_off_bounds_handler, 0)
+
             move_system(self.ball, self.ball_off_bounds_handler, self.ball_x_dir, self.ball_y_dir)
             self.update_score()
             self.collision_present = collision_detection_system(
@@ -103,6 +113,11 @@ class Local(State):
         self.g_manager.register_entity(self.player1)
         self.g_manager.register_entity(self.player2)
 
+    # def ai(self, ball, player):
+    #     if player.components["graphics"].rect.centery < ball.components["graphics"].rect.top and player.components["graphics"].rect.bottom < WIN_H:
+    #         player.components["graphics"].rect.moveip(0, 10)
+    #     if player.components["graphics"].rect.centery > ball.components["graphics"].rect.bottom and player.components["graphics"].rect.top > 0:
+    #         player.components["graphics"].rect.moveip(0, -10)
     def create_balls(self):
         # create ball and set position to the center of the screen
         self.ball = Ball("ball")
