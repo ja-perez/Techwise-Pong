@@ -18,6 +18,18 @@ def move_system(entity, off_bounds_handler, x_dir=0, y_dir=0):
     off_bounds_handler(entity)
 
 
+def ai_system(player_entity, ball_entity, off_bounds_handler, y_dir = 0):
+    velocity_component = player_entity.components["velocity"]
+    graphic_component = player_entity.components["graphics"]
+    new_y = velocity_component.y_velocity * y_dir
+    if player_entity.components["graphics"].rect.centery < ball_entity.components["graphics"].rect.top:
+        #and player_entity.components["graphics"].rect.bottom < WIN_H:
+        player_entity.components["graphics"].rect.move_ip(0, 10)
+    if player_entity.components["graphics"].rect.centery > ball_entity.components["graphics"].rect.bottom:
+        #and player_entity.components["graphics"].rect.top > 0:
+        player_entity.components["graphics"].rect.move_ip(0, -10)
+    off_bounds_handler(player_entity)
+
 def collision_detection_system(c_object, entities):
     c_object_rect = c_object.components["graphics"].rect
     for entity in entities:
