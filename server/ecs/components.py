@@ -1,5 +1,5 @@
 import pygame
-from Constants import *
+from ecs.Constants import *
 
 
 class GraphicComponent:

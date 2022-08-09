@@ -7,7 +7,7 @@ class Network:
         local_server = socket.gethostbyname(socket.gethostname())
         self.server = str(local_server)
         # Testing
-        # self.server = "192.168.56.1"
+        # self.server = "192.168.0.129"
         self.port = 5555
         self.addr = (self.server, self.port)
         self.p = self.connect()

@@ -130,3 +130,7 @@ class Match_Manager:
 
     def number_of_matches(self):
         return len(self.matches)
+
+    def find_match(self, match_id: int):
+        if match_id in self.matches:
+            return self.matches[match_id]

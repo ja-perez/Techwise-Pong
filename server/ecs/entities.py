@@ -1,28 +1,24 @@
 from ecs.entity import Entity
 from ecs.components import VelocityComponent
-from Constants import *
+from ecs.Constants import *
 import pygame
-
+from pygame import Rect
 
 class Player(Entity):
     def __init__(self, name="", client_id=""):
         Entity.__init__(self, name)
         self.client_id = client_id
-        self.score = 0
+        self.score, self.x_dir, self.y_dir = 0, 0, 0
         self.curr_state = "wait"
-        self.set_components("velocity", VelocityComponent(0, 5))
-        # temp
-        self.move = ""
+        self.shape = Rect((0, 0), PADDLE)
+        self.set_components("velocity", VelocityComponent(0, 10))
 
     def set_vel(self, x=0, y=0):
         self.components["velocity"].x_velocity = x
         self.components["velocity"].y_velocity = y
 
-    def set_dir(self, move: str):
-        if (self.get_y_vel() > 0 and move == "down") or (self.get_y_vel() < 0 and move == "up"):
-            y_comp = self.get_y_vel()
-            y_comp *= -1
-            self.set_vel(0, y_comp)
+    def set_y_dir(self, move: str):
+        self.y_dir = (move == "down") - (move == "up")
 
     def set_id(self, new_id: str):
         self.client_id = new_id
@@ -36,6 +32,21 @@ class Player(Entity):
     def get_y_vel(self):
         return self.components["velocity"].y_velocity
 
+    def get_x_vel(self):
+        return self.components["velocity"].x_velocity
+
+    def get_dirs(self):
+        return self.x_dir, self.y_dir
+
+    def get_vel(self):
+        return self.get_x_vel(), self.get_y_vel()
+
+    def get_pos(self):
+        return self.shape.topleft
+
+    def get_center(self):
+        return self.shape.center
+
     def get_id(self):
         return self.client_id
 
@@ -45,28 +56,23 @@ class Player(Entity):
     def get_state(self):
         return self.curr_state
 
+    def get_size(self):
+        return self.shape.size
+
 
 class Ball(Entity):
     def __init__(self, name):
         Entity.__init__(self, name)
-        self.surface = pygame.Surface(BALL)
-        self.surface.fill(WHITE)
-        self.components["graphics"] = GraphicComponent(self.surface, 0, 0)
-        self.components["graphics"].is_circle = True
-        self.components["graphics"].radius = BALL_RADIUS
         self.components["velocity"] = VelocityComponent(0, 0)
-
-    def set_pos(self, x, y):
-        self.components["graphics"].rect.move_ip(x, y)
 
     def set_vel(self, x, y):
         self.components["velocity"].x_velocity = x
         self.components["velocity"].y_velocity = y
 
-    def x_vel(self):
+    def get_x_vel(self):
         return self.components["velocity"].x_velocity
 
-    def y_vel(self):
+    def get_y_vel(self):
         return self.components["velocity"].y_velocity
 
 

@@ -195,6 +195,3 @@ class Local(State):
     def exit_state(self):
         if self.pause:
             self.pause = False
-
-    def enter_state(self):
-        pass

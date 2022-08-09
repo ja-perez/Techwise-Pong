@@ -47,23 +47,24 @@ class Pong_Server():
             try:
                 data = conn.recv(2048)
                 data = data.decode("utf-8")
+                print(str(client_id) + " received:", data)
                 if not data or data.lower() == "goodbye":
                     if curr_match:
                         self.m.update_match(curr_match, client_id, data)
                     break
                 reply = ""
-                if curr_match:
+                if type(curr_match) == int:
                     reply = self.m.update_match(curr_match, client_id, data)
                 else:
                     reply = self.process_client_data(data, client_id)
                     curr_match = reply
                     reply = str(reply)
-                print(str(client_id) + " received:", data)
-                print(str(client_id) + " reply:", reply)
+                    print(str(client_id) + " reply:", reply)
                 self.m.update_matches()
                 conn.sendall(str.encode(reply))
             except:
                 break
+
         self.num_of_clients -= 1
         self.client_ids.remove(client_id)
         self.m.update_matches()
