@@ -12,7 +12,7 @@ class Local(State):
     def __init__(self, game, name):
         State.__init__(self, game, name)
         self.start, self.pause = False, False
-        self.game_mode = 0
+        self.game_mode = 2
         self.scored, self.collision_present, self.volley, self.boost = False, False, 1, 2
         self.register_commands()
         self.create_entities()
