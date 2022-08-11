@@ -1,4 +1,4 @@
-from ecs.entities import Player
+from ecs.entities import Player, Ball
 from ecs.systems import move_system
 # temp
 from ecs.Constants import *
@@ -10,6 +10,7 @@ class Pong():
     def __init__(self, match_state):
         self.match_state = match_state
         self.player_1, self.player_2 = Player("Player 1"), Player("Player 2")
+        self.ball_0 = Ball("Ball 0")
         self.start_pos()
 
     def update(self):

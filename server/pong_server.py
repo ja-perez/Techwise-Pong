@@ -35,6 +35,7 @@ class Pong_Server():
 
     def create_client_thread(self, conn):
         client_id = self.get_client_id()
+        # TODO: Change to create matches by request instead of pre-emptively #
         if self.num_of_clients % 2 > self.m.number_of_matches():
             # TODO: Create matches by request instead of making them "statically" #
             self.m.create_match()

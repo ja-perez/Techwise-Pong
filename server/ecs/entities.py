@@ -63,7 +63,10 @@ class Player(Entity):
 class Ball(Entity):
     def __init__(self, name):
         Entity.__init__(self, name)
-        self.components["velocity"] = VelocityComponent(0, 0)
+        self.x_dir, self.y_dir = 0, 0
+        self.curr_state = "wait"
+        self.shape = Rect((0, 0), BALL)
+        self.set_components("velocity", VelocityComponent(0, 4))
 
     def set_vel(self, x, y):
         self.components["velocity"].x_velocity = x
