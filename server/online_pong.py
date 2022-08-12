@@ -39,7 +39,6 @@ class Pong():
         p1_pos = str(self.player_1.get_pos()[0]) + ' ' + str(self.player_1.get_pos()[1])
         p2_pos = str(self.player_2.get_pos()[0]) + ' ' + str(self.player_2.get_pos()[1])
         player_pos = 'moves' + ' ' + p1_pos + ' ' + p2_pos
-        return player_pos
 
     def process_input(self, player_id: int, player_input: str):
         player_id = str(player_id)
@@ -53,6 +52,12 @@ class Pong():
         else:  # Assume some kind of state change (wait -> start, end->wait, etc.)
             if player_input == "start":
                 pass
+
+    def get_player1_data(self):
+        return self.player_1.get_pos(), self.player_1.get_score()
+
+    def get_player2_data(self):
+        return self.player_2.get_pos(), self.player_2.get_score()
 
     def set_players(self, players: (str, str)):
         self.player_1.client_id, self.player_2.client_id = players

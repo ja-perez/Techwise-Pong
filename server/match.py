@@ -9,6 +9,7 @@ class Match:
         self.match_state = "wait"
         self.private_match = private_match
         self.pong_match = Pong(self.match_state)
+        self.game_state = {}
 
     def set_player(self, player_id: int):
         player_id = str(player_id)
@@ -52,7 +53,14 @@ class Match:
     def update_game(self, player_id: int, player_input: str):
         self.pong_match.process_input(player_id, player_input)
         self.pong_match.update()
-        return self.pong_match.render()
+        self.pong_match.render()
+        self.game_state = {"match_id": self.match_id,
+                           "player 1": self.pong_match.get_player1_data(),
+                           "player 2": self.pong_match.get_player2_data(),
+                           "match_state": self.match_state
+                           }
+        print(self.game_state)
+        return self.game_state
 
 
 class Match_Manager:

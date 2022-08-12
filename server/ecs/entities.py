@@ -29,34 +29,34 @@ class Player(Entity):
     def set_state(self, new_state: str):
         self.curr_state = new_state
 
-    def get_y_vel(self):
+    def get_y_vel(self) -> int:
         return self.components["velocity"].y_velocity
 
-    def get_x_vel(self):
+    def get_x_vel(self) -> int:
         return self.components["velocity"].x_velocity
 
-    def get_dirs(self):
+    def get_dirs(self) -> (int, int):
         return self.x_dir, self.y_dir
 
-    def get_vel(self):
+    def get_vel(self) -> (int, int):
         return self.get_x_vel(), self.get_y_vel()
 
-    def get_pos(self):
+    def get_pos(self) -> (int, int):
         return self.shape.topleft
 
-    def get_center(self):
+    def get_center(self) -> (int, int):
         return self.shape.center
 
-    def get_id(self):
+    def get_id(self) -> int:
         return self.client_id
 
     def get_score(self) -> int:
         return self.score
 
-    def get_state(self):
+    def get_state(self) -> str:
         return self.curr_state
 
-    def get_size(self):
+    def get_size(self) -> (int, int):
         return self.shape.size
 
 

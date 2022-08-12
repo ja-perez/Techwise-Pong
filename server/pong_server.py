@@ -1,11 +1,14 @@
 import socket
 import _thread
 import random
+import pickle
 from match import Match_Manager
 
 """
 TODO:
 Implement Basic Entity Creation per match
+Game State Object: {"match id": match_id, "Player1": ((x, y), score), "Player2": ((x, y), score), 
+                        "Ball": ((x, y), collision), "state": "wait"}
 """
 
 class Pong_Server():
@@ -42,27 +45,34 @@ class Pong_Server():
         _thread.start_new_thread(self.threaded_client, (conn, client_id))
 
     def threaded_client(self, conn, client_id):
-        conn.send(str.encode("ClientID:" + " " + str(client_id)))
+        # conn.send(str.encode("ClientID:" + " " + str(client_id)))
+        client_conn_msg = "ClientID: " + str(client_id)
+        conn.send(pickle.dumps(client_conn_msg))
         curr_match = None
         while True:
             try:
-                data = conn.recv(2048)
-                data = data.decode("utf-8")
-                print(str(client_id) + " received:", data)
+                # data = conn.recv(2048)
+                # data = data.decode("utf-8")
+                data = pickle.loads(conn.recv(2048))
+                if "stop" not in data:
+                    print(str(client_id) + " received:", data)
                 if not data or data.lower() == "goodbye":
                     if curr_match:
                         self.m.update_match(curr_match, client_id, data)
                     break
-                reply = ""
                 if type(curr_match) == int:
                     reply = self.m.update_match(curr_match, client_id, data)
                 else:
                     reply = self.process_client_data(data, client_id)
-                    curr_match = reply
-                    reply = str(reply)
+                    if type(reply) == int:
+                        curr_match = reply
+                        reply = "match_id: " + str(reply)
+                    else:
+                        reply = str(reply)
                     print(str(client_id) + " reply:", reply)
                 self.m.update_matches()
-                conn.sendall(str.encode(reply))
+                # conn.sendall(str.encode(reply))
+                conn.sendall(pickle.dumps(reply))
             except:
                 break
 
@@ -85,7 +95,7 @@ class Pong_Server():
         else:
             return "No action available"
 
-    def get_client_id(self):
+    def get_client_id(self) -> int:
         while True:
             random.seed()
             client_id = random.randint(1000, 9999)
