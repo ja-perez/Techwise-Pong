@@ -1,6 +1,7 @@
 import socket
 import pickle
 
+
 class Network:
     def __init__(self):
         self.client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -22,20 +23,15 @@ class Network:
             self.client.connect(self.addr)
             self.connected = True
             return pickle.loads(self.client.recv(2048))
-            # return self.client.recv(2048).decode()
         except:
             print("Couldn't connect")
-            self.connected = False
 
     def send(self, data):
         try:
-            # self.client.send(str.encode(data))
-            # return self.client.recv(2048).decode()
             self.client.send(pickle.dumps(data))
             return pickle.loads(self.client.recv(2048))
         except socket.error as e:
             print(e)
-            self.connected = False
 
     def disconnect(self):
         self.client.send(str.encode("goodbye"))

@@ -21,6 +21,7 @@ class Match:
         else:
             self.players[1] = player_id
         self.pong_match.set_players(self.get_players())
+        self.update_game_state()
 
     def get_players(self):
         return self.players[1], self.players[2]
@@ -50,16 +51,20 @@ class Match:
     def get_state(self):
         return self.match_state
 
+    def update_game_state(self):
+        self.game_state = {"match_id": self.match_id,
+                           "player 1": self.pong_match.get_player1_data(),
+                           "player 2": self.pong_match.get_player2_data(),
+                           "ball": self.pong_match.get_ball_data(),
+                           "match_state": self.match_state
+                           }
+
     def update_game(self, player_id: int, player_input: str):
         self.pong_match.process_input(player_id, player_input)
         self.pong_match.update()
         self.pong_match.render()
-        self.game_state = {"match_id": self.match_id,
-                           "player 1": self.pong_match.get_player1_data(),
-                           "player 2": self.pong_match.get_player2_data(),
-                           "match_state": self.match_state
-                           }
-        print(self.game_state)
+        self.update_game_state()
+        print("Updated State:", self.game_state)
         return self.game_state
 
 
@@ -85,7 +90,7 @@ class Match_Manager:
         try:
             match_id = self.open[0]
             self.matches[match_id].set_player(player_id)
-            return match_id
+            return self.matches[match_id].game_state
         except IndexError as e:
             print(str(e))
             return "No matches available"
@@ -99,7 +104,7 @@ class Match_Manager:
         try:
             private_id = int(private_id)
             self.matches[private_id].set_player(player_id)
-            return self.matches[private_id].get_id()
+            return self.matches[private_id].game_state
         except KeyError as e:
             print(str(e))
             return "Match " + str(private_id) + " does not exist"

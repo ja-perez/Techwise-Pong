@@ -43,6 +43,9 @@ class Ball(Entity):
     def set_pos(self, x, y):
         self.components["graphics"].rect.move_ip(x, y)
 
+    def set_cords(self, x, y):
+        self.components["graphics"].rect.topleft = (x, y)
+
     def set_vel(self, x, y):
         self.components["velocity"].x_velocity = x
         self.components["velocity"].y_velocity = y

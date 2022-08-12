@@ -27,11 +27,9 @@ def move_system(entity, off_bounds_handler, x_dir=0, y_dir=0):
 
 
 def collision_detection_system(c_object, entities):
-    c_object_rect = c_object.components["graphics"].rect
     for entity in entities:
-        entity_rect = entity.rect
-        if c_object_rect == entity_rect:
+        if c_object.shape == entity.shape:
             continue
-        elif pygame.Rect.colliderect(c_object_rect, entity_rect):
+        elif pygame.Rect.colliderect(c_object.shape, entity.shape):
             return True
     return False

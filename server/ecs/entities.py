@@ -47,7 +47,7 @@ class Player(Entity):
     def get_center(self) -> (int, int):
         return self.shape.center
 
-    def get_id(self) -> int:
+    def get_id(self) -> str:
         return self.client_id
 
     def get_score(self) -> int:
@@ -66,17 +66,38 @@ class Ball(Entity):
         self.x_dir, self.y_dir = 0, 0
         self.curr_state = "wait"
         self.shape = Rect((0, 0), BALL)
-        self.set_components("velocity", VelocityComponent(0, 4))
+        self.set_components("velocity", VelocityComponent(4, 4))
 
     def set_vel(self, x, y):
         self.components["velocity"].x_velocity = x
         self.components["velocity"].y_velocity = y
+
+    def set_x_dir(self, x_dir):
+        self.x_dir = x_dir
+
+    def set_y_dir(self, y_dir):
+        self.y_dir = y_dir
+
+    def toggle_y_dir(self):
+        self.y_dir *= -1
+
+    def toggle_x_dir(self):
+        self.x_dir *= -1
+
+    def get_dirs(self):
+        return self.x_dir, self.y_dir
+
+    def get_pos(self) -> (int, int):
+        return self.shape.topleft
 
     def get_x_vel(self):
         return self.components["velocity"].x_velocity
 
     def get_y_vel(self):
         return self.components["velocity"].y_velocity
+
+    def get_vel(self):
+        return self.get_x_vel(), self.get_y_vel()
 
 
 class Score(Entity):
