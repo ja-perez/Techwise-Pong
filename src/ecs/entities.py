@@ -8,13 +8,20 @@ class Player(Entity):
     def __init__(self, name):
         Entity.__init__(self, name)
         self.score = 0
-        self.surface = pygame.Surface(PADDLE)
+        self.paddle_width = PADDLE_W
+        self.paddle_height = PADDLE_H
+        self.surface = pygame.Surface((self.paddle_width, self.paddle_height))
         self.surface.fill(WHITE)
         self.components["graphics"] = GraphicComponent(self.surface, 0, 0)
         self.components["velocity"] = VelocityComponent(0, 0)
+        self.change_size(1, 2)
 
     def set_color(self, color):
         self.surface.fill(color)
+
+    def change_size(self, width, height):
+        self.paddle_width += width
+        self.paddle_height = height
 
     def set_cords(self, x, y):
         self.components["graphics"].rect.topleft = (x, y)
@@ -37,6 +44,7 @@ class Ball(Entity):
     def __init__(self, name):
         Entity.__init__(self, name)
         self.surface = pygame.Surface(BALL)
+        #THIS DOESNT WORK?
         self.surface.fill(YELLOW)
         self.components["graphics"] = GraphicComponent(self.surface, 0, 0)
         self.components["graphics"].is_circle = True
@@ -48,6 +56,9 @@ class Ball(Entity):
 
     def set_cords(self, x, y):
         self.components["graphics"].rect.topleft = (x, y)
+
+    def increase_radius(self, num):
+        self.components["graphics"].radius += num
 
     def set_vel(self, x, y):
         self.components["velocity"].x_velocity = x
