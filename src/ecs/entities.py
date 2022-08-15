@@ -13,6 +13,9 @@ class Player(Entity):
         self.components["graphics"] = GraphicComponent(self.surface, 0, 0)
         self.components["velocity"] = VelocityComponent(0, 0)
 
+    def set_color(self, color):
+        self.surface.fill(color)
+
     def set_cords(self, x, y):
         self.components["graphics"].rect.topleft = (x, y)
 
@@ -34,7 +37,7 @@ class Ball(Entity):
     def __init__(self, name):
         Entity.__init__(self, name)
         self.surface = pygame.Surface(BALL)
-        self.surface.fill(WHITE)
+        self.surface.fill(YELLOW)
         self.components["graphics"] = GraphicComponent(self.surface, 0, 0)
         self.components["graphics"].is_circle = True
         self.components["graphics"].radius = BALL_RADIUS
