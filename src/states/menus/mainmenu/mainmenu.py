@@ -15,6 +15,7 @@ class MainMenu(State):
         for event in pygame.event.get():
             if self.local_game_button.handleEvent(event):
                 self.change_state("localmenu", self.name)
+                print(pygame.font.get_fonts())
             if self.online_game_button.handleEvent(event):
                 self.change_state("online")
             if self.mainmenu_settings.handleEvent(event):
@@ -40,20 +41,24 @@ class MainMenu(State):
         self.exit_button.draw()
 
     def create_buttons(self):
-        self.local_game_button = pygwidgets.TextButton(self.game.screen, (0, 0), 'Local')
+        self.local_game_button = pygwidgets.TextButton(self.game.screen, (0, 0), 'Local',
+                                                       fontSize=MENU_FONT_SIZE, fontName=FONT_NAME)
         button_height = self.local_game_button.getRect().height
         self.local_game_button.moveXY(WIN_W / 2 - self.local_game_button.getRect().width / 2,
                                       WIN_H / 2 - self.local_game_button.getRect().height / 2
                                       + button_height)
-        self.online_game_button = pygwidgets.TextButton(self.game.screen, (0, 0), 'Online')
+        self.online_game_button = pygwidgets.TextButton(self.game.screen, (0, 0), 'Online',
+                                                       fontSize=MENU_FONT_SIZE, fontName=FONT_NAME)
         self.online_game_button.moveXY(WIN_W / 2 - self.online_game_button.getRect().width / 2,
                                       WIN_H / 2 - self.online_game_button.getRect().height / 2
                                       + button_height * 2)
-        self.mainmenu_settings = pygwidgets.TextButton(self.game.screen, (0, 0), 'Settings')
+        self.mainmenu_settings = pygwidgets.TextButton(self.game.screen, (0, 0), 'Settings',
+                                                       fontSize=MENU_FONT_SIZE, fontName=FONT_NAME)
         self.mainmenu_settings.moveXY(WIN_W / 2 - self.mainmenu_settings.getRect().width / 2,
                                       WIN_H / 2 - self.mainmenu_settings.getRect().height / 2
                                       + button_height * 3)
-        self.exit_button = pygwidgets.TextButton(self.game.screen, (0, 0), 'Exit Game')
+        self.exit_button = pygwidgets.TextButton(self.game.screen, (0, 0), 'Exit Game',
+                                                       fontSize=MENU_FONT_SIZE, fontName=FONT_NAME)
         self.exit_button.moveXY(WIN_W / 2 - self.exit_button.getRect().width / 2,
                                 WIN_H / 2 - self.exit_button.getRect().height / 2
                                 + button_height * 4)

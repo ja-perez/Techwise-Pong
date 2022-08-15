@@ -15,7 +15,6 @@ class GraphicsMenu(State):
         self.return_state = ""
         self.left_paddle_color = WHITE
         self.right_paddle_color = WHITE
-        #self.get_left_paddle_color()
 
 
     def get_left_paddle_color(self):
@@ -142,7 +141,7 @@ class GraphicsMenu(State):
 
 
     def create_return_button(self):
-        self.return_button = pygwidgets.TextButton(self.game.screen, (0, 0), 'Return', fontSize=45)
+        self.return_button = pygwidgets.TextButton(self.game.screen, (0, 0), 'Return', fontSize=45, fontName= FONT_NAME)
         self.return_button.moveXY(WIN_W / 2 - self.return_button.getRect().width / 2,
                                   WIN_H / 2 - self.return_button.getRect().height + 100)
 

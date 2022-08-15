@@ -43,22 +43,26 @@ class LocalMenu(State):
         self.return_button.draw()
 
     def create_buttons(self):
-        height_variable = 60
-        self.graphics_button = pygwidgets.TextButton(self.game.screen, (0, 0), 'Player vs Player', fontSize=45)
+        height_variable = 80
+        self.graphics_button = pygwidgets.TextButton(self.game.screen, (0, 0), 'Player vs Player',
+                                                     fontSize=MENU_FONT_SIZE, fontName=FONT_NAME)
         button_height = self.graphics_button.getRect().height
         self.graphics_button.moveXY(WIN_W / 2 - self.graphics_button.getRect().width / 2,
                                     WIN_H / 2 - self.graphics_button.getRect().height / 2
                                     - button_height * 3 + height_variable)
 
-        self.audio_button = pygwidgets.TextButton(self.game.screen, (0, 0), 'Player vs AI', fontSize=45)
+        self.audio_button = pygwidgets.TextButton(self.game.screen, (0, 0), 'Player vs AI',
+                                                  fontSize=MENU_FONT_SIZE, fontName=FONT_NAME)
         self.audio_button.moveXY(WIN_W / 2 - self.audio_button.getRect().width / 2,
                                     WIN_H / 2 - self.audio_button.getRect().height / 2
                                  - button_height * 2 + height_variable)
-        self.controls_button = pygwidgets.TextButton(self.game.screen, (0, 0), 'AI vs AI', fontSize=45)
+        self.controls_button = pygwidgets.TextButton(self.game.screen, (0, 0), 'AI vs AI',
+                                                     fontSize=MENU_FONT_SIZE, fontName=FONT_NAME)
         self.controls_button.moveXY(WIN_W / 2 - self.controls_button.getRect().width / 2,
                                     WIN_H / 2 - self.controls_button.getRect().height / 2
                                     - button_height + height_variable)
-        self.return_button = pygwidgets.TextButton(self.game.screen, (0, 0), 'Return', fontSize=45)
+        self.return_button = pygwidgets.TextButton(self.game.screen, (0, 0), 'Return',
+                                                   fontSize=MENU_FONT_SIZE, fontName=FONT_NAME)
         self.return_button.moveXY(WIN_W / 2 - self.return_button.getRect().width / 2,
                                     WIN_H / 2 - self.return_button.getRect().height / 2 + height_variable)
 
