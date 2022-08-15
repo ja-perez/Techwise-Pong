@@ -137,7 +137,7 @@ class Local(State):
         # create ball and set position to the center of the screen
         self.ball = Ball("ball")
         self.ball.set_pos(GAME_W, GAME_H - BALL[1] / 2)
-        self.ball_vel = 3
+        self.ball_vel = 6
         self.ball_x_dir = 1 if random.randint(0, 1) else -1
         self.ball_y_dir = 1 if random.randint(0, 1) else -1
         self.ball.set_vel(self.ball_vel, self.ball_vel)
@@ -201,8 +201,20 @@ class Local(State):
             self.ball_x_dir *= -1
             self.volley += 1
             bouncefx.play()
-            if self.volley % self.boost == 0:
-                self.ball.set_vel(self.ball.x_vel() + self.volley / 2.5, self.ball.y_vel() + self.volley / 2.5)
+
+            ## COMMENTED OUT FOR FASTER VOLLEY
+            # if self.volley % self.boost == 0:
+            #     self.ball.set_vel(self.ball.x_vel() + self.volley / 2.5, self.ball.y_vel() + self.volley / 2.5)
+
+            # Faster Volley
+            self.ball.set_vel(self.ball.x_vel() + 2, self.ball.y_vel() + 2)
+
+
+            # GAME MODE STUFF - FIX LATER
+            #self.ball.increase_radius(6)
+            self.player1.change_size(1, 1)
+            self.player2.change_size(1, 1)
+
 
     def exit_state(self):
         if self.pause:
