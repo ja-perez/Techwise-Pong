@@ -3,6 +3,7 @@ import sys
 from Constants import *
 from states.menus.mainmenu.mainmenu import MainMenu
 from states.menus.settings.settings import Settings
+from states.menus.graphicsmenu.graphicsmenu import GraphicsMenu
 from states.menus.settings.update_set import Change_Graphics, Change_Audio, Change_Controls
 from states.menus.pause.pause import Pause
 from states.modes.local.local import Local
@@ -26,7 +27,7 @@ class Game():
         self.states = {"mainmenu": MainMenu(self, "mainmenu"), "local": Local(self, "local"),
                        "settings": Settings(self, "settings"), "pause": Pause(self, "pause"),
                        "localmenu": LocalMenu(self, "localmenu"),
-                       "graphics": Change_Graphics(self, "graphics"), "audio": Change_Audio(self, "audio"),
+                       "graphicsmenu": GraphicsMenu(self, "graphicsmenu"), "audio": Change_Audio(self, "audio"),
                        "controls": Change_Controls(self, "controls"), "online": Online(self, "online")}
         self.curr_state = self.states["mainmenu"]
         # Background Music

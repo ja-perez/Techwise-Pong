@@ -12,6 +12,8 @@ class Local(State):
     def __init__(self, game, name):
         State.__init__(self, game, name)
         self.start, self.pause = False, False
+        self.left_paddle_color = WHITE
+        self.right_paddle_color = WHITE
         self.game_mode = 2
         self.scored, self.collision_present, self.volley, self.boost = False, False, 1, 2
         self.register_commands()
@@ -47,6 +49,7 @@ class Local(State):
         if self.pause:
             self.next_state = "pause"
             self.change_state(self.next_state)
+        self.update_colors()
 
     def render(self):
         if not self.start:
@@ -95,32 +98,41 @@ class Local(State):
         self.score1.set_pos(self.player1.surface.get_width() * 2, 0)
         self.score2.set_pos(GAME_W * 2 - self.score2.surface.get_width() * 1.5, 0)
 
+    def set_left_paddle_color(self, color):
+        self.left_paddle_color = color
+
+    def set_right_paddle_color(self, color):
+        self.right_paddle_color = color
+
+    def update_colors(self):
+        self.player1.set_color(self.left_paddle_color)
+        self.player2.set_color(self.right_paddle_color)
+
     def create_players(self):
         # create player 1:
         # set position to the left of the screen
         # set x velocity to 0 and y velocity to 10
         # set up and down values to false and direction to 0
+        # set color based on settings menu color selection
         self.player1 = Player("player 1")
         self.player1.set_vel(0, 10)
         self.p1_up, self.p1_down = False, False
         self.p1_y_direction = 0
+        self.player1.set_color(self.left_paddle_color)
         # create player 2:
         # set position to the left of the screen
         # set x velocity to 0 and y velocity to 10
         # set up and down values to false and direction to 0
+        # set color based on settings menu color selection
         self.player2 = Player("player 2")
         self.player2.set_vel(0, 10)
         self.p2_up, self.p2_down = False, False
         self.p2_y_direction = 0
+        self.player2.set_color(self.right_paddle_color)
         # register both players with game manager
         self.g_manager.register_entity(self.player1)
         self.g_manager.register_entity(self.player2)
 
-    # def ai(self, ball, player):
-    #     if player.components["graphics"].rect.centery < ball.components["graphics"].rect.top and player.components["graphics"].rect.bottom < WIN_H:
-    #         player.components["graphics"].rect.moveip(0, 10)
-    #     if player.components["graphics"].rect.centery > ball.components["graphics"].rect.bottom and player.components["graphics"].rect.top > 0:
-    #         player.components["graphics"].rect.moveip(0, -10)
     def create_balls(self):
         # create ball and set position to the center of the screen
         self.ball = Ball("ball")

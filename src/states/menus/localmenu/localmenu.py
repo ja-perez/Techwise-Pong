@@ -2,7 +2,6 @@ import pygwidgets
 import pygame
 from states.state import State
 from Constants import *
-from states.modes.local.local import Local
 
 class LocalMenu(State):
     def __init__(self, game, name):

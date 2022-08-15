@@ -13,7 +13,7 @@ class Settings(State):
     def update(self):
         for event in pygame.event.get():
             if self.graphics_button.handleEvent(event):
-                self.change_state("graphics")
+                self.change_state("graphicsmenu", self.name)
             if self.audio_button.handleEvent(event):
                 self.change_state("audio")
             if self.controls_button.handleEvent(event):
