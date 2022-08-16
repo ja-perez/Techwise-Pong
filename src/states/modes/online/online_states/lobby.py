@@ -66,3 +66,6 @@ class Lobby(State):
     def change_online_state(self, next_state):
         self.curr_state = self.states[next_state]
         self.curr_state.enter_state()
+
+    def enter_state(self):
+        self.curr_state = self.states["self"]

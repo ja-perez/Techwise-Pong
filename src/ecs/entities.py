@@ -45,7 +45,7 @@ class Ball(Entity):
         Entity.__init__(self, name)
         self.surface = pygame.Surface(BALL)
         #THIS DOESNT WORK?
-        self.surface.fill(YELLOW)
+        #self.surface.fill(YELLOW)
         self.components["graphics"] = GraphicComponent(self.surface, 0, 0)
         self.components["graphics"].is_circle = True
         self.components["graphics"].radius = BALL_RADIUS

@@ -28,6 +28,8 @@ class Online_Match(State):
             for event in pygame.event.get():
                 if self.exit_button.handleEvent(event):
                     print("returning to lobby")
+                    self.exit_state()
+                    state.curr_state = state.states["self"]
         if self.data:
             self.curr_match = self.network.send(self.data)
             if self.data == "ready":
@@ -154,5 +156,10 @@ class Online_Match(State):
                 self.curr_player = reply["curr_player"]
 
     def exit_state(self):
-        self.curr_match, self.server_response = None, None
+        self.server_response = None
         self.data, self.start = "", False
+
+    def change_state(self, next_state: str):
+        self.exit_state()
+        self.online.change_state(next_state)
+        self.online.curr_state.enter_state()

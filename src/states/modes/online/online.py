@@ -17,7 +17,6 @@ class Online(State):
         if not self.network.connected:
             self.curr_state = self.states["waitscreen"]
         else:
-            # self.network.send("test")
             self.curr_state = self.states["lobby"]
         self.curr_state.update(self)
 
@@ -27,16 +26,32 @@ class Online(State):
         else:
             self.curr_state.render()
 
+    def change_state(self, next_state, prev_state=''):
+        self.exit_state()
+        if next_state in self.game.states:
+            self.game.curr_state = self.game.states[next_state]
+            if prev_state:
+                self.game.curr_state.enter_state(prev_state)
+            else:
+                self.game.curr_state.enter_state()
+        else:
+            self.curr_state = self.states[next_state]
+            if prev_state:
+                self.curr_state.enter_state(prev_state)
+            else:
+                self.curr_state.enter_state()
+
     def enter_state(self):
-        self.game.screen.blit(pygame.transform.scale(self.game.game_canvas, (WIN_W, WIN_H)), (0, 0))
-        self.curr_state.render("ws1")
-        pygame.display.flip()
-        pygame.time.delay(600)
-        self.network = Network()
-        if self.network.connected:
-            self.friend_code = self.network.getP().split()[1]
-            self.states.update({"lobby": Lobby(self.game, self)})
-            self.curr_state = self.states["lobby"]
+        if "lobby" not in self.states:
+            self.game.screen.blit(pygame.transform.scale(self.game.game_canvas, (WIN_W, WIN_H)), (0, 0))
+            self.curr_state.render("ws1")
+            pygame.display.flip()
+            pygame.time.delay(600)
+            self.network = Network()
+            if self.network.connected:
+                self.friend_code = self.network.getP().split()[1]
+                self.states.update({"lobby": Lobby(self.game, self)})
+                self.curr_state = self.states["lobby"]
 
     def exit_state(self):
         if self.network.connected:

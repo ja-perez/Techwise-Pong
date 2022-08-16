@@ -1,6 +1,6 @@
 from commands.command import *
 from inspect import signature
-
+from commands.command import ICommand
 
 class ExampleCommand(ICommand):
     def __init__(self, active: ActiveOn, function: Callable, state_inst: State):
@@ -17,5 +17,5 @@ class ExampleCommand(ICommand):
         pass
 
 
-def example_command(keycode=0, state_inst):
+def example_command(keycode=0, state_inst=None):
     pass
