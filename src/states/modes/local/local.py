@@ -8,6 +8,7 @@ from commands.command import ActiveOn
 from ecs.systems import draw_system, move_system, collision_detection_system, ai_system
 from pygame import mixer
 
+
 class Local(State):
     def __init__(self, game, name):
         State.__init__(self, game, name)
@@ -22,7 +23,7 @@ class Local(State):
 
     def set_game_mode(self, number):
         self.game_mode = number
-    
+
     def update(self):
         command_queue = self.ih.handle_input()
         for command, args in command_queue:
@@ -174,7 +175,7 @@ class Local(State):
         player.components["graphics"].rect.bottom = min(player.components["graphics"].rect.bottom, WIN_H)
 
     def ball_off_bounds_handler(self, ball):
-        #SOUNDS MOVE LATER
+        # SOUNDS MOVE LATER
         pointfx = mixer.Sound("point.wav")
         bouncefx = mixer.Sound("bounce.wav")
         bouncefx.set_volume(0.3)
@@ -209,12 +210,10 @@ class Local(State):
             # Faster Volley
             self.ball.set_vel(self.ball.x_vel() + 2, self.ball.y_vel() + 2)
 
-
             # GAME MODE STUFF - FIX LATER
-            #self.ball.increase_radius(6)
+            # self.ball.increase_radius(6)
             self.player1.change_size(1, 1)
             self.player2.change_size(1, 1)
-
 
     def exit_state(self):
         if self.pause:

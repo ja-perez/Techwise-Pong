@@ -35,12 +35,10 @@ def down_command(keycode=0, state_inst=None):
     global move_down
     btn_state = {False: "move stop", True: "move down"}
     if keycode == pygame.K_s:
-        move_down = int(not move_down)
+        move_down = not move_down
     state_inst.data = btn_state[move_down]
 
 
 def ready_up(keycode=0, state_inst=None):
     if keycode == pygame.K_SPACE:
-        state_inst.start = not state_inst.start
-        # Temp - Stops transmission of previous move command
-        state_inst.data = ""
+        state_inst.data = "ready"

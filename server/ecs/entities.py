@@ -29,6 +29,9 @@ class Player(Entity):
     def set_state(self, new_state: str):
         self.curr_state = new_state
 
+    def set_cords(self, x, y):
+        self.shape.topleft = (x, y)
+
     def get_y_vel(self) -> int:
         return self.components["velocity"].y_velocity
 
@@ -59,6 +62,10 @@ class Player(Entity):
     def get_size(self) -> (int, int):
         return self.shape.size
 
+    def reset_player(self):
+        self.score = 0
+        self.curr_state = "wait"
+
 
 class Ball(Entity):
     def __init__(self, name):
@@ -66,7 +73,7 @@ class Ball(Entity):
         self.x_dir, self.y_dir = 0, 0
         self.curr_state = "wait"
         self.shape = Rect((0, 0), BALL)
-        self.set_components("velocity", VelocityComponent(4, 4))
+        self.set_components("velocity", VelocityComponent(2.5, 2.5))
 
     def set_vel(self, x, y):
         self.components["velocity"].x_velocity = x

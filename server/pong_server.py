@@ -56,8 +56,6 @@ class Pong_Server():
                 if "stop" not in data:
                     print(str(client_id) + " received:", data)
                 if not data or data.lower() == "goodbye":
-                    if curr_match:
-                        self.m.update_match(curr_match, client_id, data)
                     break
                 if type(curr_match) == int:
                     reply = self.m.update_match(curr_match, client_id, data)
@@ -67,13 +65,14 @@ class Pong_Server():
                         curr_match = int(reply["match_id"])
                     else:
                         reply = str(reply)
-                    print(str(client_id) + " reply:", reply)
+                    if reply:
+                        print(str(client_id) + " reply:", reply)
                 self.m.update_matches()
-
                 conn.sendall(pickle.dumps(reply))
             except:
                 break
-
+        if curr_match:
+            self.m.update_match(curr_match, client_id, "goodbye")
         self.num_of_clients -= 1
         self.client_ids.remove(client_id)
         self.m.update_matches()

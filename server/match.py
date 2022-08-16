@@ -21,7 +21,12 @@ class Match:
         else:
             self.players[1] = player_id
         self.pong_match.set_players(self.get_players())
-        self.update_game_state()
+        self.update_game_state(player_id)
+
+    def get_player(self, player_id: int):
+        for player in self.players:
+            if self.players[player] == str(player_id):
+                return player
 
     def get_players(self):
         return self.players[1], self.players[2]
@@ -32,6 +37,7 @@ class Match:
             if self.players[player] == player_id:
                 self.players[player] = ""
                 self.match_state = "wait"
+        self.pong_match.reset_match()
 
     def is_private(self):
         return self.private_match
@@ -49,21 +55,23 @@ class Match:
         return str(self.match_id) in self.get_players()
 
     def get_state(self):
-        return self.match_state
+        return self.pong_match.match_state
 
-    def update_game_state(self):
+    def update_game_state(self, player_id):
         self.game_state = {"match_id": self.match_id,
-                           "player 1": self.pong_match.get_player1_data(),
-                           "player 2": self.pong_match.get_player2_data(),
+                           1: self.pong_match.get_player1_data(),
+                           2: self.pong_match.get_player2_data(),
                            "ball": self.pong_match.get_ball_data(),
-                           "match_state": self.match_state
+                           "match_state": self.pong_match.match_state,
+                           "curr_player": self.get_player(player_id),
+                           "winner": self.pong_match.winner
                            }
 
     def update_game(self, player_id: int, player_input: str):
         self.pong_match.process_input(player_id, player_input)
         self.pong_match.update()
         self.pong_match.render()
-        self.update_game_state()
+        self.update_game_state(player_id)
         print("Updated State:", self.game_state)
         return self.game_state
 
@@ -114,6 +122,7 @@ class Match_Manager:
         if data == "goodbye":
             try:
                 curr_match.remove_player(player_id)
+                curr_match.update_game(player_id, "")
             except ValueError as e:
                 return str(e)
         else:  # Assumed to be input
@@ -127,6 +136,8 @@ class Match_Manager:
                 if match_id in self.open:
                     self.open.remove(match_id)
             elif match_id not in self.open:
+                if curr_match.get_state() != "wait":
+                    curr_match.pong_match.set_state("wait")
                 self.open.append(match_id)
             if curr_match.is_private() and not curr_match.owner_present():
                 remove_match.append(match_id)

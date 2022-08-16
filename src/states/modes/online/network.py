@@ -25,6 +25,7 @@ class Network:
             return pickle.loads(self.client.recv(2048))
         except:
             print("Couldn't connect")
+            self.connected = False
 
     def send(self, data):
         try:
@@ -32,6 +33,7 @@ class Network:
             return pickle.loads(self.client.recv(2048))
         except socket.error as e:
             print(e)
+
 
     def disconnect(self):
         self.client.send(str.encode("goodbye"))
