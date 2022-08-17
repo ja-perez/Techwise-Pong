@@ -8,7 +8,7 @@ from states.menus.settings.update_set import Change_Graphics, Change_Audio, Chan
 from states.menus.pause.pause import Pause
 from states.modes.local.local import Local
 from states.menus.localmenu.localmenu import LocalMenu
-from states.modes.online.online import Online
+from states.modes.online.r_online import Online
 from pygame import mixer
 
 
@@ -43,9 +43,12 @@ class Game():
         self.clock.tick(60)
 
     def render(self):
-        self.screen.blit(pygame.transform.scale(self.game_canvas, (WIN_W, WIN_H)), (0, 0))
+        self.reset_screen()
         self.curr_state.render()
         pygame.display.flip()
+
+    def reset_screen(self):
+        self.screen.blit(pygame.transform.scale(self.game_canvas, (WIN_W, WIN_H)), (0, 0))
 
     def teardown(self):
         # handle game exit

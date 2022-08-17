@@ -14,7 +14,8 @@ class Player(Entity):
         self.surface.fill(WHITE)
         self.components["graphics"] = GraphicComponent(self.surface, 0, 0)
         self.components["velocity"] = VelocityComponent(0, 0)
-        self.change_size(1, 2)
+        self.e_type = "Player"
+        # self.change_size(1, 2)
 
     def set_color(self, color):
         self.surface.fill(color)
@@ -22,6 +23,9 @@ class Player(Entity):
     def change_size(self, width, height):
         self.paddle_width += width
         self.paddle_height = height
+
+    def get_size(self):
+        return self.paddle_width, self.paddle_height
 
     def set_cords(self, x, y):
         self.components["graphics"].rect.topleft = (x, y)
@@ -50,6 +54,7 @@ class Ball(Entity):
         self.components["graphics"].is_circle = True
         self.components["graphics"].radius = BALL_RADIUS
         self.components["velocity"] = VelocityComponent(0, 0)
+        self.e_type = "Ball"
 
     def set_pos(self, x, y):
         self.components["graphics"].rect.move_ip(x, y)
@@ -79,6 +84,7 @@ class Score(Entity):
         self.components["text"] = TextComponent(title, size, color)
         self.surface = self.components["text"].font.render(title, False, color)
         self.components["graphics"] = GraphicComponent(self.surface, 0, 0)
+        self.e_type = "Score"
 
     def set_pos(self, x, y):
         self.components["graphics"].rect.move_ip(x, y)

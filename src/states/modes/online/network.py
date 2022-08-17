@@ -13,10 +13,14 @@ class Network:
         # self.server = "192.168.0.150"
         self.port = 5555
         self.addr = (self.server, self.port)
+        self.connected = False
         self.p = self.connect()
 
     def getP(self):
         return self.p
+
+    def get_id(self):
+        return self.p.split()[1]
 
     def connect(self):
         try:
@@ -25,7 +29,6 @@ class Network:
             return pickle.loads(self.client.recv(2048))
         except:
             print("Couldn't connect")
-            self.connected = False
 
     def send(self, data):
         try:

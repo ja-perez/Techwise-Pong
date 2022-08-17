@@ -10,7 +10,8 @@ class Online(State):
     def __init__(self, game, name):
         State.__init__(self, game, name)
         self.friend_code = ""
-        self.states = {"waitscreen": WaitScreen(self.game, "waitscreen")}
+        self.states = {"waitscreen": WaitScreen(self.game, "waitscreen"),
+                       "lobby": None}
         self.curr_state = self.states["waitscreen"]
 
     def update(self):
@@ -42,7 +43,7 @@ class Online(State):
                 self.curr_state.enter_state()
 
     def enter_state(self):
-        if "lobby" not in self.states:
+        if not self.states["lobby"]:
             self.game.screen.blit(pygame.transform.scale(self.game.game_canvas, (WIN_W, WIN_H)), (0, 0))
             self.curr_state.render("ws1")
             pygame.display.flip()

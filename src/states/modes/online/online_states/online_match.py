@@ -52,7 +52,6 @@ class Online_Match(State):
             # TODO: Create texts for displaying if client is winner or loser
             # TODO: Also need to implement buttons for rematching or returning to server
 
-
     def render(self):
         if self.curr_match["match_state"] != "end":
             draw_system(self.game.screen, self.g_manager.all_component_instances("graphics"))
