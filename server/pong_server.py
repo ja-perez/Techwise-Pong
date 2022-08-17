@@ -81,14 +81,14 @@ class Pong_Server():
 
     def process_client_data(self, data: str, client_id: int):
         if data == "create_private":
-            self.m.create_private_match(client_id)
-            return client_id
+            private_state = self.m.create_private_match(client_id)
+            return private_state
         elif "join_private" in data:
-            private_id = self.m.get_private_match(data.split()[1], client_id)
-            return private_id
+            private_state = self.m.get_private_match(data.split()[1], client_id)
+            return private_state
         elif data == "join_public":
-            public_id = self.m.get_open_match(client_id)
-            return public_id
+            public_state = self.m.get_open_match(client_id)
+            return public_state
         else:
             return "No action available"
 

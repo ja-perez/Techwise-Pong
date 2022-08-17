@@ -106,7 +106,7 @@ class Match_Manager:
     def create_private_match(self, private_id: int):
         self.matches[private_id] = Match(private_id, True)
         self.matches[private_id].set_player(private_id)
-        return self.matches[private_id].get_id()
+        return self.matches[private_id].game_state
 
     def get_private_match(self, private_id: str, player_id: int):
         try:

@@ -35,7 +35,7 @@ class Pong():
             pass
 
     def render(self):
-        print("ball pos:", self.ball_0.get_pos())
+        pass
 
     def process_input(self, player_id: int, player_input: str):
         player_id = str(player_id)

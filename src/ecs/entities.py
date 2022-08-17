@@ -77,11 +77,11 @@ class Ball(Entity):
 
 
 class Score(Entity):
-    def __init__(self, title, size, color):
+    def __init__(self, title, size, color, font_name=None):
         Entity.__init__(self, title)
         self.color = color
         self.size = size
-        self.components["text"] = TextComponent(title, size, color)
+        self.components["text"] = TextComponent(title, size, color, font_name)
         self.surface = self.components["text"].font.render(title, False, color)
         self.components["graphics"] = GraphicComponent(self.surface, 0, 0)
         self.e_type = "Score"

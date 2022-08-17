@@ -23,8 +23,8 @@ class AudioComponent:
 
 
 class TextComponent:
-    def __init__(self, text, size, color):
+    def __init__(self, text, size, color, font_name=None):
         self.text = text
         self.size = size
         self.color = color
-        self.font = pygame.font.Font(None, self.size)
+        self.font = pygame.font.Font(font_name, self.size)
