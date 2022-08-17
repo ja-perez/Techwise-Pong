@@ -6,7 +6,7 @@ class Match:
     def __init__(self, match_id, private_match=False):
         self.match_id = match_id
         self.players = {1: "", 2: ""}
-        self.match_state = "wait"
+        self.match_state = "waiting"
         self.private_match = private_match
         self.pong_match = Pong(self.match_state)
         self.game_state = {}
@@ -36,7 +36,7 @@ class Match:
         for player in self.players:
             if self.players[player] == player_id:
                 self.players[player] = ""
-                self.match_state = "wait"
+                self.match_state = "waiting"
         self.pong_match.reset_match()
 
     def is_private(self):
@@ -136,8 +136,8 @@ class Match_Manager:
                 if match_id in self.open:
                     self.open.remove(match_id)
             elif match_id not in self.open:
-                if curr_match.get_state() != "wait":
-                    curr_match.pong_match.set_state("wait")
+                if curr_match.get_state() != "waiting":
+                    curr_match.pong_match.set_state("waiting")
                 self.open.append(match_id)
             if curr_match.is_private() and not curr_match.owner_present():
                 remove_match.append(match_id)

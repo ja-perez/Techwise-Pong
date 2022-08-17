@@ -18,9 +18,9 @@ class Pong():
         self.start_pos()
 
     def update(self):
-        if self.match_state == "wait":
+        if self.match_state == "waiting":
             # Wait for both players to join match and press start
-            self.match_state = "start" if self.both_players_ready() else "wait"
+            self.match_state = "start" if self.both_players_ready() else "waiting"
         elif self.match_state == "start":
             # Start playing game
             move_system(self.player_1, self.paddle_off_bounds_handler, 0, self.player_1.y_dir)
@@ -71,7 +71,7 @@ class Pong():
         self.player_2.set_cords(GAME_W * 2 - PADDLE[0] - BALL[0], GAME_H - PADDLE[1] / 2)
 
     def reset_match(self):
-        self.match_state = "wait"
+        self.match_state = "waiting"
         self.winner = ""
         self.reset_players()
         self.reset_ball_pos()

@@ -31,3 +31,8 @@ class EntityManager():
             if e_type in get_type:
                 for entity in self.entity_types[e_type]:
                     yield entity.components["graphics"]
+
+    def update_entity_component(self, entity, component_type):
+        for i, old_entity in enumerate(self.component_to_entity[component_type]):
+            if old_entity == entity:
+                self.component_to_entity[component_type][i] = entity

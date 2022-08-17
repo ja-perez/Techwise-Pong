@@ -2,7 +2,8 @@ import pygame
 import pygwidgets
 from states.state import State
 from Constants import *
-from states.modes.online.online_states.online_commands import MatchCommand, up_command, down_command, ready_up
+from states.modes.online.online_states.online_commands import MatchCommand, up_command, down_command, ready_up, \
+    leave_command
 from commands.command import ActiveOn
 from ecs.entities import Player, Ball, State_Text, Score
 from ecs.entity_manager import EntityManager
@@ -17,6 +18,8 @@ class OnlineMatch(State):
         self.join_private = join_private
         self.network, self.server_reply = self.online.network, ""
         self.curr_match, self.match_state = None, "connecting"
+        self.data, self.curr_player = "ping", 0
+        self.register_commands()
         # Original method for creating objects
         self.create_objects()
 
@@ -39,19 +42,33 @@ class OnlineMatch(State):
                     # If no matches then ask to try again or return to lobby
                     # If match found then set match id to server response
                     pass
+                # If server reply is a dict then we have been assigned a match
                 if type(self.server_reply) == dict:
                     self.curr_match = self.server_reply
                     self.match_id = self.server_reply["match_id"]
                     print(self.server_reply)
+                else:
+                    # Server could not find match, or no matches are available
+                    # Print error and ask player to try again or go back to lobby
+                    pass
+                # Check if player pressed ESC to return to lobby
                 if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
                     self.online.online_state = self.online.states["lobby"]
         else:
-            # Currently in a match
-            # Need to check match state
-            # If still waiting then only read start input
-            # If playing then read movement input
-            # If game over then read option input
-            pass
+            # Currently in a match - Need to check match state
+            self.match_state = self.curr_match["match_state"]
+            if self.match_state == "end":
+                for event in pygame.event.get():
+                    # Check return to lobby button is pressed
+                    # Check if rematch button is pressed
+                    pass
+            else:
+                command_queue = self.ih.handle_input()
+                for command, args in command_queue:
+                    command.execute(args[0])
+                reply = self.network.send(self.data)
+                if "match_id" in reply:
+                    self.curr_match = self.network.send(self.data)
 
     def render(self):
         if not self.match_id:
@@ -65,13 +82,44 @@ class OnlineMatch(State):
                 # Print "looking for open matches"
                 self.public_prompt.draw()
                 pass
-        else:   # In match
+        else:  # In match
             # Need to check match state
             # If waiting, then prompt to press start or if waiting for other player
             # If start then display the updated position of all objects
             # If game over then display player outcome and option to rematch or return to lobby
-            draw_system(self.game.screen, self.g_manager.all_component_instances("graphics"))
+            self.match_state = self.curr_match["match_state"]
+            self.curr_player = self.curr_match["curr_player"]
+            if self.match_state == "waiting":
+                if self.curr_match[self.curr_player][2] == "wait":
+                    # Print Waiting on self to ready up
+                    self.ready_up_prompt.draw()
+                    pass
+                else:
+                    # Print Waiting on other player to ready up
+                    self.waiting_prompt.draw()
+                    pass
+                self.update_objects()
+                draw_system(self.game.screen, self.g_manager.all_component_instances("graphics"))
+            elif self.match_state == "start":
+                self.update_objects()
+                draw_system(self.game.screen, self.g_manager.all_component_instances("graphics"))
+            elif self.match_state == "end":
+                # display player game outcome
+                # wait for client to choose to leave or rematch
+                self.start_positions()
+                draw_system(self.game.screen, self.g_manager.all_entity_types("Player", "Score"))
+
         self.leave_prompt.draw()
+
+    def register_commands(self):
+        self.move_up = MatchCommand(ActiveOn.BOTH, up_command, self)
+        self.move_down = MatchCommand(ActiveOn.BOTH, down_command, self)
+        self.set_ready = MatchCommand(ActiveOn.BOTH, ready_up, self)
+        self.leave_match = MatchCommand(ActiveOn.PRESSED, leave_command, self)
+        self.ih.register_command(pygame.K_w, self.move_up)
+        self.ih.register_command(pygame.K_s, self.move_down)
+        self.ih.register_command(pygame.K_SPACE, self.set_ready)
+        self.ih.register_command(pygame.K_ESCAPE, self.leave_match)
 
     def create_objects(self):
         self.g_manager = EntityManager()
@@ -135,13 +183,61 @@ class OnlineMatch(State):
         public_prompt_rect = self.public_prompt.getRect().width, self.public_prompt.getRect().height
         self.public_prompt.moveXY(GAME_W - public_prompt_rect[0] / 2, GAME_H - public_prompt_rect[1])
 
+        # Waiting Prompts
+        prompt = "Press Space to Ready Up"
+        self.ready_up_prompt = pygwidgets.DisplayText(self.game.screen, (0, 0), value=prompt,
+                                                      fontSize=TEXT_SIZE, textColor=WHITE,
+                                                      fontName=FONT_NAME, justified="center")
+        ready_up_prompt_rect = self.ready_up_prompt.getRect().width, self.ready_up_prompt.getRect().height
+        self.ready_up_prompt.moveXY(GAME_W - ready_up_prompt_rect[0] / 2, GAME_H - ready_up_prompt_rect[1])
+
+        prompt = "Waiting for other player"
+        self.waiting_prompt = pygwidgets.DisplayText(self.game.screen, (0, 0), value=prompt,
+                                                     fontSize=TEXT_SIZE, textColor=WHITE,
+                                                     fontName=FONT_NAME, justified="center")
+        waiting_prompt_rect = self.waiting_prompt.getRect().width, self.waiting_prompt.getRect().height
+        self.waiting_prompt.moveXY(GAME_W - waiting_prompt_rect[0] / 2, GAME_H - waiting_prompt_rect[1])
+
         # Leave Match Prompt
         prompt = "Press Escape to return to Lobby"
         self.leave_prompt = pygwidgets.DisplayText(self.game.screen, (0, 0), value=prompt,
-                                                    fontSize=MENU_FONT_SIZE, textColor=WHITE,
-                                                    fontName=FONT_NAME, justified="center")
+                                                   fontSize=MENU_FONT_SIZE, textColor=WHITE,
+                                                   fontName=FONT_NAME, justified="center")
         leave_prompt_rect = self.leave_prompt.getRect().width, self.leave_prompt.getRect().height
         self.leave_prompt.moveXY(0, WIN_H - leave_prompt_rect[1])
+
+    def update_objects(self):
+        # Updating Moving Objects
+        p1_x, p1_y = self.curr_match[1][0]
+        p2_x, p2_y = self.curr_match[2][0]
+        ball_x, ball_y = self.curr_match['ball']
+        self.player_1.set_cords(p1_x, p1_y)
+        self.player_2.set_cords(p2_x, p2_y)
+        self.ball_0.set_cords(ball_x, ball_y)
+
+        # Updating Scores
+        if self.curr_match["match_state"] != "start":
+            self.score_1.name = "Player 1: " + self.curr_match[1][2]
+            self.score_2.name = "Player 2: " + self.curr_match[2][2]
+        else:
+            self.score_1.name = "Player 1: " + str(self.curr_match[1][1])
+            self.score_2.name = "Player 2: " + str(self.curr_match[2][1])
+        self.score_1.update_graphics()
+        self.score_2.update_graphics()
+        self.g_manager.update_entity_component(self.score_1, "graphics")
+        self.g_manager.update_entity_component(self.score_2, "graphics")
+        self.g_manager.update_entity_component(self.score_1, "text")
+        self.g_manager.update_entity_component(self.score_2, "text")
+
+    def start_positions(self):
+        p1_x, p1_y = BALL_RADIUS * 2, GAME_H - self.player_1.get_size()[1] / 2
+        p2_x, p2_y = GAME_W * 2 - self.player_2.get_size()[0] - BALL_RADIUS * 2, \
+                     GAME_H - self.player_2.get_size()[1] / 2
+        self.player_1.set_cords(p1_x, p1_y)
+        self.player_2.set_cords(p2_x, p2_y)
+
+        ball_0_cords = GAME_W - BALL_RADIUS, GAME_H - BALL_RADIUS
+        self.ball_0.set_cords(ball_0_cords[0], ball_0_cords[1])
 
     def enter_state(self):
         # If private - print prompt for entering friend code
