@@ -42,3 +42,8 @@ def down_command(keycode=0, state_inst=None):
 def ready_up(keycode=0, state_inst=None):
     if keycode == pygame.K_SPACE:
         state_inst.data = "ready"
+
+
+def leave_command(keycode=0, state_inst=None):
+    if keycode == pygame.K_ESCAPE:
+        state_inst.data = "leave"

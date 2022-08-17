@@ -1,71 +1,69 @@
 import pygame, pygwidgets
 from states.state import State
 from ecs.entities import State_Text
-from states.modes.online.online_states.friend_screen import Friend_Screen
-from states.modes.online.online_states.online_match import Online_Match
+from states.modes.online.online_states.client import OnlineMatch
 from Constants import *
 
 
 class Lobby(State):
-    def __init__(self, game, online):
-        State.__init__(self, game)
+    def __init__(self, online):
+        State.__init__(self, online.game)
+        self.online = online
         self.create_objects()
-        self.online_inst = online
-        self.states = {"friendscreen": Friend_Screen(game, online),
-                       "publicmatch": Online_Match(game, online),
-                       "privatematch": Online_Match(game, online, True),
-                       "self": self}
-        self.curr_state = self.states["self"]
 
-    def update(self, state):
-        if self.curr_state != self:
-            self.curr_state.update(self)
-        else:
-            for event in pygame.event.get():
-                if self.find_match_btn.handleEvent(event):
-                    self.change_online_state("publicmatch")
-                elif self.play_w_friend_btn.handleEvent(event):
-                    self.curr_state = self.states["friendscreen"]
-                elif self.mainmenu_btn.handleEvent(event):
-                    state.change_state("mainmenu")
+    def update(self):
+        for event in pygame.event.get():
+            if self.join_public_btn.handleEvent(event):
+                self.online.states.update({"match": OnlineMatch(self.online)})
+                self.online.online_state = self.online.states["match"]
+                self.online.online_state.enter_state()
+            elif self.join_private_btn.handleEvent(event):
+                self.online.states.update({"match": OnlineMatch(self.online, True)})
+                self.online.online_state = self.online.states["match"]
+                self.online.online_state.enter_state()
+            elif self.mainmenu_btn.handleEvent(event):
+                self.online.exit_online()
 
     def render(self):
-        if self.curr_state != self:
-            self.curr_state.render()
-        else:
-            graphic_component = self.lobby_screen.components["graphics"]
-            self.game.screen.blit(graphic_component.surface, graphic_component.rect)
-            self.find_match_btn.draw()
-            self.play_w_friend_btn.draw()
-            self.mainmenu_btn.draw()
+        graphic_component = self.lobby_screen.components["graphics"]
+        self.game.screen.blit(graphic_component.surface, graphic_component.rect)
+        self.join_public_btn.draw()
+        self.join_private_btn.draw()
+        self.mainmenu_btn.draw()
 
+    # Creating the graphical components of this state
     def create_objects(self):
+        self.create_texts()
+        self.create_buttons()
+
+    def create_texts(self):
         # Lobby title
         lobby_title = "Lobby"
-        self.lobby_screen = State_Text(lobby_title, TEXT_SIZE, WHITE)
+        self.lobby_screen = State_Text(lobby_title, TEXT_SIZE, WHITE, FONT_NAME)
         graphic_component = self.lobby_screen.components["graphics"]
         self.lobby_screen.set_pos(GAME_W - graphic_component.rect.width / 2,
                                   GAME_H - graphic_component.rect.height * 2)
 
+    def create_buttons(self):
         # Lobby Buttons
         # Find Random Match
-        self.find_match_btn = pygwidgets.TextButton(self.game.screen, (0, 0), 'Find Match')
-        btn_rect = self.find_match_btn.getRect().width, self.find_match_btn.getRect().height
-        self.find_match_btn.moveXY(GAME_W - btn_rect[0] / 2, GAME_H - btn_rect[1] / 2)
+        prompt_length = 150
+        self.join_public_btn = pygwidgets.TextButton(self.game.screen, (0, 0), 'Find Match',
+                                                     fontName=FONT_NAME, width=prompt_length)
+        btn_rect = self.join_public_btn.getRect().width, self.join_public_btn.getRect().height
+        self.join_public_btn.moveXY(GAME_W - btn_rect[0] / 2, GAME_H - btn_rect[1] / 2)
         # Play with friend
-        self.play_w_friend_btn = pygwidgets.TextButton(self.game.screen, (0, 0), 'Play with Friend')
-        btn_rect = self.play_w_friend_btn.getRect().width, self.play_w_friend_btn.getRect().height
-        self.play_w_friend_btn.moveXY(GAME_W - btn_rect[0] / 2, GAME_H - btn_rect[1] / 2
-                                  + btn_rect[1])
+        self.join_private_btn = pygwidgets.TextButton(self.game.screen, (0, 0), 'Play with Friend',
+                                                      fontName=FONT_NAME, width=prompt_length)
+        btn_rect = self.join_private_btn.getRect().width, self.join_private_btn.getRect().height
+        self.join_private_btn.moveXY(GAME_W - btn_rect[0] / 2, GAME_H - btn_rect[1] / 2
+                                      + btn_rect[1])
         # Return to main menu
-        self.mainmenu_btn = pygwidgets.TextButton(self.game.screen, (0, 0), 'Main Menu')
+        self.mainmenu_btn = pygwidgets.TextButton(self.game.screen, (0, 0), 'Main Menu',
+                                                  fontName=FONT_NAME, width=prompt_length)
         btn_rect = self.mainmenu_btn.getRect().width, self.mainmenu_btn.getRect().height
         self.mainmenu_btn.moveXY(GAME_W - btn_rect[0] / 2, GAME_H - btn_rect[1] / 2
                                  + btn_rect[1] * 2)
 
-    def change_online_state(self, next_state):
-        self.curr_state = self.states[next_state]
-        self.curr_state.enter_state()
-
-    def enter_state(self):
-        self.curr_state = self.states["self"]
+    def reset(self):
+        pass

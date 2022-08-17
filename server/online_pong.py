@@ -31,26 +31,28 @@ class Pong():
             if self.winner:
                 self.match_state = "end"
         elif self.match_state == "end":
-            # Set the winner and wait for rematch/quit response
-            pass
+            if self.player_1.get_state() == "leave" and self.player_2.get_state() == "leave":
+                self.match_state = "reset"
 
-    def render(self):
-        pass
 
     def process_input(self, player_id: int, player_input: str):
         player_id = str(player_id)
-        if "move" in player_input:
-            # self.match_state = "start", maybe call start game, move this into there?
+        if "move" in player_input and self.match_state == "start":
             move = player_input.split()[1]
             if self.player_1.get_id() == player_id:
                 self.player_1.set_y_dir(move)
             else:
                 self.player_2.set_y_dir(move)
-        elif "ready" == player_input:  # Assume some kind of state change (wait -> start, end->wait, etc.)
+        elif "ready" == player_input and self.match_state == "waiting":
             if self.player_1.get_id() == player_id:
                 self.player_1.set_state("ready")
             else:
                 self.player_2.set_state("ready")
+        elif "leave" == player_input and self.match_state == "end":
+            if self.player_1.get_id() == player_id:
+                self.player_1.set_state("leave")
+            else:
+                self.player_2.set_state("leave")
 
     def get_player1_data(self):
         return self.player_1.get_pos(), self.player_1.get_score(), self.player_1.get_state()
@@ -69,12 +71,6 @@ class Pong():
         self.player_2.reset_player()
         self.player_1.set_cords(BALL[0], GAME_H - PADDLE[1] / 2)
         self.player_2.set_cords(GAME_W * 2 - PADDLE[0] - BALL[0], GAME_H - PADDLE[1] / 2)
-
-    def reset_match(self):
-        self.match_state = "waiting"
-        self.winner = ""
-        self.reset_players()
-        self.reset_ball_pos()
 
     def start_pos(self):
         self.player_1.shape.move_ip(BALL[0], GAME_H - PADDLE[1] / 2)

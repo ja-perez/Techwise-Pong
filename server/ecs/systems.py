@@ -30,6 +30,10 @@ def collision_detection_system(c_object, entities):
     for entity in entities:
         if c_object.shape == entity.shape:
             continue
-        elif pygame.Rect.colliderect(c_object.shape, entity.shape):
-            return True
+        elif entity.name == "Player 1":
+            if c_object.shape.x == entity.shape.right and entity.shape.top <= c_object.shape.y <= entity.shape.bottom:
+                return True
+        elif entity.name == "Player 2":
+            if c_object.shape.x == entity.shape.left and entity.shape.top <= c_object.shape.y <= entity.shape.bottom:
+                return True
     return False

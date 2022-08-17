@@ -8,7 +8,7 @@ from states.menus.settings.update_set import Change_Graphics, Change_Audio, Chan
 from states.menus.pause.pause import Pause
 from states.modes.local.local import Local
 from states.menus.localmenu.localmenu import LocalMenu
-from states.modes.online.r_online import Online
+from states.modes.online.online import Online
 from pygame import mixer
 
 

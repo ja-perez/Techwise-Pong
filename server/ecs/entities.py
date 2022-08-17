@@ -9,7 +9,7 @@ class Player(Entity):
         Entity.__init__(self, name)
         self.client_id = client_id
         self.score, self.x_dir, self.y_dir = 0, 0, 0
-        self.curr_state = "wait"
+        self.curr_state = "waiting"
         self.shape = Rect((0, 0), PADDLE)
         self.set_components("velocity", VelocityComponent(0, 10))
 
@@ -64,7 +64,8 @@ class Player(Entity):
 
     def reset_player(self):
         self.score = 0
-        self.curr_state = "wait"
+        self.curr_state = "waiting"
+        self.client_id = ""
 
 
 class Ball(Entity):

@@ -2,7 +2,8 @@ import pygame
 import pygwidgets
 from states.state import State
 from Constants import *
-from states.modes.online.online_states.online_commands import MatchCommand, up_command, down_command, ready_up
+from states.modes.online.online_states.online_commands import MatchCommand, up_command, down_command, ready_up, \
+    leave_command
 from commands.command import ActiveOn
 from ecs.entities import Player, Ball, State_Text, Score
 from ecs.entity_manager import EntityManager
@@ -60,14 +61,15 @@ class OnlineMatch(State):
                 for event in pygame.event.get():
                     # Check return to lobby button is pressed
                     if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
+                        self.network.send("leave")
                         self.online.online_state = self.online.states["lobby"]
-                    # Check if rematch button is pressed
-                    pass
             else:
                 command_queue = self.ih.handle_input()
                 for command, args in command_queue:
                     command.execute(args[0])
                 reply = self.network.send(self.data)
+                if reply == "goodbye":
+                    self.online.online_state = self.online.states["lobby"]
                 if "match_id" in reply:
                     self.curr_match = self.network.send(self.data)
 
@@ -92,7 +94,7 @@ class OnlineMatch(State):
             self.match_state = self.curr_match["match_state"]
             self.curr_player = self.curr_match["curr_player"]
             if self.match_state == "waiting":
-                if self.curr_match[self.curr_player][2] == "wait":
+                if self.curr_match[self.curr_player][2] == "waiting":
                     # Print Waiting on self to ready up
                     self.ready_up_prompt.draw()
                     pass
@@ -117,13 +119,16 @@ class OnlineMatch(State):
                 draw_system(self.game.screen, self.g_manager.all_entity_types("Player", "Score"))
             if self.match_state != "start":
                 self.leave_prompt.draw()
+
     def register_commands(self):
         self.move_up = MatchCommand(ActiveOn.BOTH, up_command, self)
         self.move_down = MatchCommand(ActiveOn.BOTH, down_command, self)
         self.set_ready = MatchCommand(ActiveOn.BOTH, ready_up, self)
+        self.player_leave = MatchCommand(ActiveOn.PRESSED, leave_command, self)
         self.ih.register_command(pygame.K_w, self.move_up)
         self.ih.register_command(pygame.K_s, self.move_down)
         self.ih.register_command(pygame.K_SPACE, self.set_ready)
+        self.ih.register_command(pygame.K_ESCAPE, self.player_leave)
 
     def create_objects(self):
         self.g_manager = EntityManager()
@@ -213,15 +218,15 @@ class OnlineMatch(State):
         # End Game Prompt
         prompt = "Congratulations, You're the Winner!"
         self.first_prompt = pygwidgets.DisplayText(self.game.screen, (0, 0), value=prompt,
-                                                     fontSize=TEXT_SIZE, textColor=WHITE,
-                                                     fontName=FONT_NAME, justified="center")
+                                                   fontSize=TEXT_SIZE, textColor=WHITE,
+                                                   fontName=FONT_NAME, justified="center")
         first_prompt_rect = self.first_prompt.getRect().width, self.first_prompt.getRect().height
         self.first_prompt.moveXY(GAME_W - first_prompt_rect[0] / 2, GAME_H - first_prompt_rect[1])
 
         prompt = "Better Luck Next Time, Chump"
         self.last_prompt = pygwidgets.DisplayText(self.game.screen, (0, 0), value=prompt,
-                                                     fontSize=TEXT_SIZE, textColor=WHITE,
-                                                     fontName=FONT_NAME, justified="center")
+                                                  fontSize=TEXT_SIZE, textColor=WHITE,
+                                                  fontName=FONT_NAME, justified="center")
         last_prompt_rect = self.last_prompt.getRect().width, self.last_prompt.getRect().height
         self.last_prompt.moveXY(GAME_W - last_prompt_rect[0] / 2, GAME_H - last_prompt_rect[1])
 

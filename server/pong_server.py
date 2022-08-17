@@ -4,13 +4,6 @@ import random
 import pickle
 from match import Match_Manager
 
-"""
-TODO:
-Implement Basic Entity Creation per match
-Game State Object: {"match id": match_id, "Player1": ((x, y), score), "Player2": ((x, y), score), 
-                        "Ball": ((x, y), collision), "state": "wait"}
-"""
-
 
 class Pong_Server():
     def __init__(self, server_ip, port, queue):
@@ -41,7 +34,6 @@ class Pong_Server():
         client_id = self.get_client_id()
         # TODO: Change to create matches by request instead of pre-emptively #
         if self.num_of_clients % 2 > self.m.number_of_matches():
-            # TODO: Create matches by request instead of making them "statically" #
             self.m.create_match()
         _thread.start_new_thread(self.threaded_client, (conn, client_id))
 
@@ -59,6 +51,8 @@ class Pong_Server():
                     break
                 if type(curr_match) == int:
                     reply = self.m.update_match(curr_match, client_id, data)
+                    if reply == "goodbye":
+                        curr_match = None
                 else:
                     reply = self.process_client_data(data, client_id)
                     if type(reply) == dict:

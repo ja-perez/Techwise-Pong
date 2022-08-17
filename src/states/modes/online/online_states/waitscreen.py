@@ -40,7 +40,7 @@ class WaitScreen(State):
     def create_scenes(self):
         # waiting screen 1
         ws1_text = "Waiting for response from server"
-        self.wait_screen1 = State_Text(ws1_text, TEXT_SIZE, WHITE)
+        self.wait_screen1 = State_Text(ws1_text, TEXT_SIZE, WHITE, FONT_NAME)
         graphic_component = self.wait_screen1.components["graphics"]
         self.wait_screen1.set_pos(GAME_W - graphic_component.rect.width / 2,
                                   GAME_H - graphic_component.rect.height / 2)
@@ -48,16 +48,18 @@ class WaitScreen(State):
 
         # waiting screen 2
         ws2_text = "No response from server, try again?"
-        self.wait_screen2 = State_Text(ws2_text, TEXT_SIZE, WHITE)
+        self.wait_screen2 = State_Text(ws2_text, TEXT_SIZE, WHITE, FONT_NAME)
         graphic_component = self.wait_screen2.components["graphics"]
         self.wait_screen2.set_pos(GAME_W - graphic_component.rect.width / 2,
                                   GAME_H - graphic_component.rect.height * 2)
         # waiting screen 2 buttons
-        self.ws2_button1 = pygwidgets.TextButton(self.game.screen, (0, 0), 'Yes')
+        self.ws2_button1 = pygwidgets.TextButton(self.game.screen, (0, 0), 'Yes',
+                                                 fontName=FONT_NAME)
         btn_rect = self.ws2_button1.getRect().width, self.ws2_button1.getRect().height
         self.ws2_button1.moveXY(GAME_W - btn_rect[0] / 2, GAME_H - btn_rect[1] / 2)
 
-        self.ws2_button2 = pygwidgets.TextButton(self.game.screen, (0, 0), 'No')
+        self.ws2_button2 = pygwidgets.TextButton(self.game.screen, (0, 0), 'No',
+                                                 fontName=FONT_NAME)
         btn_rect = self.ws2_button2.getRect().width, self.ws2_button2.getRect().height
         self.ws2_button2.moveXY(GAME_W - btn_rect[0] / 2, GAME_H - btn_rect[1] / 2
                                 + btn_rect[1])

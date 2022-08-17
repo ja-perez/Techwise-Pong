@@ -36,8 +36,6 @@ class Match:
         for player in self.players:
             if self.players[player] == player_id:
                 self.players[player] = ""
-                self.match_state = "waiting"
-        self.pong_match.reset_match()
 
     def is_private(self):
         return self.private_match
@@ -70,7 +68,6 @@ class Match:
     def update_game(self, player_id: int, player_input: str):
         self.pong_match.process_input(player_id, player_input)
         self.pong_match.update()
-        self.pong_match.render()
         self.update_game_state(player_id)
         print("Updated State:", self.game_state)
         return self.game_state
@@ -119,10 +116,11 @@ class Match_Manager:
 
     def update_match(self, match_id: int, player_id: int, data: str):
         curr_match = self.matches[match_id]
-        if data == "goodbye":
+        if data == "goodbye" or data == "leave":
             try:
                 curr_match.remove_player(player_id)
-                curr_match.update_game(player_id, "")
+                curr_match.update_game(player_id, "leave")
+                return "goodbye"
             except ValueError as e:
                 return str(e)
         else:  # Assumed to be input
@@ -136,9 +134,10 @@ class Match_Manager:
                 if match_id in self.open:
                     self.open.remove(match_id)
             elif match_id not in self.open:
-                if curr_match.get_state() != "waiting":
-                    curr_match.pong_match.set_state("waiting")
-                self.open.append(match_id)
+                if curr_match.pong_match.match_state == "reset":
+                    self.matches.update({match_id: Match(match_id)})
+                elif curr_match.pong_match.match_state != "end":
+                    self.open.append(match_id)
             if curr_match.is_private() and not curr_match.owner_present():
                 remove_match.append(match_id)
                 self.open.remove(match_id)
