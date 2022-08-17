@@ -39,12 +39,6 @@ def down_command(keycode=0, state_inst=None):
     state_inst.data = btn_state[move_down]
 
 
-def leave_command(keycode=0, state_inst=None):
-    if keycode == pygame.K_ESCAPE:
-        state_inst.online.online_state = state_inst.online.states["lobby"]
-        state_inst.data = "leave"
-
-
 def ready_up(keycode=0, state_inst=None):
     if keycode == pygame.K_SPACE:
         state_inst.data = "ready"

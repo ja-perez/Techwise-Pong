@@ -2,8 +2,7 @@ import pygame
 import pygwidgets
 from states.state import State
 from Constants import *
-from states.modes.online.online_states.online_commands import MatchCommand, up_command, down_command, ready_up, \
-    leave_command
+from states.modes.online.online_states.online_commands import MatchCommand, up_command, down_command, ready_up
 from commands.command import ActiveOn
 from ecs.entities import Player, Ball, State_Text, Score
 from ecs.entity_manager import EntityManager
@@ -60,6 +59,8 @@ class OnlineMatch(State):
             if self.match_state == "end":
                 for event in pygame.event.get():
                     # Check return to lobby button is pressed
+                    if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
+                        self.online.online_state = self.online.states["lobby"]
                     # Check if rematch button is pressed
                     pass
             else:
@@ -82,6 +83,7 @@ class OnlineMatch(State):
                 # Print "looking for open matches"
                 self.public_prompt.draw()
                 pass
+            self.leave_prompt.draw()
         else:  # In match
             # Need to check match state
             # If waiting, then prompt to press start or if waiting for other player
@@ -99,7 +101,7 @@ class OnlineMatch(State):
                     self.waiting_prompt.draw()
                     pass
                 self.update_objects()
-                draw_system(self.game.screen, self.g_manager.all_component_instances("graphics"))
+                draw_system(self.game.screen, self.g_manager.all_entity_types("Player", "Score"))
             elif self.match_state == "start":
                 self.update_objects()
                 draw_system(self.game.screen, self.g_manager.all_component_instances("graphics"))
@@ -107,19 +109,21 @@ class OnlineMatch(State):
                 # display player game outcome
                 # wait for client to choose to leave or rematch
                 self.start_positions()
+                self.update_objects()
+                if self.curr_match["winner"] == str(self.curr_player):
+                    self.first_prompt.draw()
+                else:
+                    self.last_prompt.draw()
                 draw_system(self.game.screen, self.g_manager.all_entity_types("Player", "Score"))
-
-        self.leave_prompt.draw()
-
+            if self.match_state != "start":
+                self.leave_prompt.draw()
     def register_commands(self):
         self.move_up = MatchCommand(ActiveOn.BOTH, up_command, self)
         self.move_down = MatchCommand(ActiveOn.BOTH, down_command, self)
         self.set_ready = MatchCommand(ActiveOn.BOTH, ready_up, self)
-        self.leave_match = MatchCommand(ActiveOn.PRESSED, leave_command, self)
         self.ih.register_command(pygame.K_w, self.move_up)
         self.ih.register_command(pygame.K_s, self.move_down)
         self.ih.register_command(pygame.K_SPACE, self.set_ready)
-        self.ih.register_command(pygame.K_ESCAPE, self.leave_match)
 
     def create_objects(self):
         self.g_manager = EntityManager()
@@ -206,6 +210,21 @@ class OnlineMatch(State):
         leave_prompt_rect = self.leave_prompt.getRect().width, self.leave_prompt.getRect().height
         self.leave_prompt.moveXY(0, WIN_H - leave_prompt_rect[1])
 
+        # End Game Prompt
+        prompt = "Congratulations, You're the Winner!"
+        self.first_prompt = pygwidgets.DisplayText(self.game.screen, (0, 0), value=prompt,
+                                                     fontSize=TEXT_SIZE, textColor=WHITE,
+                                                     fontName=FONT_NAME, justified="center")
+        first_prompt_rect = self.first_prompt.getRect().width, self.first_prompt.getRect().height
+        self.first_prompt.moveXY(GAME_W - first_prompt_rect[0] / 2, GAME_H - first_prompt_rect[1])
+
+        prompt = "Better Luck Next Time, Chump"
+        self.last_prompt = pygwidgets.DisplayText(self.game.screen, (0, 0), value=prompt,
+                                                     fontSize=TEXT_SIZE, textColor=WHITE,
+                                                     fontName=FONT_NAME, justified="center")
+        last_prompt_rect = self.last_prompt.getRect().width, self.last_prompt.getRect().height
+        self.last_prompt.moveXY(GAME_W - last_prompt_rect[0] / 2, GAME_H - last_prompt_rect[1])
+
     def update_objects(self):
         # Updating Moving Objects
         p1_x, p1_y = self.curr_match[1][0]
@@ -216,7 +235,7 @@ class OnlineMatch(State):
         self.ball_0.set_cords(ball_x, ball_y)
 
         # Updating Scores
-        if self.curr_match["match_state"] != "start":
+        if self.curr_match["match_state"] == "waiting":
             self.score_1.name = "Player 1: " + self.curr_match[1][2]
             self.score_2.name = "Player 2: " + self.curr_match[2][2]
         else:
