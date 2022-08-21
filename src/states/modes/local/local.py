@@ -76,9 +76,11 @@ class Local(State):
                                   self.pause_text.components["graphics"].rect)
             draw_system(self.game.screen, self.g_manager.all_component_instances("graphics"))
 
-        surface = pygame.Surface((30, 30))
+        # surface = pygame.Surface((30, 30))
         # ball_image = pygame.Surface.convert(pygame.image.load('themes/ball_images/disco_ball.png'))
-        pygame.Surface.blit(surface, self.game.screen, (100, 100))
+        # pygame.Surface.blit(surface, self.game.screen, (100, 100))
+        ball_pos = self.ball.get_cords()
+        self.game.screen.blit(self.ball_image, ball_pos)
 
     def register_commands(self):
         # Command: press p to pause and transition to pause state
@@ -163,7 +165,8 @@ class Local(State):
         # register ball with game manager
         self.g_manager.register_entity(self.ball)
 
-        #ball_image = pygame.Surface.convert(pygame.image.load('backgrounds/disco_ball.png'), self.ball.components["graphics"].surface)
+        self.ball_image = pygame.Surface.convert(pygame.image.load("themes\\ball_images\\disco_ball.png"), self.ball.components["graphics"].surface)
+        self.ball_image = pygame.transform.scale(self.ball_image, BALL)
 
         # self.surface.blit(self.ball_image, self.ball.get_surface, GAME_W, GAME_H - BALL[1] / 2)
 
