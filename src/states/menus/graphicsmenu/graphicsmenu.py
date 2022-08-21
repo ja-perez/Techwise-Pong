@@ -16,7 +16,6 @@ class GraphicsMenu(State):
         self.left_paddle_color = WHITE
         self.right_paddle_color = WHITE
 
-
     def get_left_paddle_color(self):
         return self.left_paddle_color
 
@@ -108,36 +107,36 @@ class GraphicsMenu(State):
     def create_left_buttons(self):
         height_var = 35
         self.left_blue_button = pygwidgets.CustomButton(self.game.screen, (WIN_W/4, WIN_H/4 + height_var),
-                                                   'color_buttons/blue.png')
+                                                   'themes/color_buttons/blue.png')
 
         self.left_green_button = pygwidgets.CustomButton(self.game.screen, (WIN_W/4, WIN_H/4 + 3*height_var),
-                                                   'color_buttons/green.png')
+                                                   'themes/color_buttons/green.png')
 
         self.left_red_button = pygwidgets.CustomButton(self.game.screen, (WIN_W / 4, WIN_H / 4 + 5*height_var),
-                                                    'color_buttons/red.png')
+                                                    'themes/color_buttons/red.png')
 
         self.left_yellow_button = pygwidgets.CustomButton(self.game.screen, (WIN_W / 4, WIN_H / 4 + 7*height_var),
-                                                    'color_buttons/yellow.png')
+                                                    'themes/color_buttons/yellow.png')
 
         self.left_white_button = pygwidgets.CustomButton(self.game.screen, (WIN_W / 4, WIN_H / 4 + 9 * height_var),
-                                                     'color_buttons/white.png')
+                                                     'themes/color_buttons/white.png')
 
     def create_right_buttons(self):
         height_var = 35
         self.right_blue_button = pygwidgets.CustomButton(self.game.screen, ((WIN_W / 4 + WIN_W/2), WIN_H / 4 + height_var),
-                                                   'color_buttons/blue.png')
+                                                   'themes/color_buttons/blue.png')
 
         self.right_green_button = pygwidgets.CustomButton(self.game.screen, ((WIN_W / 4 + WIN_W/2), WIN_H / 4 + 3 * height_var),
-                                                    'color_buttons/green.png')
+                                                    'themes/color_buttons/green.png')
 
         self.right_red_button = pygwidgets.CustomButton(self.game.screen, ((WIN_W / 4 + WIN_W/2), WIN_H / 4 + 5 * height_var),
-                                                  'color_buttons/red.png')
+                                                  'themes/color_buttons/red.png')
 
         self.right_yellow_button = pygwidgets.CustomButton(self.game.screen, ((WIN_W / 4 + WIN_W/2), WIN_H / 4 + 7 * height_var),
-                                                     'color_buttons/yellow.png')
+                                                     'themes/color_buttons/yellow.png')
 
         self.right_white_button = pygwidgets.CustomButton(self.game.screen, ((WIN_W / 4 + WIN_W/2), WIN_H / 4 + 9 * height_var),
-                                                    'color_buttons/white.png')
+                                                    'themes/color_buttons/white.png')
 
 
     def create_return_button(self):
