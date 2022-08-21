@@ -23,13 +23,13 @@ class Local(State):
         self.create_entities()
         self.next_state = ""
         self.teleport = 1
-        self.background_color = pygame.image.load(self.themes.background_color)
-        #self.ball_image = self.themes.ball_image
 
         # Use to change theme. Available themes are: classic, cyberpunk, disco, science, snow, and western
         # (Will add to its own theme settings menu later)
         self.themes.western()
 
+        #used to edit background color in game.py
+        self.background_color = pygame.image.load(self.themes.background_color)
 
 
     def set_game_mode(self, number):
