@@ -10,7 +10,8 @@ from states.modes.local.local import Local
 from states.menus.localmenu.localmenu import LocalMenu
 from states.modes.online.online import Online
 from pygame import mixer
-
+from themes.themes import Themes
+import random
 
 class Game():
     def __init__(self):
@@ -22,7 +23,6 @@ class Game():
         self.font = pygame.font.Font(FONT_NAME, FONT_SIZE)
         self.running = True
         self.clock = pygame.time.Clock()
-
         # Pong game states initializations
         self.states = {"mainmenu": MainMenu(self, "mainmenu"), "local": Local(self, "local"),
                        "settings": Settings(self, "settings"), "pause": Pause(self, "pause"),
@@ -30,10 +30,21 @@ class Game():
                        "graphicsmenu": GraphicsMenu(self, "graphicsmenu"), "audio": Change_Audio(self, "audio"),
                        "controls": Change_Controls(self, "controls"), "online": Online(self, "online")}
         self.curr_state = self.states["mainmenu"]
+        self.change_music()
+        self.background = pygame.image.load(self.states["local"].themes.background_color)
+        self.change_background_color(BLACK)
+
+
+
+    def change_music(self):
         # Background Music
-        mixer.music.load("background.wav")
+        mixer.music.load(self.states["local"].themes.background_music)
         mixer.music.set_volume(0.3)
         mixer.music.play(-1)
+
+    def change_background_color(self, background_color ):
+        if self.states["local"].classic_bool:
+            self.game_canvas.fill(random.choices(range(256), k=3))
 
     def update(self):
         if pygame.event.peek(pygame.QUIT):
@@ -48,7 +59,11 @@ class Game():
         pygame.display.flip()
 
     def reset_screen(self):
-        self.screen.blit(pygame.transform.scale(self.game_canvas, (WIN_W, WIN_H)), (0, 0))
+
+        if self.states["local"].classic_bool:
+            self.screen.blit(pygame.transform.scale(self.game_canvas, (WIN_W, WIN_H)), (0, 0))
+        else:
+            self.screen.blit(pygame.transform.scale(self.background, (WIN_W, WIN_H)), (0, 0))
 
     def teardown(self):
         # handle game exit
