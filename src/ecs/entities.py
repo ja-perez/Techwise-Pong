@@ -11,7 +11,6 @@ class Player(Entity):
         self.paddle_width = PADDLE_W
         self.paddle_height = PADDLE_H
         self.surface = pygame.Surface((self.paddle_width, self.paddle_height))
-        self.surface.fill(WHITE)
         self.components["graphics"] = GraphicComponent(self.surface, 0, 0)
         self.components["velocity"] = VelocityComponent(0, 0)
         self.e_type = "Player"
@@ -43,18 +42,21 @@ class Player(Entity):
     def increase_score(self, increment):
         self.score += increment
 
-
 class Ball(Entity):
     def __init__(self, name):
         Entity.__init__(self, name)
         self.surface = pygame.Surface(BALL)
-        #THIS DOESNT WORK?
-        #self.surface.fill(YELLOW)
+        # THIS DOESNT WORK?
+        self.surface.fill(YELLOW)
         self.components["graphics"] = GraphicComponent(self.surface, 0, 0)
         self.components["graphics"].is_circle = True
         self.components["graphics"].radius = BALL_RADIUS
+        self.components["graphics"].color = WHITE
         self.components["velocity"] = VelocityComponent(0, 0)
         self.e_type = "Ball"
+
+    def set_color(self, color):
+        self.components["graphics"].color = color
 
     def set_pos(self, x, y):
         self.components["graphics"].rect.move_ip(x, y)
@@ -96,6 +98,7 @@ class Score(Entity):
         self.update_surface()
         self.components["graphics"].surface = self.surface
 
+
 class Pause(Entity):
     def __init__(self, title, size, color):
         Entity.__init__(self, title)
@@ -106,6 +109,7 @@ class Pause(Entity):
     def set_pos(self, x, y):
         self.components["graphics"].rect.move_ip(x, y)
 
+
 class Start(Entity):
     def __init__(self, title, size, color):
         Entity.__init__(self, title)
@@ -115,6 +119,7 @@ class Start(Entity):
 
     def set_pos(self, x, y):
         self.components["graphics"].rect.move_ip(x, y)
+
 
 class State_Text(Entity):
     def __init__(self, title, size, color, fontName=None):

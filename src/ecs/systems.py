@@ -4,7 +4,8 @@ import pygame
 def draw_system(surface, graphics):
     for graphic_component in graphics:
         if graphic_component.is_circle:
-            pygame.draw.circle(surface, (255, 255, 255), graphic_component.rect.center, graphic_component.radius)
+            pygame.draw.circle(surface, graphic_component.color,
+                               graphic_component.rect.center, graphic_component.radius)
         else:
             surface.blit(graphic_component.surface, graphic_component.rect)
 

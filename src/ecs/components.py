@@ -9,6 +9,7 @@ class GraphicComponent:
         self.rect.move_ip(initial_x, initial_y)
         self.is_circle = False
         self.radius = 0
+        self.color = WHITE
 
 
 class VelocityComponent:

@@ -8,7 +8,7 @@ class Network:
         # Testing
         local_server = socket.gethostbyname(socket.gethostname())
         self.server = str(local_server)
-        # Testing
+
         # Raspberry Pi Server - unofficial server
         # self.server = "192.168.0.150"
         self.port = 5555
