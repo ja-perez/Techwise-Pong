@@ -14,9 +14,7 @@ class Local(State):
         State.__init__(self, game, name)
         self.start, self.pause = False, False
         self.themes = Themes()
-
-        self.themes.western()
-
+        self.themes.snow()
         self.classic_bool = False
         self.left_paddle_color = self.themes.left_paddle_color
         self.right_paddle_color = self.themes.right_paddle_color
@@ -27,12 +25,12 @@ class Local(State):
         self.next_state = ""
         self.teleport = 1
         self.background_color = pygame.image.load(self.themes.background_color)
-
         #self.ball_image = self.themes.ball_image
 
-        #generates random color values
+        # Use to change theme. Available themes are: classic, cyberpunk, disco, science, snow, and western
+        # (Will add to its own theme settings menu later)
+        self.themes.science()
 
-        self.random_color_flag = False
 
 
     def set_game_mode(self, number):
