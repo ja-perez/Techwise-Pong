@@ -14,7 +14,6 @@ class Local(State):
         State.__init__(self, game, name)
         self.start, self.pause = False, False
         self.themes = Themes()
-        self.themes.snow()
         self.classic_bool = False
         self.left_paddle_color = self.themes.left_paddle_color
         self.right_paddle_color = self.themes.right_paddle_color
@@ -29,7 +28,7 @@ class Local(State):
 
         # Use to change theme. Available themes are: classic, cyberpunk, disco, science, snow, and western
         # (Will add to its own theme settings menu later)
-        self.themes.science()
+        self.themes.western()
 
 
 
