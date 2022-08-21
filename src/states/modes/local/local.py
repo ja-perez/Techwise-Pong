@@ -14,6 +14,7 @@ class Local(State):
         State.__init__(self, game, name)
         self.start, self.pause = False, False
         self.themes = Themes()
+        #TO USE CLASSIC TURN ON THIS BOOL
         self.classic_bool = False
         self.left_paddle_color = self.themes.left_paddle_color
         self.right_paddle_color = self.themes.right_paddle_color
@@ -29,8 +30,10 @@ class Local(State):
         self.themes.western()
 
         #used to edit background color in game.py
-        self.background_color = pygame.image.load(self.themes.background_color)
-
+        if not self.classic_bool:
+            self.background_color = pygame.image.load(self.themes.background_color)
+        else:
+            self.background_color = self.themes.background_color
 
     def set_game_mode(self, number):
         self.game_mode = number
