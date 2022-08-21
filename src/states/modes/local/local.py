@@ -7,19 +7,33 @@ from states.modes.local.localcommands import LocalCommand, up_command, down_comm
 from commands.command import ActiveOn
 from ecs.systems import draw_system, move_system, collision_detection_system, ai_system
 from pygame import mixer
-
+from themes.themes import Themes
 
 class Local(State):
     def __init__(self, game, name):
         State.__init__(self, game, name)
         self.start, self.pause = False, False
-        self.left_paddle_color = WHITE
-        self.right_paddle_color = WHITE
+        self.themes = Themes()
+
+        self.themes.western()
+
+        self.classic_bool = False
+        self.left_paddle_color = self.themes.left_paddle_color
+        self.right_paddle_color = self.themes.right_paddle_color
         self.game_mode = 2
         self.scored, self.collision_present, self.volley, self.boost = False, False, 1, 2
         self.register_commands()
         self.create_entities()
         self.next_state = ""
+        self.teleport = 1
+        self.background_color = pygame.image.load(self.themes.background_color)
+
+        #self.ball_image = self.themes.ball_image
+
+        #generates random color values
+
+        self.random_color_flag = False
+
 
     def set_game_mode(self, number):
         self.game_mode = number
@@ -61,6 +75,10 @@ class Local(State):
             self.game.screen.blit(self.pause_text.components["graphics"].surface,
                                   self.pause_text.components["graphics"].rect)
             draw_system(self.game.screen, self.g_manager.all_component_instances("graphics"))
+
+        surface = pygame.Surface((30, 30))
+        # ball_image = pygame.Surface.convert(pygame.image.load('themes/ball_images/disco_ball.png'))
+        pygame.Surface.blit(surface, self.game.screen, (100, 100))
 
     def register_commands(self):
         # Command: press p to pause and transition to pause state
@@ -145,6 +163,14 @@ class Local(State):
         # register ball with game manager
         self.g_manager.register_entity(self.ball)
 
+        #ball_image = pygame.Surface.convert(pygame.image.load('backgrounds/disco_ball.png'), self.ball.components["graphics"].surface)
+
+        # self.surface.blit(self.ball_image, self.ball.get_surface, GAME_W, GAME_H - BALL[1] / 2)
+
+        #if not self.classic_bool:
+        # pygame.Surface.blit(self.ball_image, self.ball.components["graphics"].surface, (GAME_W, GAME_H - BALL[1] / 2))
+        #pygame.Surface.blit(ball_image, self.game.screen, (GAME_W, GAME_H - BALL[1] / 2))
+
     def create_texts(self):
         # create Pause entity
         self.pause_text = Pause("Press P to Toggle Pause", SCORE_SIZE, WHITE)
@@ -175,33 +201,26 @@ class Local(State):
         player.components["graphics"].rect.bottom = min(player.components["graphics"].rect.bottom, WIN_H)
 
     def ball_off_bounds_handler(self, ball):
-        # SOUNDS MOVE LATER
-        pointfx = mixer.Sound("point.wav")
-        bouncefx = mixer.Sound("bounce.wav")
-        bouncefx.set_volume(0.3)
-        pointfx.set_volume(0.4)
+
 
         if ball.components["graphics"].rect.left <= 0:
             self.player2.increase_score(1)
             self.scored = True
-            pointfx.play()
+            self.themes.score_vfx.play()
         elif ball.components["graphics"].rect.right >= WIN_W:
             self.player1.increase_score(1)
             self.scored = True
-            pointfx.play()
+            self.themes.score_vfx.play()
         if ball.components["graphics"].rect.top <= 0 or ball.components["graphics"].rect.bottom >= WIN_H:
             self.ball_y_dir *= -1
-            bouncefx.play()
+            self.themes.bounce_vfx.play()
 
     def collision_handler(self, collision_present):
-        # SOUND MOVE LATER
-        bouncefx = mixer.Sound("bounce.wav")
-        bouncefx.set_volume(0.3)
 
         if collision_present:
             self.ball_x_dir *= -1
             self.volley += 1
-            bouncefx.play()
+            self.themes.bounce_vfx.play()
 
             ## COMMENTED OUT FOR FASTER VOLLEY
             # if self.volley % self.boost == 0:
@@ -209,11 +228,31 @@ class Local(State):
 
             # Faster Volley
             self.ball.set_vel(self.ball.x_vel() + 2, self.ball.y_vel() + 2)
-
             # GAME MODE STUFF - FIX LATER
             # self.ball.increase_radius(6)
             self.player1.change_size(1, 1)
             self.player2.change_size(1, 1)
+            # self.teleport += 1
+            # if self.teleport == 3:
+            #     self.ball.set_pos(random.randrange(400, 520), GAME_H - BALL[1] / 2)
+            #     self.teleport = 1
+
+            # Generate random colors
+            self.random_color1 = random.choices(range(256), k=3)
+            self.random_color2 = random.choices(range(256), k=3)
+
+            # Turn on random color flag - Used to turn backgrounds color
+            self.random_color_flag = True
+
+            # Change Paddle color on paddle hit
+            # self.set_right_paddle_color(self.random_color1)
+            # self.set_left_paddle_color(self.random_color2)
+
+            # Change backgrounds color on paddle hit
+            # if self.random_color_flag:
+            #     self.game.change_background_color()
+
+
 
     def exit_state(self):
         if self.pause:
