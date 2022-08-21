@@ -31,9 +31,11 @@ class Game():
                        "controls": Change_Controls(self, "controls"), "online": Online(self, "online")}
         self.curr_state = self.states["mainmenu"]
         self.change_music()
-        self.background = pygame.image.load(self.states["local"].themes.background_color)
-        self.change_background_color(BLACK)
 
+        if not self.states["local"].classic_bool:
+            self.background = pygame.image.load(self.states["local"].themes.background_color)
+        else:
+            self.background = self.states["local"].background_color
 
 
     def change_music(self):
@@ -43,8 +45,7 @@ class Game():
         mixer.music.play(-1)
 
     def change_background_color(self, background_color ):
-        if self.states["local"].classic_bool:
-            self.game_canvas.fill(random.choices(range(256), k=3))
+        self.game_canvas.fill(random.choices(range(256), k=3))
 
     def update(self):
         if pygame.event.peek(pygame.QUIT):
