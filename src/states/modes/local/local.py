@@ -33,7 +33,7 @@ class Local(State):
         # (Will add to its own theme settings menu later)
 
         #self.themes.snow()
-        self.themes.disco()
+        self.themes.western()
 
         #used to edit background color in game.py
         if not self.classic_bool:
