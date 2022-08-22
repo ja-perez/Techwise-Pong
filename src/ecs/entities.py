@@ -42,6 +42,8 @@ class Player(Entity):
     def increase_score(self, increment):
         self.score += increment
 
+    def get_y_vel(self):
+        return self.components["velocity"].y_velocity
 
 class Ball(Entity):
     def __init__(self, name):
@@ -104,9 +106,9 @@ class Score(Entity):
 
 
 class Pause(Entity):
-    def __init__(self, title, size, color):
+    def __init__(self, title, size, color, fontName=None):
         Entity.__init__(self, title)
-        self.components["text"] = TextComponent(title, size, color)
+        self.components["text"] = TextComponent(title, size, color, fontName)
         self.surface = self.components["text"].font.render(title, False, color)
         self.components["graphics"] = GraphicComponent(self.surface, 0, 0)
 
@@ -115,9 +117,9 @@ class Pause(Entity):
 
 
 class Start(Entity):
-    def __init__(self, title, size, color):
+    def __init__(self, title, size, color, fontName=None):
         Entity.__init__(self, title)
-        self.components["text"] = TextComponent(title, size, color)
+        self.components["text"] = TextComponent(title, size, color, fontName)
         self.surface = self.components["text"].font.render(title, False, color)
         self.components["graphics"] = GraphicComponent(self.surface, 0, 0)
 

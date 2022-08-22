@@ -184,14 +184,14 @@ class Local(State):
 
     def create_texts(self):
         # create Pause entity
-        self.pause_text = Pause("Press P to Toggle Pause", SCORE_SIZE, WHITE)
+        self.pause_text = Pause("Press P to Toggle Pause", SCORE_SIZE, WHITE, FONT_NAME)
         # create Start entity
-        self.start_text = Start("Press Space to Start", TEXT_SIZE, WHITE)
+        self.start_text = Start("Press Space to Start", TEXT_SIZE, WHITE, FONT_NAME)
         # create Score entities
         self.score1 = Score(self.player1.get_name() + " score: " + self.player1.get_score(),
-                            SCORE_SIZE, WHITE)
+                            SCORE_SIZE, WHITE, FONT_NAME)
         self.score2 = Score(self.player2.get_name() + " score: " + self.player2.get_score(),
-                            SCORE_SIZE, WHITE)
+                            SCORE_SIZE, WHITE, FONT_NAME)
         # register scores with game manager and pause with text manager
         self.g_manager.register_entity(self.score1)
         self.g_manager.register_entity(self.score2)
@@ -238,12 +238,14 @@ class Local(State):
             #     self.ball.set_vel(self.ball.x_vel() + self.volley / 2.5, self.ball.y_vel() + self.volley / 2.5)
 
             # Faster Volley
+            # Frenzy game mode
             if self.game_mode == 1:
                 self.ball.set_vel(self.ball.x_vel() + 2, self.ball.y_vel() + 2)
-            elif self.game_mode == 3:
-                self.ball.set_vel(self.ball.x_vel() - 2, self.ball.y_vel() - 2)
-                self.player1.set_vel(self.player1.x_vel() - 2, self.player1.x_vel() - 2)
-                self.player2.set_vel(self.player2.x_vel() - 2, self.player2.x_vel() - 2)
+            # Low gravity game mode
+            elif self.game_mode == 2:
+                self.ball.set_vel(self.ball.x_vel() - 0.25, self.ball.y_vel() - 0.25)
+                self.player1.set_vel(0, self.player1.get_y_vel() - 0.25)
+                self.player2.set_vel(0, self.player2.get_y_vel() - 0.25)
             # GAME MODE STUFF - FIX LATER
             # self.ball.increase_radius(6)
             self.player1.change_size(1, 1)
