@@ -4,7 +4,6 @@ from states.state import State
 from Constants import *
 from commands.command import *
 from input.input_handler import *
-from ecs.entities import Player
 
 class GraphicsMenu(State):
     def __init__(self, game, name):
@@ -54,7 +53,7 @@ class GraphicsMenu(State):
                 self.game.states["local"].set_right_paddle_color(WHITE)
 
             if self.return_button.handleEvent(event):
-                self.change_state("local")
+                self.change_state("themesmenu", self.name)
 
     def render(self):
         self.button_display()

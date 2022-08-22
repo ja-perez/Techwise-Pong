@@ -8,6 +8,7 @@ from states.menus.settings.update_set import Change_Graphics, Change_Audio, Chan
 from states.menus.pause.pause import Pause
 from states.modes.local.local import Local
 from states.menus.localmenu.localmenu import LocalMenu
+from states.menus.themesmenu.themesmenu import ThemesMenu
 from states.modes.online.online import Online
 from pygame import mixer
 from themes.themes import Themes
@@ -27,7 +28,9 @@ class Game():
         self.states = {"mainmenu": MainMenu(self, "mainmenu"), "local": Local(self, "local"),
                        "settings": Settings(self, "settings"), "pause": Pause(self, "pause"),
                        "localmenu": LocalMenu(self, "localmenu"),
-                       "graphicsmenu": GraphicsMenu(self, "graphicsmenu"), "audio": Change_Audio(self, "audio"),
+                       "graphicsmenu": GraphicsMenu(self, "graphicsmenu"),
+                       "themesmenu": ThemesMenu(self, "themesmenu"),
+                       "audio": Change_Audio(self, "audio"),
                        "controls": Change_Controls(self, "controls"), "online": Online(self, "online")}
         self.curr_state = self.states["mainmenu"]
         self.change_music()
@@ -60,7 +63,6 @@ class Game():
         pygame.display.flip()
 
     def reset_screen(self):
-
         if self.states["local"].classic_bool:
             self.screen.blit(pygame.transform.scale(self.game_canvas, (WIN_W, WIN_H)), (0, 0))
         else:

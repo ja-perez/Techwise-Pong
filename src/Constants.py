@@ -4,7 +4,7 @@ WIN_H = 540
 GAME_W = 480
 GAME_H = 270
 GAME_TITLE = "Pong Demo"
-FONT_NAME = 'Oswald.ttf'
+FONT_NAME = 'Teko-Light.ttf'
 FONT_SIZE = 100
 MENU_FONT_SIZE = 20
 SCORE_SIZE = 25
@@ -14,6 +14,7 @@ WHITE = (255, 255, 255)
 BLACK = (0, 0, 0,)
 RED = (255, 0, 0)
 GREEN = (0, 255, 0)
+OLIVE_GREEN = (22, 110, 74)
 BLUE = (0, 0, 255)
 YELLOW = (255, 255, 0)
 
@@ -37,6 +38,8 @@ PADDLE = WIN_W / 48, WIN_H / 5
 PADDLE_W = WIN_W / 48
 PADDLE_H = WIN_H / 5
 BALL = WIN_W / 60 + 10, WIN_H / 35 + 10
+BALL_W = WIN_W / 60 + 10
+BALL_H = WIN_H / 35 + 10
 BALL_RADIUS = GAME_W / 60
 
 X = 0

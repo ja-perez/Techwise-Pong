@@ -14,11 +14,12 @@ class Local(State):
         State.__init__(self, game, name)
         self.start, self.pause = False, False
         self.themes = Themes()
+        #self.themes.classic()
         # Game Modes - 0: Classic, 1: Frenzy, 2: Low-Grav, 3: TTA
         # Player Pairs - 0: Player v. Player, 1: Player v. AI, 2: AI v. AI
         self.game_mode, self.player_pair = 0, 2
         #TO USE CLASSIC TURN ON THIS BOOL
-        self.classic_bool = False
+        self.classic_bool = True
         self.left_paddle_color = self.themes.left_paddle_color
         self.right_paddle_color = self.themes.right_paddle_color
 
@@ -29,11 +30,9 @@ class Local(State):
         self.next_state = ""
         self.teleport = 1
 
-        # Use to change theme. Available themes are: classic, cyberpunk, disco, science, snow, and western
-        # (Will add to its own theme settings menu later)
+        self.ball_image = pygame.image.load(self.themes.ball_image).convert_alpha()
+        self.ball_image = pygame.transform.scale(self.ball_image, (BALL_W, BALL_H))
 
-        #self.themes.snow()
-        self.themes.western()
 
         #used to edit background color in game.py
         if not self.classic_bool:
@@ -82,6 +81,8 @@ class Local(State):
                 self.next_state = "pause"
                 self.change_state(self.next_state)
 
+
+
         # temp Through the Ages game mode logic
         if self.game_mode == 3 and self.collision_present:
             # Start at snow -> western -> disco -> science -> cyberpunk
@@ -100,9 +101,18 @@ class Local(State):
         self.update_colors()
 
     def update_theme(self):
-        self.background_color = pygame.image.load(self.themes.background_color)
+        if not self.classic_bool:
+            self.background_color = pygame.image.load(self.themes.background_color)
+        else:
+            self.background_color = self.themes.background_color
         self.game.background = self.background_color
         self.game.change_music()
+        self.left_paddle_color = self.themes.left_paddle_color
+        self.right_paddle_color = self.themes.right_paddle_color
+
+        self.ball_image = pygame.image.load(self.themes.ball_image).convert_alpha()
+        self.ball_image = pygame.transform.scale(self.ball_image, (BALL_W + 20, BALL_H + 20))
+
 
     def render(self):
         if self.winner:
@@ -123,10 +133,8 @@ class Local(State):
             draw_system(self.game.screen, self.g_manager.all_component_instances("graphics"))
             ball_pos = self.ball.get_cords()[0] - self.ball_image.get_width() // 2, self.ball.get_cords()[1] \
                        - self.ball_image.get_height() // 2
+
             self.game.screen.blit(self.ball_image, ball_pos)
-        # surface = pygame.Surface((30, 30))
-        # ball_image = pygame.Surface.convert(pygame.image.load('themes/ball_images/disco_ball.png'))
-        # pygame.Surface.blit(surface, self.game.screen, (100, 100))
 
 
     def register_commands(self):
@@ -212,14 +220,6 @@ class Local(State):
         # register ball with game manager
         self.g_manager.register_entity(self.ball)
 
-        self.ball_image = pygame.Surface.convert(pygame.image.load("themes\\ball_images\\disco_ball.png"), self.ball.components["graphics"].surface)
-        self.ball_image = pygame.transform.scale(self.ball_image, BALL)
-
-        # self.surface.blit(self.ball_image, self.ball.get_surface, GAME_W, GAME_H - BALL[1] / 2)
-
-        #if not self.classic_bool:
-        # pygame.Surface.blit(self.ball_image, self.ball.components["graphics"].surface, (GAME_W, GAME_H - BALL[1] / 2))
-        #pygame.Surface.blit(ball_image, self.game.screen, (GAME_W, GAME_H - BALL[1] / 2))
 
     def create_texts(self):
         # create Winner entity
@@ -229,9 +229,9 @@ class Local(State):
         # create Start entity
         self.start_text = Start("Press Space to Start", TEXT_SIZE, WHITE, FONT_NAME)
         # create Score entities
-        self.score1 = Score(self.player1.get_name() + " score: " + self.player1.get_score(),
+        self.score1 = Score(self.player1.get_name() + ":  " + self.player1.get_score(),
                             SCORE_SIZE, WHITE, FONT_NAME)
-        self.score2 = Score(self.player2.get_name() + " score: " + self.player2.get_score(),
+        self.score2 = Score(self.player2.get_name() + ":  " + self.player2.get_score(),
                             SCORE_SIZE, WHITE, FONT_NAME)
         # register scores with game manager and pause with text manager
         self.g_manager.register_entity(self.score1)
