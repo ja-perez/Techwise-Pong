@@ -1,7 +1,7 @@
-import pygame, random
+import pygame, random, pygwidgets
 from states.state import State
 from Constants import *
-from ecs.entities import Player, Ball, Score, Pause, Start
+from ecs.entities import Player, Ball, Score, Pause, Start, State_Text
 from ecs.entity_manager import EntityManager
 from states.modes.local.localcommands import LocalCommand, up_command, down_command, set_pause, set_start, set_exit
 from commands.command import ActiveOn
@@ -14,12 +14,16 @@ class Local(State):
         State.__init__(self, game, name)
         self.start, self.pause = False, False
         self.themes = Themes()
+        # Game Modes - 0: Classic, 1: Frenzy, 2: Low-Grav, 3: TTA
+        # Player Pairs - 0: Player v. Player, 1: Player v. AI, 2: AI v. AI
+        self.game_mode, self.player_pair = 0, 2
         #TO USE CLASSIC TURN ON THIS BOOL
         self.classic_bool = False
         self.left_paddle_color = self.themes.left_paddle_color
         self.right_paddle_color = self.themes.right_paddle_color
-        self.game_mode, self.player_pair = 2, 2
-        self.scored, self.collision_present, self.volley, self.boost = False, False, 1, 2
+
+        self.scored, self.winning_score, self.winner = False, 2, ""
+        self.collision_present, self.volley, self.boost = False, 0, 2
         self.register_commands()
         self.create_entities()
         self.next_state = ""
@@ -27,6 +31,8 @@ class Local(State):
 
         # Use to change theme. Available themes are: classic, cyberpunk, disco, science, snow, and western
         # (Will add to its own theme settings menu later)
+
+        #self.themes.snow()
         self.themes.western()
 
         #used to edit background color in game.py
@@ -42,53 +48,85 @@ class Local(State):
         self.player_pair = number
 
     def update(self):
-        command_queue = self.ih.handle_input()
-        for command, args in command_queue:
-            command.execute(args[0])
-        if self.start:
-            self.p1_y_direction = self.p1_down - self.p1_up
-            self.p2_y_direction = self.p2_down - self.p2_up
+        if self.winner:
+            # print Game Over, Player X is the winner!
+            # Return to main menu button
+            for event in pygame.event.get():
+                if self.homemenu_btn.handleEvent(event):
+                    self.next_state = "mainmenu"
+                    self.change_state(self.next_state)
+        else:
+            command_queue = self.ih.handle_input()
+            for command, args in command_queue:
+                command.execute(args[0])
+            if self.start:
+                self.p1_y_direction = self.p1_down - self.p1_up
+                self.p2_y_direction = self.p2_down - self.p2_up
 
-            if self.player_pair == 0:
-                move_system(self.player1, self.paddle_off_bounds_handler, 0, self.p1_y_direction)
-                move_system(self.player2, self.paddle_off_bounds_handler, 0, self.p2_y_direction)
-            if self.player_pair == 1:
-                move_system(self.player1, self.paddle_off_bounds_handler, 0, self.p1_y_direction)
-                ai_system(self.player2, self.ball, self.paddle_off_bounds_handler, 0)
-            if self.player_pair == 2:
-                ai_system(self.player1, self.ball, self.paddle_off_bounds_handler, 0)
-                ai_system(self.player2, self.ball, self.paddle_off_bounds_handler, 0)
+                if self.player_pair == 0:
+                    move_system(self.player1, self.paddle_off_bounds_handler, 0, self.p1_y_direction)
+                    move_system(self.player2, self.paddle_off_bounds_handler, 0, self.p2_y_direction)
+                if self.player_pair == 1:
+                    move_system(self.player1, self.paddle_off_bounds_handler, 0, self.p1_y_direction)
+                    ai_system(self.player2, self.ball, self.paddle_off_bounds_handler, 0)
+                if self.player_pair == 2:
+                    ai_system(self.player1, self.ball, self.paddle_off_bounds_handler, 0)
+                    ai_system(self.player2, self.ball, self.paddle_off_bounds_handler, 0)
 
-            move_system(self.ball, self.ball_off_bounds_handler, self.ball_x_dir, self.ball_y_dir)
-            self.update_score()
-            self.collision_present = collision_detection_system(
-                self.ball, self.g_manager.all_active_component_instances("graphics"))
-            self.collision_handler(self.collision_present)
-        if self.pause:
-            self.next_state = "pause"
-            self.change_state(self.next_state)
+                move_system(self.ball, self.ball_off_bounds_handler, self.ball_x_dir, self.ball_y_dir)
+                self.update_score()
+                self.collision_present = collision_detection_system(
+                    self.ball, self.g_manager.all_active_component_instances("graphics"))
+                self.collision_handler(self.collision_present)
+            elif self.pause:
+                self.next_state = "pause"
+                self.change_state(self.next_state)
 
         # temp Through the Ages game mode logic
-        if self.game_mode == 3:
-            pass
-
+        if self.game_mode == 3 and self.collision_present:
+            # Start at snow -> western -> disco -> science -> cyberpunk
+            if self.volley == 2:
+                self.themes.western()
+                self.update_theme()
+            elif self.volley == 4:
+                self.themes.disco()
+                self.update_theme()
+            elif self.volley == 4:
+                self.themes.science()
+                self.update_theme()
+            elif self.volley == 4:
+                self.themes.cyberpunk()
+                self.update_theme()
         self.update_colors()
 
-    def render(self):
-        if not self.start:
-            self.game.screen.blit(self.start_text.components["graphics"].surface,
-                                  self.start_text.components["graphics"].rect)
-            draw_system(self.game.screen, self.g_manager.all_component_instances("graphics"))
-        else:
-            self.game.screen.blit(self.pause_text.components["graphics"].surface,
-                                  self.pause_text.components["graphics"].rect)
-            draw_system(self.game.screen, self.g_manager.all_component_instances("graphics"))
+    def update_theme(self):
+        self.background_color = pygame.image.load(self.themes.background_color)
+        self.game.background = self.background_color
+        self.game.change_music()
 
+    def render(self):
+        if self.winner:
+            self.winner_text.name = "Game Over, " + self.winner + " is the winner!"
+            self.winner_text.update_surface()
+            self.winner_text.update_graphics()
+            self.winner_text.set_coords(GAME_W - self.winner_text.get_width(), GAME_H / 2)
+            self.game.screen.blit(self.winner_text.components["graphics"].surface,
+                                  self.winner_text.components["graphics"].rect)
+            self.homemenu_btn.draw()
+        else:
+            if not self.start:
+                self.game.screen.blit(self.start_text.components["graphics"].surface,
+                                      self.start_text.components["graphics"].rect)
+            else:
+                self.game.screen.blit(self.pause_text.components["graphics"].surface,
+                                      self.pause_text.components["graphics"].rect)
+            draw_system(self.game.screen, self.g_manager.all_component_instances("graphics"))
+            ball_pos = self.ball.get_cords()
+            self.game.screen.blit(self.ball_image, ball_pos)
         # surface = pygame.Surface((30, 30))
         # ball_image = pygame.Surface.convert(pygame.image.load('themes/ball_images/disco_ball.png'))
         # pygame.Surface.blit(surface, self.game.screen, (100, 100))
-        ball_pos = self.ball.get_cords()
-        self.game.screen.blit(self.ball_image, ball_pos)
+
 
     def register_commands(self):
         # Command: press p to pause and transition to pause state
@@ -143,7 +181,7 @@ class Local(State):
         # set x velocity to 0 and y velocity to 10
         # set up and down values to false and direction to 0
         # set color based on settings menu color selection
-        self.player1 = Player("player 1")
+        self.player1 = Player("Player 1")
         self.player1.set_vel(0, 10)
         self.p1_up, self.p1_down = False, False
         self.p1_y_direction = 0
@@ -153,7 +191,7 @@ class Local(State):
         # set x velocity to 0 and y velocity to 10
         # set up and down values to false and direction to 0
         # set color based on settings menu color selection
-        self.player2 = Player("player 2")
+        self.player2 = Player("Player 2")
         self.player2.set_vel(0, 10)
         self.p2_up, self.p2_down = False, False
         self.p2_y_direction = 0
@@ -183,6 +221,8 @@ class Local(State):
         #pygame.Surface.blit(ball_image, self.game.screen, (GAME_W, GAME_H - BALL[1] / 2))
 
     def create_texts(self):
+        # create Winner entity
+        self.winner_text = State_Text("Game Over", TEXT_SIZE, WHITE, FONT_NAME)
         # create Pause entity
         self.pause_text = Pause("Press P to Toggle Pause", SCORE_SIZE, WHITE, FONT_NAME)
         # create Start entity
@@ -196,6 +236,11 @@ class Local(State):
         self.g_manager.register_entity(self.score1)
         self.g_manager.register_entity(self.score2)
 
+        self.homemenu_btn = pygwidgets.TextButton(self.game.screen, (0, 0), "Return to Main Menu",
+                                                  fontSize=MENU_FONT_SIZE, fontName=FONT_NAME,
+                                                  width=200, height=50)
+        self.homemenu_btn.moveXY(GAME_W - 200/2, GAME_H - 50/2)
+
     def update_score(self):
         if self.scored:
             self.g_manager.unregister_entity(self.ball)
@@ -206,6 +251,10 @@ class Local(State):
             self.score1.update_graphics()
             self.score2.update_graphics()
             self.volley = 1
+            if self.winning_score == int(self.player1.get_score()):
+                self.winner = self.player1.get_name()
+            elif self.winning_score == int(self.player2.get_score()):
+                self.winner = self.player2.get_name()
 
     def paddle_off_bounds_handler(self, player):
         player.components["graphics"].rect.top = max(player.components["graphics"].rect.top, 0)
@@ -270,7 +319,13 @@ class Local(State):
             # if self.random_color_flag:
             #     self.game.change_background_color()
 
-
+    def enter_state(self):
+        if self.game_mode == 3:
+            self.classic_bool = False
+            self.themes.snow()
+            self.background_color = pygame.image.load(self.themes.background_color)
+            self.game.background = self.background_color
+            self.game.change_music()
 
     def exit_state(self):
         if self.pause:
