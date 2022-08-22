@@ -130,6 +130,8 @@ class Start(Entity):
 class State_Text(Entity):
     def __init__(self, title, size, color, fontName=None):
         Entity.__init__(self, title)
+        self.color = color
+        self.size = size
         self.components["text"] = TextComponent(title, size, color, fontName)
         self.surface = self.components["text"].font.render(title, False, color)
         self.components["graphics"] = GraphicComponent(self.surface, 0, 0)
@@ -140,3 +142,16 @@ class State_Text(Entity):
 
     def get_size(self):
         return self.components["graphics"].rect.width, self.components["graphics"].rect.height
+
+    def update_surface(self):
+        self.surface = self.components["text"].font.render(self.name, False, self.color)
+
+    def update_graphics(self):
+        self.update_surface()
+        self.components["graphics"].surface = self.surface
+
+    def set_coords(self, x, y):
+        self.components["graphics"].rect.center = x, y
+
+    def get_width(self):
+        return self.components["graphics"].rect.width
