@@ -1,6 +1,8 @@
 import pygwidgets
 import pygame
 from states.state import State
+from states.modes.local.local import Local
+from states.menus.localmenu.localmenu import LocalMenu
 from Constants import *
 from commands.command import *
 from input.input_handler import *
@@ -66,4 +68,5 @@ class MainMenu(State):
         pass
 
     def enter_state(self):
-        pass
+        self.game.states.update({"local": Local(self.game, "local")})
+        self.game.states.update({"localmenu": LocalMenu(self.game, "localmenu")})

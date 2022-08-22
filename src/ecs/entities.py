@@ -42,6 +42,7 @@ class Player(Entity):
     def increase_score(self, increment):
         self.score += increment
 
+
 class Ball(Entity):
     def __init__(self, name):
         Entity.__init__(self, name)
@@ -79,6 +80,7 @@ class Ball(Entity):
 
     def get_cords(self):
         return self.components["graphics"].rect.topleft
+
 
 class Score(Entity):
     def __init__(self, title, size, color, font_name=None):
@@ -133,3 +135,6 @@ class State_Text(Entity):
 
     def set_pos(self, x, y):
         self.components["graphics"].rect.move_ip(x, y)
+
+    def get_size(self):
+        return self.components["graphics"].rect.width, self.components["graphics"].rect.height

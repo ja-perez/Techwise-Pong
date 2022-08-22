@@ -18,7 +18,7 @@ class Local(State):
         self.classic_bool = False
         self.left_paddle_color = self.themes.left_paddle_color
         self.right_paddle_color = self.themes.right_paddle_color
-        self.game_mode = 2
+        self.game_mode, self.player_pair = 2, 2
         self.scored, self.collision_present, self.volley, self.boost = False, False, 1, 2
         self.register_commands()
         self.create_entities()
@@ -38,6 +38,9 @@ class Local(State):
     def set_game_mode(self, number):
         self.game_mode = number
 
+    def set_player_pair(self, number):
+        self.player_pair = number
+
     def update(self):
         command_queue = self.ih.handle_input()
         for command, args in command_queue:
@@ -46,13 +49,13 @@ class Local(State):
             self.p1_y_direction = self.p1_down - self.p1_up
             self.p2_y_direction = self.p2_down - self.p2_up
 
-            if self.game_mode == 0:
+            if self.player_pair == 0:
                 move_system(self.player1, self.paddle_off_bounds_handler, 0, self.p1_y_direction)
                 move_system(self.player2, self.paddle_off_bounds_handler, 0, self.p2_y_direction)
-            if self.game_mode == 1:
+            if self.player_pair == 1:
                 move_system(self.player1, self.paddle_off_bounds_handler, 0, self.p1_y_direction)
                 ai_system(self.player2, self.ball, self.paddle_off_bounds_handler, 0)
-            if self.game_mode == 2:
+            if self.player_pair == 2:
                 ai_system(self.player1, self.ball, self.paddle_off_bounds_handler, 0)
                 ai_system(self.player2, self.ball, self.paddle_off_bounds_handler, 0)
 
@@ -64,6 +67,11 @@ class Local(State):
         if self.pause:
             self.next_state = "pause"
             self.change_state(self.next_state)
+
+        # temp Through the Ages game mode logic
+        if self.game_mode == 3:
+            pass
+
         self.update_colors()
 
     def render(self):
@@ -230,7 +238,12 @@ class Local(State):
             #     self.ball.set_vel(self.ball.x_vel() + self.volley / 2.5, self.ball.y_vel() + self.volley / 2.5)
 
             # Faster Volley
-            self.ball.set_vel(self.ball.x_vel() + 2, self.ball.y_vel() + 2)
+            if self.game_mode == 1:
+                self.ball.set_vel(self.ball.x_vel() + 2, self.ball.y_vel() + 2)
+            elif self.game_mode == 3:
+                self.ball.set_vel(self.ball.x_vel() - 2, self.ball.y_vel() - 2)
+                self.player1.set_vel(self.player1.x_vel() - 2, self.player1.x_vel() - 2)
+                self.player2.set_vel(self.player2.x_vel() - 2, self.player2.x_vel() - 2)
             # GAME MODE STUFF - FIX LATER
             # self.ball.increase_radius(6)
             self.player1.change_size(1, 1)
