@@ -29,7 +29,7 @@ class Themes():
         self.background_color = "themes/backgrounds/disco2.jpg"
         self.background_music = "sounds/background/disco_bgm.wav"
         self.bounce = "sounds/bounce/disco_bounce.wav"
-        self.score = "sounds/score/classic_score.wav"
+        self.score = "sounds/score/disco_score.wav"
         self.left_paddle_color = DISCO_1
         self.right_paddle_color = DISCO_2
         self.ball_image = "backgrounds/disco_ball.png"
