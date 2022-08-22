@@ -81,7 +81,7 @@ class Ball(Entity):
         return self.components["velocity"].y_velocity
 
     def get_cords(self):
-        return self.components["graphics"].rect.topleft
+        return self.components["graphics"].rect.center
 
 
 class Score(Entity):
