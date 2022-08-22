@@ -33,7 +33,7 @@ class Local(State):
         # (Will add to its own theme settings menu later)
 
         #self.themes.snow()
-        self.themes.western()
+        self.themes.disco()
 
         #used to edit background color in game.py
         if not self.classic_bool:
@@ -121,7 +121,8 @@ class Local(State):
                 self.game.screen.blit(self.pause_text.components["graphics"].surface,
                                       self.pause_text.components["graphics"].rect)
             draw_system(self.game.screen, self.g_manager.all_component_instances("graphics"))
-            ball_pos = self.ball.get_cords()
+            ball_pos = self.ball.get_cords()[0] - self.ball_image.get_width() // 2, self.ball.get_cords()[1] \
+                       - self.ball_image.get_height() // 2
             self.game.screen.blit(self.ball_image, ball_pos)
         # surface = pygame.Surface((30, 30))
         # ball_image = pygame.Surface.convert(pygame.image.load('themes/ball_images/disco_ball.png'))
