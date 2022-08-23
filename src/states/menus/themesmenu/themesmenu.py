@@ -53,15 +53,15 @@ class ThemesMenu(State):
 
     def render(self):
         self.button_display()
-        self.title_text()
+        #self.title_text()
 
 
-    def title_text(self):
-        font = pygame.font.Font(FONT_NAME, 50)
-        text_surface = font.render("THEMES", True, BLACK)
-        text_rect = text_surface.get_rect()
-        text_rect.center = (GAME_W, GAME_H//2 - 80)
-        self.game.screen.blit(text_surface, text_rect)
+    # def title_text(self):
+    #     font = pygame.font.Font(FONT_NAME, 50)
+    #     text_surface = font.render("THEMES", True, BLACK)
+    #     text_rect = text_surface.get_rect()
+    #     text_rect.center = (GAME_W, GAME_H//2 - 80)
+    #     self.game.screen.blit(text_surface, text_rect)
 
 
     def button_display(self):
@@ -73,6 +73,7 @@ class ThemesMenu(State):
         self.snow_rb.draw()
         self.western_rb.draw()
         #DISPLAY BUTTONS
+        self.title_text.draw()
         self.classic_dt.draw()
         self.cyberpunk_dt.draw()
         self.disco_dt.draw()
@@ -119,6 +120,11 @@ class ThemesMenu(State):
                                                      fontName=FONT_NAME,
                                                      fontSize=font_size)
     def create_theme_it(self):
+        self.title_text = pygwidgets.DisplayText(self.game.screen, (GAME_W, GAME_H//2 - 80),
+                                                   fontName=FONT_NAME,
+                                                   fontSize=50,
+                                                   textColor=CYBERPUNK_1)
+
         self.classic_dt = pygwidgets.DisplayText(self.game.screen, (GAME_W, GAME_H),
                                                    fontName=FONT_NAME,
                                                    fontSize=50,
@@ -155,6 +161,7 @@ class ThemesMenu(State):
                                                    fontSize=50,
                                                    textColor=CYBERPUNK_1)
 
+        self.title_text.setText("Themes Menu")
         self.classic_dt.setValue('Classic')
         self.cyberpunk_dt.setValue('CyberPunk')
         self.disco_dt.setValue('Disco')
@@ -174,6 +181,8 @@ class ThemesMenu(State):
         self.western_rb.moveXY(200, 90)
 
     def move_dt(self):
+        #title
+        self.title_text.moveXY(-90, 0)
         #left side
         self.classic_dt.moveXY(-380, -165)
         self.cyberpunk_dt.moveXY(-380, -45)
