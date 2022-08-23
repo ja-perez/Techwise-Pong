@@ -35,32 +35,33 @@ class Settings(State):
     def button_display(self):
         self.graphics_button.draw()
         self.audio_button.draw()
-        self.controls_button.draw()
+        # self.controls_button.draw()
         self.return_button.draw()
 
     def create_buttons(self):
-        height_variable = 60
+        height_variable = 45
+        width_variable = 100
         self.graphics_button = pygwidgets.TextButton(self.game.screen, (0, 0), 'Graphics',
-                                                       fontSize=MENU_FONT_SIZE, fontName=FONT_NAME)
+                                                       fontSize=MENU_FONT_SIZE, fontName=FONT_NAME,
+                                                     width=width_variable, height=height_variable)
         button_height = self.graphics_button.getRect().height
-        self.graphics_button.moveXY(WIN_W / 2 - self.graphics_button.getRect().width / 2,
-                                    WIN_H / 2 - self.graphics_button.getRect().height / 2
-                                    - button_height * 3 + height_variable)
+        self.graphics_button.moveXY(GAME_W - width_variable / 2, GAME_H - height_variable / 2)
 
         self.audio_button = pygwidgets.TextButton(self.game.screen, (0, 0), 'Audio',
-                                                       fontSize=MENU_FONT_SIZE, fontName=FONT_NAME)
-        self.audio_button.moveXY(WIN_W / 2 - self.audio_button.getRect().width / 2,
-                                    WIN_H / 2 - self.audio_button.getRect().height / 2
-                                 - button_height * 2 + height_variable)
+                                                       fontSize=MENU_FONT_SIZE, fontName=FONT_NAME,
+                                                     width=width_variable, height=height_variable)
+        self.audio_button.moveXY(GAME_W - width_variable / 2, GAME_H - height_variable / 2
+                                 + height_variable)
         self.controls_button = pygwidgets.TextButton(self.game.screen, (0, 0), 'Controls',
-                                                       fontSize=MENU_FONT_SIZE, fontName=FONT_NAME)
-        self.controls_button.moveXY(WIN_W / 2 - self.controls_button.getRect().width / 2,
-                                    WIN_H / 2 - self.controls_button.getRect().height / 2
-                                    - button_height + height_variable)
+                                                       fontSize=MENU_FONT_SIZE, fontName=FONT_NAME,
+                                                     width=width_variable, height=height_variable)
+        self.controls_button.moveXY(GAME_W - width_variable / 2, GAME_H - height_variable / 2
+                                    + height_variable * 2)
         self.return_button = pygwidgets.TextButton(self.game.screen, (0, 0), 'Return',
-                                                       fontSize=MENU_FONT_SIZE, fontName=FONT_NAME)
-        self.return_button.moveXY(WIN_W / 2 - self.return_button.getRect().width / 2,
-                                    WIN_H / 2 - self.return_button.getRect().height / 2 + height_variable)
+                                                       fontSize=MENU_FONT_SIZE, fontName=FONT_NAME,
+                                                     width=width_variable, height=height_variable)
+        self.return_button.moveXY(GAME_W - width_variable / 2, GAME_H - height_variable / 2
+                                  + height_variable * 2)
 
     def enter_state(self, prev_state):
         self.return_state = prev_state
