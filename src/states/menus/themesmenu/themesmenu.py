@@ -33,7 +33,6 @@ class ThemesMenu(State):
                 self.game.states["local"].classic_bool = False
                 self.game.states["local"].themes.disco()
                 self.game.states["local"].update_theme()
-
             if self.science_rb.handleEvent(event):
                 self.game.states["local"].classic_bool = False
                 self.game.states["local"].themes.science()
@@ -50,7 +49,7 @@ class ThemesMenu(State):
                 self.game.states["local"].update_theme()
 
             if self.return_button.handleEvent(event):
-                self.change_state("local")
+                self.change_state(self.return_state)
 
     def render(self):
         self.button_display()
@@ -190,5 +189,5 @@ class ThemesMenu(State):
         self.return_button.moveXY(WIN_W / 2 - self.return_button.getRect().width / 2,
                                   WIN_H / 2 - self.return_button.getRect().height + 100)
 
-    def enter_state(self, prev_state):
+    def enter_state(self, prev_state="graphicsmenu"):
         self.return_state = prev_state

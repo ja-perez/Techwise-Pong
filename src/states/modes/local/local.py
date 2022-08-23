@@ -33,7 +33,6 @@ class Local(State):
         self.ball_image = pygame.image.load(self.themes.ball_image).convert_alpha()
         self.ball_image = pygame.transform.scale(self.ball_image, (BALL_W, BALL_H))
 
-
         #used to edit background color in game.py
         if not self.classic_bool:
             self.background_color = pygame.image.load(self.themes.background_color)
@@ -47,13 +46,14 @@ class Local(State):
         self.player_pair = number
 
     def update(self):
+        self.update_objects()
         if self.winner:
             # print Game Over, Player X is the winner!
             # Return to main menu button
             for event in pygame.event.get():
                 if self.homemenu_btn.handleEvent(event):
                     self.next_state = "mainmenu"
-                    self.change_state(self.next_state)
+                    self.change_state(self.next_state, "local")
         else:
             command_queue = self.ih.handle_input()
             for command, args in command_queue:
@@ -79,7 +79,7 @@ class Local(State):
                 self.collision_handler(self.collision_present)
             elif self.pause:
                 self.next_state = "pause"
-                self.change_state(self.next_state)
+                self.change_state(self.next_state, "local")
 
 
 
@@ -92,10 +92,10 @@ class Local(State):
             elif self.volley == 4:
                 self.themes.disco()
                 self.update_theme()
-            elif self.volley == 4:
+            elif self.volley == 6:
                 self.themes.science()
                 self.update_theme()
-            elif self.volley == 4:
+            elif self.volley == 8:
                 self.themes.cyberpunk()
                 self.update_theme()
         self.update_colors()
@@ -105,6 +105,7 @@ class Local(State):
             self.background_color = pygame.image.load(self.themes.background_color)
         else:
             self.background_color = self.themes.background_color
+        print(1)
         self.game.background = self.background_color
         self.game.change_music()
         self.left_paddle_color = self.themes.left_paddle_color
@@ -113,6 +114,10 @@ class Local(State):
         self.ball_image = pygame.image.load(self.themes.ball_image).convert_alpha()
         self.ball_image = pygame.transform.scale(self.ball_image, (BALL_W + 20, BALL_H + 20))
 
+    def update_objects(self):
+        self.g_manager.update_entity_component(self.player1, "graphics")
+        self.g_manager.update_entity_component(self.player2, "graphics")
+        self.g_manager.update_entity_component(self.ball, "graphics")
 
     def render(self):
         if self.winner:
@@ -221,6 +226,7 @@ class Local(State):
         self.g_manager.register_entity(self.ball)
 
 
+
     def create_texts(self):
         # create Winner entity
         self.winner_text = State_Text("Game Over", TEXT_SIZE, WHITE, FONT_NAME)
@@ -289,7 +295,7 @@ class Local(State):
 
             # Faster Volley
             # Frenzy game mode
-            if self.game_mode == 1:
+            if self.game_mode == 1 or self.game_mode == 3:
                 self.ball.set_vel(self.ball.x_vel() + 2, self.ball.y_vel() + 2)
             # Low gravity game mode
             elif self.game_mode == 2:
@@ -331,3 +337,4 @@ class Local(State):
     def exit_state(self):
         if self.pause:
             self.pause = False
+        # maybe change theme back to classic pong?

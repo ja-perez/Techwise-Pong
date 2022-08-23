@@ -47,7 +47,7 @@ class Game():
         mixer.music.set_volume(0.3)
         mixer.music.play(-1)
 
-    def change_background_color(self, background_color ):
+    def change_background_color(self, background_color):
         self.game_canvas.fill(random.choices(range(256), k=3))
 
     def update(self):

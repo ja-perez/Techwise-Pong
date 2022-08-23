@@ -67,6 +67,7 @@ class MainMenu(State):
     def exit_state(self):
         pass
 
-    def enter_state(self):
-        self.game.states.update({"local": Local(self.game, "local")})
-        self.game.states.update({"localmenu": LocalMenu(self.game, "localmenu")})
+    def enter_state(self, prev_state=""):
+        if prev_state == "local":
+            self.game.states.update({"local": Local(self.game, "local")})
+            self.game.states.update({"localmenu": LocalMenu(self.game, "localmenu")})

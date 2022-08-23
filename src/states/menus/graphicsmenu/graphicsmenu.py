@@ -9,7 +9,7 @@ class GraphicsMenu(State):
     def __init__(self, game, name):
         State.__init__(self, game, name)
         self.create_left_buttons()
-        self.create_return_button()
+        self.create_option_buttons()
         self.create_right_buttons()
         self.return_state = ""
         self.left_paddle_color = WHITE
@@ -53,6 +53,8 @@ class GraphicsMenu(State):
                 self.game.states["local"].set_right_paddle_color(WHITE)
 
             if self.return_button.handleEvent(event):
+                self.change_state("settings", "mainmenu")
+            if self.theme_button.handleEvent(event):
                 self.change_state("themesmenu", self.name)
 
     def render(self):
@@ -66,7 +68,6 @@ class GraphicsMenu(State):
         self.surface = pygame.Surface((60,200))
         self.surface.fill(color)
         self.game.screen.blit(self.surface, (50,WIN_H//3 + 20))
-
 
     def create_right_paddle(self, color):
         self.surface = pygame.Surface((60, 200))
@@ -101,6 +102,7 @@ class GraphicsMenu(State):
         self.right_white_button.draw()
 
         self.return_button.draw()
+        self.theme_button.draw()
 
 # Button pixel: 35 x 35 pixels
     def create_left_buttons(self):
@@ -138,10 +140,13 @@ class GraphicsMenu(State):
                                                     'themes/color_buttons/white.png')
 
 
-    def create_return_button(self):
+    def create_option_buttons(self):
         self.return_button = pygwidgets.TextButton(self.game.screen, (0, 0), 'Return', fontSize=45, fontName= FONT_NAME)
         self.return_button.moveXY(WIN_W / 2 - self.return_button.getRect().width / 2,
                                   WIN_H / 2 - self.return_button.getRect().height + 100)
+        self.theme_button = pygwidgets.TextButton(self.game.screen, (0, 0), 'Change Theme', fontSize=45, fontName= FONT_NAME)
+        self.theme_button.moveXY(GAME_W - self.theme_button.getRect().width / 2,
+                                  GAME_H - self.return_button.getRect().height)
 
-    def enter_state(self, prev_state):
+    def enter_state(self, prev_state="settings"):
         self.return_state = prev_state

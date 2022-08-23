@@ -14,9 +14,9 @@ class Pause(State):
             if self.resume_button.handleEvent(event):
                 self.change_state("local")
             if self.settings_button.handleEvent(event):
-                self.change_state("settings", self.name)
+                self.change_state("settings", self.parent_state)
             if self.exit_to_mainmenu.handleEvent(event):
-                self.change_state("mainmenu")
+                self.change_state("mainmenu", self.parent_state)
             if self.exit_to_desktop.handleEvent(event):
                 print("Goodbye")
                 self.game.running = False
@@ -75,5 +75,5 @@ class Pause(State):
     def exit_state(self):
         pass
 
-    def enter_state(self):
-        pass
+    def enter_state(self, parent_state=''):
+        self.parent_state = parent_state
