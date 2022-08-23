@@ -11,7 +11,7 @@ class Network:
 
         # Raspberry Pi Server - unofficial server
         # self.server = "192.168.0.150"
-        self.port = 5555
+        self.port = 6000
         self.addr = (self.server, self.port)
         self.connected = False
         self.p = self.connect()

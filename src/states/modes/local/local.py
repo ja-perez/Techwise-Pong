@@ -105,7 +105,6 @@ class Local(State):
             self.background_color = pygame.image.load(self.themes.background_color)
         else:
             self.background_color = self.themes.background_color
-        print(1)
         self.game.background = self.background_color
         self.game.change_music()
         self.left_paddle_color = self.themes.left_paddle_color

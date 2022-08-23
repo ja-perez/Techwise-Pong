@@ -35,7 +35,7 @@ class Settings(State):
     def button_display(self):
         self.graphics_button.draw()
         self.audio_button.draw()
-        self.controls_button.draw()
+        # self.controls_button.draw()
         self.return_button.draw()
 
     def create_buttons(self):
@@ -60,7 +60,8 @@ class Settings(State):
         self.return_button = pygwidgets.TextButton(self.game.screen, (0, 0), 'Return',
                                                        fontSize=MENU_FONT_SIZE, fontName=FONT_NAME)
         self.return_button.moveXY(WIN_W / 2 - self.return_button.getRect().width / 2,
-                                    WIN_H / 2 - self.return_button.getRect().height / 2 + height_variable)
+                                    WIN_H / 2 - self.return_button.getRect().height / 2
+                                  - button_height + height_variable)
 
     def enter_state(self, prev_state):
         self.return_state = prev_state

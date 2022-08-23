@@ -79,6 +79,7 @@ class OnlineMatch(State):
             if self.join_private:
                 # Print prompt for entering friend code or to create private match
                 self.code_prompt.draw()
+                self.friend_code_prompt.draw()
                 self.code_input.draw()
                 self.private_match_btn.draw()
             else:
@@ -97,11 +98,9 @@ class OnlineMatch(State):
                 if self.curr_match[self.curr_player][2] == "waiting":
                     # Print Waiting on self to ready up
                     self.ready_up_prompt.draw()
-                    pass
                 else:
                     # Print Waiting on other player to ready up
                     self.waiting_prompt.draw()
-                    pass
                 self.update_objects()
                 draw_system(self.game.screen, self.g_manager.all_entity_types("Player", "Score"))
             elif self.match_state == "start":
@@ -174,6 +173,14 @@ class OnlineMatch(State):
         code_prompt_rect = self.code_prompt.getRect().width, self.code_prompt.getRect().height
         self.code_prompt.moveXY(GAME_W - code_prompt_rect[0] / 2, GAME_H / 2)
 
+        prompt = "Your friend code: " + str(self.online.client_id)
+        self.friend_code_prompt = pygwidgets.DisplayText(self.game.screen, (0, 0), value=prompt,
+                                                  fontSize=SCORE_SIZE, textColor=WHITE,
+                                                  fontName=FONT_NAME, justified="center")
+        friend_code_prompt_rect = self.friend_code_prompt.getRect().width, self.friend_code_prompt.getRect().height
+        self.friend_code_prompt.moveXY(GAME_W - friend_code_prompt_rect[0] / 2,
+                                       WIN_H - friend_code_prompt_rect[1])
+
         text_input = 200
         self.private_match_btn = pygwidgets.TextButton(self.game.screen, (0, 0), 'Create Private Match',
                                                        fontName=FONT_NAME, width=text_input)
@@ -223,7 +230,7 @@ class OnlineMatch(State):
         first_prompt_rect = self.first_prompt.getRect().width, self.first_prompt.getRect().height
         self.first_prompt.moveXY(GAME_W - first_prompt_rect[0] / 2, GAME_H - first_prompt_rect[1])
 
-        prompt = "Better Luck Next Time, Chump"
+        prompt = "Better Luck Next Time!"
         self.last_prompt = pygwidgets.DisplayText(self.game.screen, (0, 0), value=prompt,
                                                   fontSize=TEXT_SIZE, textColor=WHITE,
                                                   fontName=FONT_NAME, justified="center")

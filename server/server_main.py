@@ -8,7 +8,7 @@ server = str(local_server)
 
 # Raspberry Pi Server IP
 # server = "192.168.0.150"
-port = 5555
+port = 6000
 queue = 2
 
 def main():

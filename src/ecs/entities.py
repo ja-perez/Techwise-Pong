@@ -11,6 +11,7 @@ class Player(Entity):
         self.paddle_width = PADDLE_W
         self.paddle_height = PADDLE_H
         self.surface = pygame.Surface((self.paddle_width, self.paddle_height))
+        self.surface.fill(WHITE)
         self.components["graphics"] = GraphicComponent(self.surface, 0, 0)
         self.components["velocity"] = VelocityComponent(0, 0)
         self.e_type = "Player"
