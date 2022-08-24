@@ -15,7 +15,7 @@ class Settings(State):
             if self.graphics_button.handleEvent(event):
                 self.change_state("graphicsmenu", self.name)
             if self.audio_button.handleEvent(event):
-                self.change_state("audiomenu")
+                self.change_state("audiomenu", self.name)
             if self.controls_button.handleEvent(event):
                 self.change_state("controls")
             if self.return_button.handleEvent(event):
@@ -63,5 +63,6 @@ class Settings(State):
         self.return_button.moveXY(GAME_W - width_variable / 2, GAME_H - height_variable / 2
                                   + height_variable * 2)
 
-    def enter_state(self, prev_state):
-        self.return_state = prev_state
+    def enter_state(self, prev_state=""):
+        if prev_state:
+            self.return_state = prev_state

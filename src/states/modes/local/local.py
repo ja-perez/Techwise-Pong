@@ -303,7 +303,7 @@ class Local(State):
 
             # Faster Volley
             # Frenzy game mode
-            if self.game_mode == 1 or self.game_mode == 3:
+            if self.game_mode == 1:
                 self.ball.set_vel(self.ball.x_vel() + 2, self.ball.y_vel() + 2)
             # Low gravity game mode
             elif self.game_mode == 2:
@@ -341,6 +341,17 @@ class Local(State):
             self.background_color = pygame.image.load(self.themes.background_color)
             self.game.background = self.background_color
             self.game.change_music()
+        if self.game_mode == 0:
+            self.winning_score = 1
+        if self.player_pair == 1:
+            self.player2.name = "Bot"
+        if self.player_pair == 2:
+            self.player1.name = "Bot 1"
+            self.player2.name = "Bot 2"
+        self.score1.name = self.player1.get_name() + " score: " + self.player1.get_score()
+        self.score2.name = self.player2.get_name() + " score: " + self.player2.get_score()
+        self.score1.update_graphics()
+        self.score2.update_graphics()
 
     def exit_state(self):
         if self.pause:

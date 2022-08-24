@@ -182,5 +182,5 @@ class AudioMenu(State):
         self.return_button.moveXY(WIN_W / 2 - self.return_button.getRect().width / 2,
                                   WIN_H / 2 - self.return_button.getRect().height + 100)
 
-    def enter_state(self, prev_state="graphicsmenu"):
+    def enter_state(self, prev_state="settings"):
         self.return_state = prev_state
