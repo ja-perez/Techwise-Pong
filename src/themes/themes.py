@@ -33,7 +33,7 @@ class Themes():
         self.score = "sounds/score/classic_score.wav"
         self.left_paddle_color = WHITE
         self.right_paddle_color = WHITE
-        self.ball_image = "themes/ball_images/cyberpunk_ball.png"
+        self.ball_image = "themes/ball_images/classic_ball.png"
         self.set_vfx_volume(0.3, 0.3)
 
     def cyberpunk(self):
