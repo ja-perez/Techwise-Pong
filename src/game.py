@@ -9,6 +9,7 @@ from states.menus.pause.pause import Pause
 from states.modes.local.local import Local
 from states.menus.localmenu.localmenu import LocalMenu
 from states.menus.themesmenu.themesmenu import ThemesMenu
+from states.menus.audiomenu.audiomenu import AudioMenu
 from states.modes.online.online import Online
 from pygame import mixer
 from themes.themes import Themes
@@ -27,7 +28,7 @@ class Game():
         # Pong game states initializations
         self.states = {"mainmenu": MainMenu(self, "mainmenu"), "local": Local(self, "local"),
                        "settings": Settings(self, "settings"), "pause": Pause(self, "pause"),
-                       "localmenu": LocalMenu(self, "localmenu"),
+                       "localmenu": LocalMenu(self, "localmenu"), "audiomenu": AudioMenu(self, "audiomenu"),
                        "graphicsmenu": GraphicsMenu(self, "graphicsmenu"),
                        "themesmenu": ThemesMenu(self, "themesmenu"),
                        "audio": Change_Audio(self, "audio"),

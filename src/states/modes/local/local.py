@@ -22,14 +22,14 @@ class Local(State):
         self.classic_bool = True
         self.left_paddle_color = self.themes.left_paddle_color
         self.right_paddle_color = self.themes.right_paddle_color
-
         self.scored, self.winning_score, self.winner = False, 2, ""
         self.collision_present, self.volley, self.boost = False, 0, 2
         self.register_commands()
         self.create_entities()
         self.next_state = ""
         self.teleport = 1
-
+        self.bounce_vfx_bool = True
+        self.score_vfx_bool = True
         self.ball_image = pygame.image.load(self.themes.ball_image).convert_alpha()
         self.ball_image = pygame.transform.scale(self.ball_image, (BALL_W, BALL_H))
 
@@ -81,6 +81,15 @@ class Local(State):
                 self.next_state = "pause"
                 self.change_state(self.next_state, "local")
 
+            if self.bounce_vfx_bool:
+                self.themes.set_bounce_volume(1)
+            else:
+                self.themes.set_bounce_volume(0)
+
+            if self.score_vfx_bool:
+                self.themes.set_score_volume(1)
+            else:
+                self.themes.set_score_volume(0)
 
 
         # temp Through the Ages game mode logic

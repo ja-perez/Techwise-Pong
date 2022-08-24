@@ -15,7 +15,7 @@ class Settings(State):
             if self.graphics_button.handleEvent(event):
                 self.change_state("graphicsmenu", self.name)
             if self.audio_button.handleEvent(event):
-                self.change_state("audio")
+                self.change_state("audiomenu")
             if self.controls_button.handleEvent(event):
                 self.change_state("controls")
             if self.return_button.handleEvent(event):

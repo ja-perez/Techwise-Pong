@@ -9,7 +9,7 @@ class ThemesMenu(State):
     def __init__(self, game, name):
         State.__init__(self, game, name)
         self.create_theme_rb()
-        self.create_theme_it()
+        self.create_theme_dt()
         self.create_return_button()
         self.move_rbs()
         self.move_dt()
@@ -119,7 +119,7 @@ class ThemesMenu(State):
                                                      text='Western',
                                                      fontName=FONT_NAME,
                                                      fontSize=font_size)
-    def create_theme_it(self):
+    def create_theme_dt(self):
         self.title_text = pygwidgets.DisplayText(self.game.screen, (GAME_W, GAME_H//2 - 80),
                                                    fontName=FONT_NAME,
                                                    fontSize=50,

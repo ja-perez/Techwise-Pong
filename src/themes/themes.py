@@ -7,9 +7,24 @@ class Themes():
 
     def set_vfx_volume(self, bounce_vol, score_vol):
         self.bounce_vfx = mixer.Sound(self.bounce)
-        self.bounce_vfx.set_volume(bounce_vol)
         self.score_vfx = mixer.Sound(self.score)
-        self.score_vfx.set_volume(score_vol)
+        self.bounce_volume = bounce_vol
+        self.score_volume = score_vol
+        self.bounce_vfx.set_volume(self.bounce_volume)
+        self.score_vfx.set_volume(self.score_volume)
+
+    def set_bounce_volume(self, value):
+        if value == 0:
+            self.bounce_vfx.set_volume(0)
+        else:
+            self.bounce_vfx.set_volume(self.bounce_volume)
+
+    def set_score_volume(self, value):
+        if value == 0:
+            self.score_vfx.set_volume(0)
+        else:
+            self.score_vfx.set_volume(self.score_volume)
+
 
     def classic(self):
         self.background_color = BLACK
