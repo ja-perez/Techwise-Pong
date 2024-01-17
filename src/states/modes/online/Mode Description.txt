@@ -1,0 +1,13 @@
+Players - 2
+Ball - 1
+
+# Idea?
+Online State acts as a secondary Game loop, where it defines states specific to online play and restricts
+what states it can go to from the main Game loop.
+
+Game Start : Load into waiting room for other player, when matched - both players press start for game to begin
+Game Pause : Game Settings, Resume Match, Exit Match
+    Game Settings : Audio, Controls, Return to Pause Menu
+
+Win Condition : First player to score X points wins
+Game End : Rematch, New Match, Exit Match

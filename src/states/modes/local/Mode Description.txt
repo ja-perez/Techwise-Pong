@@ -1,0 +1,9 @@
+Players - 2
+Ball - 1
+
+Game Start : Press Enter to start
+Game Pause : Resume, game settings, go to main menu (restart if leaving), exit to desktop
+    - Game Settings : Change X (reset if changed), paddle speed, ball speed
+
+Win Condition : First player to score X points wins
+Game End : Restart game, go to main menu
