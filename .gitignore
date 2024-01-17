@@ -7,3 +7,4 @@ src/ecs/__pycache__/component.cpython-310.pyc
 src/ecs/__pycache__/systems.cpython-310.pyc
 src/ecs/__pycache__/entities_manager.cpython-310.pyc
 
+.idea
