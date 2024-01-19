@@ -11,7 +11,7 @@ Real-time Pong introduces a new way to play the classic game Pong.
 With custom game modes and a local multiplayer mode, you can re-experience this classic game in a new way.
 
 ## Demo
-![Home Screen](https://github.com/ja-perez/Techwise-Pong/blob/main/media/HomeScreen.jpeg)
+![Home Screen](https://github.com/ja-perez/Techwise-Pong/blob/main/media/HomeScreen.jpg)
 
 ### Game Modes
 #### Classic 
@@ -20,7 +20,7 @@ With custom game modes and a local multiplayer mode, you can re-experience this 
 ![Through the Ages Mode](https://github.com/ja-perez/Techwise-Pong/blob/main/media/GifName.gif)
 
 ### Local Multiplayer
-![Local Multiplayer](https://github.com/ja-perez/Techwise-Pong/blob/main/media/MultiplayerScreen.jpeg)
+![Local Multiplayer](https://github.com/ja-perez/Techwise-Pong/blob/main/media/MultiplayerScreen.jpg)
 
 ![Joining Multiplayer Match](https://github.com/ja-perez/Techwise-Pong/blob/main/media/GifName.gif)
 
