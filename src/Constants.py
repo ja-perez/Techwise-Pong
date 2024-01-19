@@ -1,10 +1,15 @@
+import os
+# assets path
+ASSETS_PATH = os.path.join(os.path.dirname(__file__), 'assets')
+
 # GRAPHICS
 WIN_W = 960
 WIN_H = 540
 GAME_W = 480
 GAME_H = 270
 GAME_TITLE = "Real-Time Pong Demo"
-FONT_NAME = 'Teko-Light.ttf'
+FONT_NAME = os.path.join(ASSETS_PATH, "fonts", 'Teko-Light.ttf')
+CYBER_FONT = os.path.join(ASSETS_PATH, "fonts", 'neon_font.ttf')
 FONT_SIZE = 100
 MENU_FONT_SIZE = 20
 SCORE_SIZE = 25

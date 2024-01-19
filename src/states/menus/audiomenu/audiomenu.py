@@ -79,7 +79,7 @@ class AudioMenu(State):
         self.music_off_rb = pygwidgets.TextRadioButton(self.game.screen, (GAME_W, GAME_H),
                                                        group='music',
                                                        text='Cyberpunk',
-                                                       fontName='neon_font.ttf',
+                                                       fontName=CYBER_FONT,
                                                        fontSize=font_size)
         self.bounce_vfx_on_rb = pygwidgets.TextRadioButton(self.game.screen, (GAME_W, GAME_H),
                                                    group='bounce',

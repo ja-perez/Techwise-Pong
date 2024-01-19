@@ -97,7 +97,7 @@ class ThemesMenu(State):
         self.cyberpunk_rb = pygwidgets.TextRadioButton(self.game.screen, (GAME_W, GAME_H),
                                                        'ThemeRadioButton',
                                                        text='Cyberpunk',
-                                                       fontName='neon_font.ttf',
+                                                       fontName=CYBER_FONT,
                                                        fontSize=font_size)
         self.disco_rb = pygwidgets.TextRadioButton(self.game.screen, (GAME_W, GAME_H),
                                                    'ThemeRadioButton',
