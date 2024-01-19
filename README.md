@@ -1,32 +1,52 @@
+<!-- 
+Image Path : https://github.com/ja-perez/Techwise-Pong/blob/main/media/ImageName.jpeg)
+Gif Path : https://github.com/ja-perez/Techwise-Pong/blob/main/media/GifName.gif)
+-->
 # Real-time Pong
 
 ***
 
 ## Description
 Real-time Pong introduces a new way to play the classic game Pong.
-With custom game modes and a local multiplayer mode, you can re-experience the classic game in a new way.
+With custom game modes and a local multiplayer mode, you can re-experience this classic game in a new way.
 
-## Visuals
-Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
+## Demo
+![Home Screen](https://github.com/ja-perez/Techwise-Pong/blob/main/media/HomeScreen.jpeg)
 
-## Usage
-Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
+### Game Modes
+#### Classic 
+![Classic Mode](https://github.com/ja-perez/Techwise-Pong/blob/main/media/GifName.gif)
+#### Through the Ages 
+![Through the Ages Mode](https://github.com/ja-perez/Techwise-Pong/blob/main/media/GifName.gif)
+
+### Local Multiplayer
+![Local Multiplayer](https://github.com/ja-perez/Techwise-Pong/blob/main/media/MultiplayerScreen.jpeg)
+
+![Joining Multiplayer Match](https://github.com/ja-perez/Techwise-Pong/blob/main/media/GifName.gif)
 
 ## Installation
-Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
+### Requirements
+- Python 3.11 or higher
+- Windows 10 or higher
+### Release
+The quickest way to get playing is to download the latest release on the repositories GitHub page.
+This downloads a zip file which you can then unzip wherever you like and run the executable called "pong".
+
+### Source
+If you want to run the source code, you can clone the repository and install the required packages found in the 
+requirements.txt file.
+We recommend using a venv to install the required packages. This can be done by running the following commands in the 
+root directory of the cloned project:
+```
+python -m venv venv
+venv\Scripts\activate
+pip install -r requirements.txt
+```
+Once the required packages are installed, you can then start the game by running the main.py file in the "src" directory.
+
+Note: You may have to set the current working directory to "src" before running the main.py file for some asset paths to
+work correctly.
 
 ## Project status
-This project was made as part of Talentsprints Techwise program and is not actively being maintained.
+This project was made as part of Talentsprint's Techwise program and is not actively being maintained.
 The release titled "Final Presentation" is the working version of the project presented during the course.
-
-***
-
-## Test and Deploy
-
-Use the built-in continuous integration in GitLab.
-
-- [ ] [Get started with GitLab CI/CD](https://docs.gitlab.com/ee/ci/quick_start/index.html)
-- [ ] [Analyze your code for known vulnerabilities with Static Application Security Testing(SAST)](https://docs.gitlab.com/ee/user/application_security/sast/)
-- [ ] [Deploy to Kubernetes, Amazon EC2, or Amazon ECS using Auto Deploy](https://docs.gitlab.com/ee/topics/autodevops/requirements.html)
-- [ ] [Use pull-based deployments for improved Kubernetes management](https://docs.gitlab.com/ee/user/clusters/agent/)
-- [ ] [Set up protected environments](https://docs.gitlab.com/ee/ci/environments/protected_environments.html)
