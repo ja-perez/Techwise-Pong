@@ -1,11 +1,11 @@
 from Constants import *
 from pygame import mixer
 from os.path import join
-from os import getcwd
+from os import getcwd, listdir
 
 CWD = getcwd()
-if not CWD.endswith("src"):
-    CWD = join(CWD, "src")
+if "_internal" in listdir():
+    CWD = join(CWD, "_internal")
 
 class Themes():
     def __init__(self):
