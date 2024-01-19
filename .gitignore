@@ -9,4 +9,5 @@ src/ecs/__pycache__/entities_manager.cpython-310.pyc
 
 .idea
 
+dist/
 pong/
