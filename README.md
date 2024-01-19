@@ -42,9 +42,9 @@ python -m venv venv
 venv\Scripts\activate
 pip install -r requirements.txt
 ```
-Once the required packages are installed, you can then start the game by running the main.py file in the "src" directory.
+Once the required packages are installed, you can then start the game by running the pong.py file in the "src" directory.
 
-Note: You may have to set the current working directory to "src" before running the main.py file for some asset paths to
+Note: You may have to set the current working directory to "src" before running the pong.py file for some asset paths to
 work correctly.
 
 ## Project status
